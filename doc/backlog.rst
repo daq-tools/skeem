@@ -11,7 +11,7 @@ Iteration I
 - [o] Handle JSON
 - [o] Handle CSV
 - [x] Add test framework
-- [o] Add to repository on GitHub
+- [x] Add to repository on GitHub
 - [o] Improve tests
 - [o] CLI
 - [o] CI/GHA

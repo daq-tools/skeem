@@ -88,6 +88,12 @@ test = [
   "pytest<8",
 ]
 
+[project.urls]
+changelog = "https://github.com/daq-tools/eskema/blob/main/CHANGES.rst"
+documentation = "https://github.com/daq-tools/eskema"
+homepage = "https://github.com/daq-tools/eskema"
+repository = "https://github.com/daq-tools/eskema"
+
 
 [tool.black]
 line-length = 120
@@ -98,14 +104,14 @@ branch = false
 source = ["eskema"]
 
 [tool.pytest.ini_options]
-minversion = "2.0"
 addopts = "-ra -q --verbosity=3 --doctest-modules --cov --cov-report=term-missing --cov-report=xml"
+minversion = "2.0"
+log_level = "DEBUG"
+log_cli_level = "DEBUG"
 testpaths = [
   "eskema",
   "tests",
 ]
-log_level = "DEBUG"
-log_cli_level = "DEBUG"
 xfail_strict = true
 
 

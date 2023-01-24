@@ -1,6 +1,7 @@
 /.idea
 /.pytest_cache
 /.venv*
+/tmp
 __pycache__
 *.egg-info
 .coverage
