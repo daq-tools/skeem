@@ -76,6 +76,7 @@ develop = [
   "poethepoet<0.19",
   "pyproject-fmt<0.6",
   "ruff==0.0.231",
+  "validate-pyproject<0.12",
 ]
 release = [
   "build<1",
@@ -167,6 +168,7 @@ format = [
 lint = [
   { cmd = "ruff ." },
   { cmd = "black --check ." },
+  { cmd = "validate-pyproject pyproject.toml" },
 ]
 
 release = [
