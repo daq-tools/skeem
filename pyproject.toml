@@ -3,11 +3,28 @@ name = "eskema"
 version = "0.0.0"
 description = "Infer SQL DDL statements from tabular data"
 readme = "README.rst"
-requires-python = ">=3.6"
-license = {text = "MIT"}
-keywords = ["schema", "inference", "reflection", "sql", "ddl", "tabular", "rdbms"]
+keywords = [
+  "ddl",
+  "inference",
+  "introspection",
+  "rdbms",
+  "reflection",
+  "schema",
+  "schema-conversion",
+  "sql",
+  "sql-schema",
+  "tabular-data",
+]
+license = { text = "MIT" }
 authors = [
-  {name = "Andreas Motl", email = "andreas.motl@panodata.org"},
+  { name = "Andreas Motl", email = "andreas.motl@panodata.org" },
+]
+requires-python = ">=3.6"
+dependencies = [
+  "crash",
+  "crate[sqlalchemy]",
+  "ddlgenerator",
+  "sqlmakeuper",
 ]
 classifiers = [
   "Development Status :: 3 - Alpha",
@@ -53,35 +70,23 @@ classifiers = [
   "Topic :: Text Processing",
   "Topic :: Utilities",
 ]
-
-dependencies = [
-  "crash",
-  "crate[sqlalchemy]",
-  "ddlgenerator",
-  "sqlmakeuper",
-]
-
-[project.urls]
-homepage = "https://github.com/daq-tools/eskema"
-documentation = "https://github.com/daq-tools/eskema"
-repository = "https://github.com/daq-tools/eskema"
-changelog = "https://github.com/daq-tools/eskema/blob/main/CHANGES.rst"
-
 [project.optional-dependencies]
-test = [
-  "coverage<8",
-  "pytest<8",
-]
 develop = [
   "black<23",
   "poethepoet<0.19",
+  "pyproject-fmt<0.6",
   "ruff==0.0.231",
 ]
 release = [
   "build<1",
-  "minibump<1; python_version>='3.10'",
+  'minibump<1; python_version >= "3.10"',
   "twine<5",
 ]
+test = [
+  "coverage<8",
+  "pytest<8",
+]
+
 
 [tool.black]
 line-length = 120
@@ -152,19 +157,20 @@ extend-ignore = [
 
 [tool.poe.tasks]
 
-test = {cmd="pytest"}
+test = { cmd = "pytest" }
 
 format = [
-  {cmd="black ."},
-  {cmd="ruff --fix ."},
+  { cmd = "black ." },
+  { cmd = "ruff --fix ." },
+  { cmd = "pyproject-fmt pyproject.toml" },
 ]
 lint = [
-  {cmd="ruff ."},
-  {cmd="black --check ."},
+  { cmd = "ruff ." },
+  { cmd = "black --check ." },
 ]
 
 release = [
-  {cmd="minibump bump --relax minor"},
-  {cmd="python -m build"},
-  {cmd="twine upload dist/*"},
+  { cmd = "minibump bump --relax minor" },
+  { cmd = "python -m build" },
+  { cmd = "twine upload dist/*" },
 ]
