@@ -11,7 +11,7 @@ from eskema.util import sql_canonicalize
 
 def get_basic_sql_reference(table_name):
     """
-    How the produced SQL should look like.
+    The reference how the inferred SQL should look like.
     """
     basic_reference = sql_canonicalize(
         textwrap.dedent(
@@ -32,6 +32,11 @@ def get_basic_sql_reference(table_name):
 
 @pytest.fixture
 def basic_stream_ndjson():
+    """
+    A stream of input data. Here, in ndjson format, aka. jsonl.
+
+    http://ndjson.org/
+    """
     return io.StringIO(
         """
 {"id":1,"name":"foo","date":"2014-10-31 09:22:56","fruits":"apple,banana","price":0.42}
@@ -40,7 +45,7 @@ def basic_stream_ndjson():
     )
 
 
-def test_infer_json_basic_lib(basic_stream_ndjson):
+def test_infer_ndjson_library(basic_stream_ndjson):
     """
     Verify basic library use.
     """
@@ -50,7 +55,7 @@ def test_infer_json_basic_lib(basic_stream_ndjson):
     assert computed == get_basic_sql_reference(table_name="foo1")
 
 
-def test_infer_json_basic_cli_file_without_tablename(basic_stream_ndjson):
+def test_infer_ndjson_cli_file_without_tablename(basic_stream_ndjson):
     """
     CLI test: Table name is correctly derived from the input file name or data.
     """
@@ -62,7 +67,7 @@ def test_infer_json_basic_cli_file_without_tablename(basic_stream_ndjson):
     assert computed == get_basic_sql_reference(table_name="basic")
 
 
-def test_infer_json_basic_cli_file_with_tablename(basic_stream_ndjson):
+def test_infer_ndjson_cli_file_with_tablename(basic_stream_ndjson):
     """
     CLI test: Table name takes precedence when obtained from the user.
     """
@@ -74,7 +79,7 @@ def test_infer_json_basic_cli_file_with_tablename(basic_stream_ndjson):
     assert computed == get_basic_sql_reference(table_name="foo2")
 
 
-def test_infer_json_basic_cli_stdin(basic_stream_ndjson):
+def test_infer_json_cli_stdin(basic_stream_ndjson):
     """
     CLI test: Read data from stdin.
     """
