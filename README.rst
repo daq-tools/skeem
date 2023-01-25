@@ -24,7 +24,9 @@ Synopsis
 ***********
 Development
 ***********
-::
+
+Acquire sources, create Python virtualenv, install package and dependencies,
+and run software tests::
 
     git clone https://github.com/daq-tools/eskema
     cd eskema
@@ -38,8 +40,8 @@ Development
 Credits
 *******
 
-- `Mike Bayer`_ for `SQLAlchemy`_
-- `Catherine Devlin`_ for `ddlgenerator`_
+- `Mike Bayer`_ for `SQLAlchemy`_.
+- `Catherine Devlin`_ for `ddlgenerator`_.
 - All the other countless authors of excellent Python packages,
   Python itself, and turtles all the way down.
 

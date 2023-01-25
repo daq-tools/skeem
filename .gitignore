@@ -1,5 +1,6 @@
 /.idea
 /.pytest_cache
+/.ruff_cache
 /.venv*
 /tmp
 __pycache__

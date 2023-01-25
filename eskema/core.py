@@ -1,5 +1,7 @@
 import io
 import logging
+import typing as t
+from pathlib import Path
 
 from eskema import monkey
 
@@ -26,7 +28,15 @@ def generate_ddl(tbl, table_name=None, primary_key=None):
     return table.sql(dialect="crate", creates=True, drops=False, inserts=False)
 
 
-def file_get_firstline(filepath):
-    with open(filepath, "r") as f:
-        firstline = f.readline()
-        return io.StringIO(firstline)
+def get_firstline(filepath: t.Union[Path, str, t.IO]):
+    if isinstance(filepath, io.StringIO):
+        return stream_get_firstline(filepath)
+    elif isinstance(filepath, (Path, str)):
+        filepath = Path(filepath)
+        with open(filepath, "r") as f:
+            return stream_get_firstline(f)
+
+
+def stream_get_firstline(stream: t.IO):
+    firstline = stream.readline()
+    return io.StringIO(firstline)

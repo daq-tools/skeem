@@ -1,10 +1,42 @@
+import json
+import logging
+import sys
+
+import click
 from sqlformatter.sqlformatter import SQLFormatter
 
 
 def jd(data):
-    pass
+    print(json.dumps(data, indent=2))  # noqa: T201
 
 
-def canonicalize_sql(sql: str) -> str:
+def sql_canonicalize(sql: str) -> str:
+    return sql_pretty(sql)
+
+
+def sql_pretty(sql: str) -> str:
     sql = sql.strip().replace("\t", "    ")
-    return SQLFormatter(reindent=False, keyword_case="upper", identifier_case=None).format_query(sql)
+    return SQLFormatter(
+        reindent=False, indent_width=2, keyword_case="upper", identifier_case=None, comma_first=False
+    ).format_query(sql)
+
+
+def setup_logging(level=logging.INFO):
+    log_format = "%(asctime)-15s [%(name)-30s] %(levelname)-7s: %(message)s"
+    logging.basicConfig(format=log_format, stream=sys.stderr, level=level)
+    ll = logging.getLogger("root")
+    ll.setLevel(level=level)
+    ll.handlers[0].setFormatter(logging.Formatter(log_format))
+
+
+def boot_click(ctx: click.Context, verbose: bool, debug: bool):
+
+    # Adjust log level according to `verbose` / `debug` flags.
+    log_level = logging.WARNING
+    if verbose:
+        log_level = logging.INFO
+    if debug:
+        log_level = logging.DEBUG
+
+    # Setup logging, according to `verbose` / `debug` flags.
+    setup_logging(level=log_level)

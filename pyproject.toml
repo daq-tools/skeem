@@ -21,10 +21,12 @@ authors = [
 ]
 requires-python = ">=3.6"
 dependencies = [
+  "click<9",
   "crash",
   "crate[sqlalchemy]",
-  "ddlgenerator",
-  "sqlmakeuper",
+  "ddlgenerator<0.2",
+  "sql-formatter<0.7",
+  "sqlmakeuper<0.2",
 ]
 classifiers = [
   "Development Status :: 3 - Alpha",
@@ -94,6 +96,9 @@ documentation = "https://github.com/daq-tools/eskema"
 homepage = "https://github.com/daq-tools/eskema"
 repository = "https://github.com/daq-tools/eskema"
 
+[project.scripts]
+eskema = "eskema.cli:cli"
+
 
 [tool.black]
 line-length = 120
@@ -157,6 +162,9 @@ extend-ignore = [
 "eskema/core.py" = ["E402"]
 "tests/*" = ["S101"]
 
+[tool.setuptools.packages.find]
+namespaces = false
+
 
 # ===================
 # Tasks configuration
@@ -168,7 +176,7 @@ test = { cmd = "pytest" }
 
 format = [
   { cmd = "black ." },
-  { cmd = "ruff --fix ." },
+  { cmd = "ruff --fix --ignore=T201 ." },
   { cmd = "pyproject-fmt pyproject.toml" },
 ]
 lint = [
