@@ -1,7 +1,7 @@
 import logging
-import pathlib
 import sys
 import typing as t
+from pathlib import Path
 
 import click
 
@@ -29,7 +29,7 @@ def infer_ddl(
     ctx: click.Context,
     dialect: str,
     table_name: t.Optional[str] = None,
-    input: t.Optional[t.Union[pathlib.Path, str]] = None,  # noqa: A002
+    input: t.Optional[t.Union[Path, str]] = None,  # noqa: A002
 ):
     """
     Infer SQL DDL from input data.
@@ -43,8 +43,15 @@ def infer_ddl(
             sys.exit(-1)
         indata = sys.stdin
     else:
-        indata = pathlib.Path(indata)
+        indata = Path(indata)
         logger.info(f"Loading data from {indata}")
+
+    # Derive table name from input file name or data.
+    if table_name is None:
+        if isinstance(indata, Path):
+            table_name = indata.stem
+
+    # Decode data.
     firstline = get_firstline(indata)
     # TODO: Derive table name from input file name.
     sql = generate_ddl(firstline, table_name=table_name, primary_key="id")

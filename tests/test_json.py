@@ -41,13 +41,31 @@ def basic_stream_ndjson():
 
 
 def test_infer_json_basic_lib(basic_stream_ndjson):
+    """
+    Verify basic library use.
+    """
     firstline = get_firstline(basic_stream_ndjson)
     sql = generate_ddl(firstline, table_name="foo1", primary_key="id")
     computed = sql_canonicalize(sql)
     assert computed == get_basic_sql_reference(table_name="foo1")
 
 
-def test_infer_json_basic_cli_file(basic_stream_ndjson):
+def test_infer_json_basic_cli_file_without_tablename(basic_stream_ndjson):
+    """
+    CLI test: Table name is correctly derived from the input file name or data.
+    """
+    runner = CliRunner()
+    result = runner.invoke(cli, "infer-ddl --dialect=crate tests/basic.ndjson")
+    assert result.exit_code == 0
+
+    computed = sql_canonicalize(result.stdout)
+    assert computed == get_basic_sql_reference(table_name="basic")
+
+
+def test_infer_json_basic_cli_file_with_tablename(basic_stream_ndjson):
+    """
+    CLI test: Table name takes precedence when obtained from the user.
+    """
     runner = CliRunner()
     result = runner.invoke(cli, "infer-ddl --dialect=crate --table-name=foo2 tests/basic.ndjson")
     assert result.exit_code == 0
@@ -57,6 +75,9 @@ def test_infer_json_basic_cli_file(basic_stream_ndjson):
 
 
 def test_infer_json_basic_cli_stdin(basic_stream_ndjson):
+    """
+    CLI test: Read data from stdin.
+    """
     runner = CliRunner()
     result = runner.invoke(
         cli, args="infer-ddl --dialect=crate --table-name=foo3 -", input=basic_stream_ndjson.read(BYTES_MAGIC)
