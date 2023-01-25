@@ -22,7 +22,7 @@ def sql_pretty(sql: str) -> str:
 
 
 def setup_logging(level=logging.INFO):
-    log_format = "%(asctime)-15s [%(name)-30s] %(levelname)-7s: %(message)s"
+    log_format = "%(asctime)-15s [%(name)-26s] %(levelname)-7s: %(message)s"
     logging.basicConfig(format=log_format, stream=sys.stderr, level=level)
     ll = logging.getLogger("root")
     ll.setLevel(level=level)

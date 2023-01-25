@@ -44,7 +44,7 @@ def test_infer_json_basic_lib(basic_stream_ndjson):
     firstline = get_firstline(basic_stream_ndjson)
     sql = generate_ddl(firstline, table_name="foo1", primary_key="id")
     computed = sql_canonicalize(sql)
-    assert get_basic_sql_reference(table_name="foo1") == computed
+    assert computed == get_basic_sql_reference(table_name="foo1")
 
 
 def test_infer_json_basic_cli_file(basic_stream_ndjson):
@@ -53,4 +53,4 @@ def test_infer_json_basic_cli_file(basic_stream_ndjson):
     assert result.exit_code == 0
 
     computed = sql_canonicalize(result.stdout)
-    assert get_basic_sql_reference(table_name="foo2") == computed
+    assert computed == get_basic_sql_reference(table_name="foo2")
