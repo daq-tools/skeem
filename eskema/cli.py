@@ -1,5 +1,6 @@
 import logging
 import pathlib
+import sys
 import typing as t
 
 import click
@@ -22,7 +23,7 @@ def cli(ctx: click.Context, verbose: bool, debug: bool):
 @cli.command("infer-ddl")
 @click.option("--dialect", type=str, required=True)
 @click.option("--table-name", type=str, required=False)
-@click.argument("input", type=pathlib.Path, required=True)
+@click.argument("input", type=str, required=True)
 @click.pass_context
 def infer_ddl(
     ctx: click.Context,
@@ -33,7 +34,18 @@ def infer_ddl(
     """
     Infer SQL DDL from input data.
     """
-    firstline = get_firstline(input)
+    indata = input
+    # TODO: Can also leave empty?
+    if indata == "-":
+        logger.info("Loading data from stdin")
+        if not sys.stdin.readable():
+            logger.error("stdin is not readable")
+            sys.exit(-1)
+        indata = sys.stdin
+    else:
+        indata = pathlib.Path(indata)
+        logger.info(f"Loading data from {indata}")
+    firstline = get_firstline(indata)
     # TODO: Derive table name from input file name.
     sql = generate_ddl(firstline, table_name=table_name, primary_key="id")
     sql = sql_canonicalize(sql)

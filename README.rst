@@ -20,6 +20,9 @@ Synopsis
 
     eskema infer-ddl --dialect=postgresql data.ndjson
 
+    cat tests/basic.ndjson | eskema --verbose infer-ddl --dialect=crate --table-name=foo -
+    eskema --verbose infer-ddl --dialect=crate --table-name=foo - < tests/basic.ndjson
+
 
 ***********
 Development

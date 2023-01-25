@@ -5,7 +5,7 @@ import pytest
 from click.testing import CliRunner
 
 from eskema.cli import cli
-from eskema.core import generate_ddl, get_firstline
+from eskema.core import BYTES_MAGIC, generate_ddl, get_firstline
 from eskema.util import sql_canonicalize
 
 
@@ -54,3 +54,14 @@ def test_infer_json_basic_cli_file(basic_stream_ndjson):
 
     computed = sql_canonicalize(result.stdout)
     assert computed == get_basic_sql_reference(table_name="foo2")
+
+
+def test_infer_json_basic_cli_stdin(basic_stream_ndjson):
+    runner = CliRunner()
+    result = runner.invoke(
+        cli, args="infer-ddl --dialect=crate --table-name=foo3 -", input=basic_stream_ndjson.read(BYTES_MAGIC)
+    )
+    assert result.exit_code == 0
+
+    computed = sql_canonicalize(result.stdout)
+    assert computed == get_basic_sql_reference(table_name="foo3")

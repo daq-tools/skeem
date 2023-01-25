@@ -9,6 +9,8 @@ monkey.activate()
 
 from ddlgenerator.ddlgenerator import Table
 
+BYTES_MAGIC = 1000
+
 
 def generate_ddl(tbl, table_name=None, primary_key=None):
     """
@@ -29,7 +31,7 @@ def generate_ddl(tbl, table_name=None, primary_key=None):
 
 
 def get_firstline(filepath: t.Union[Path, str, t.IO]):
-    if isinstance(filepath, io.StringIO):
+    if isinstance(filepath, io.TextIOBase):
         return stream_get_firstline(filepath)
     elif isinstance(filepath, (Path, str)):
         filepath = Path(filepath)
