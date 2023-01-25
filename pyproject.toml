@@ -18,6 +18,8 @@ keywords = [
 license = { text = "MIT" }
 authors = [
   { name = "Andreas Motl", email = "andreas.motl@panodata.org" },
+  { name = "Benjamin Gutzmann", email = "gutzemann@gmail.com" },
+  { name = "Richard Pobering", email = "richard.pobering@panodata.org" },
 ]
 requires-python = ">=3.6"
 dependencies = [
@@ -86,8 +88,8 @@ release = [
   "twine<5",
 ]
 test = [
-  "coverage<8",
   "pytest<8",
+  "pytest-cov<5",
 ]
 
 [project.urls]

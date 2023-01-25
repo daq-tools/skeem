@@ -24,9 +24,14 @@ def sql_pretty(sql: str) -> str:
 def setup_logging(level=logging.INFO):
     log_format = "%(asctime)-15s [%(name)-26s] %(levelname)-7s: %(message)s"
     logging.basicConfig(format=log_format, stream=sys.stderr, level=level)
-    ll = logging.getLogger("root")
-    ll.setLevel(level=level)
-    ll.handlers[0].setFormatter(logging.Formatter(log_format))
+
+    # Adjust log format for "root" logger, used by `ddlgenerator`.
+    root_logger = logging.getLogger("root")
+    root_logger.setLevel(level=level)
+    root_logger.handlers[0].setFormatter(logging.Formatter(log_format))
+
+    # Disable `ddlgenerator` logger.
+    root_logger.disabled = True
 
 
 def boot_click(ctx: click.Context, verbose: bool, debug: bool):
