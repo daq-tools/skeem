@@ -70,24 +70,26 @@ def test_ndjson_autopk_undetected():
     assert infer_pk(indata) is None
 
 
-def test_ndjson_autopk_cli_file_without_primary_key():
+def test_ndjson_autopk_cli_file_without_primary_key(ndjson_file_basic):
     """
     CLI test: Table name is correctly derived from the input file name or data.
     """
     runner = CliRunner()
-    result = runner.invoke(cli, "infer-ddl --dialect=crate --table-name=autopk-1 tests/basic.ndjson")
+    result = runner.invoke(cli, f"infer-ddl --dialect=crate --table-name=autopk-1 {ndjson_file_basic}")
     assert result.exit_code == 0
 
     computed = sql_canonicalize(result.stdout)
     assert computed == get_basic_sql_reference(table_name="autopk-1")
 
 
-def test_ndjson_autopk_cli_file_with_primary_key():
+def test_ndjson_autopk_cli_file_with_primary_key(ndjson_file_basic):
     """
     CLI test: Table name takes precedence when obtained from the user.
     """
     runner = CliRunner()
-    result = runner.invoke(cli, "infer-ddl --dialect=crate --table-name=autopk-2 --primary-key=name tests/basic.ndjson")
+    result = runner.invoke(
+        cli, f"infer-ddl --dialect=crate --table-name=autopk-2 --primary-key=name {ndjson_file_basic}"
+    )
     assert result.exit_code == 0
 
     computed = sql_canonicalize(result.stdout)
