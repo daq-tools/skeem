@@ -1,3 +1,6 @@
+.. highlight:: sh
+
+
 ######
 Eskema
 ######
@@ -10,7 +13,7 @@ About
 Infer SQL DDL statements from tabular data, based on the excellent
 `ddlgenerator`_.
 
-Supported input data: `JSON`_, `ndjson`_.
+Supported input data: `JSON`_, `ndjson`_ aka. `JSON Lines`_.
 
 
 ********
@@ -52,6 +55,7 @@ Credits
 .. _ddlgenerator: https://pypi.org/project/ddlgenerator/
 .. _Catherine Devlin: https://github.com/catherinedevlin
 .. _JSON: https://www.json.org/
+.. _JSON Lines: https://jsonlines.org/
 .. _Mike Bayer: https://github.com/zzzeek
 .. _ndjson: http://ndjson.org/
 .. _SQLAlchemy: https://pypi.org/project/SQLAlchemy/
