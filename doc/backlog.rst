@@ -14,7 +14,7 @@ Iteration I
 - [x] CLI
 - [x] Handle ndjson
 - [x] Read from stdin
-- [o] Primary key detection
+- [x] Primary key detection
 - [o] Content type detection using file extension
 - [o] Handle JSON
 - [o] Handle CSV

@@ -6,28 +6,29 @@ from click.testing import CliRunner
 
 from eskema.cli import cli
 from eskema.core import BYTES_MAGIC, generate_ddl, get_firstline
+from eskema.monkey import clean_key_name
 from eskema.util import sql_canonicalize
 
 
-def get_basic_sql_reference(table_name):
+def get_basic_sql_reference(table_name, primary_key="id"):
     """
     The reference how the inferred SQL should look like.
     """
     basic_reference = sql_canonicalize(
         textwrap.dedent(
-            """
-        CREATE TABLE "{table_name}" (
+            f"""
+        CREATE TABLE "{clean_key_name(table_name)}" (
             "id" INT NOT NULL,
             "name" STRING NOT NULL,
             "date" TIMESTAMP NOT NULL,
             "fruits" STRING NOT NULL,
             "price" DOUBLE NOT NULL,
-            PRIMARY KEY ("id")
+            PRIMARY KEY ("{primary_key}")
         );
     """
         )
     )
-    return basic_reference.strip("\n").format(table_name=table_name)
+    return basic_reference.strip("\n")
 
 
 @pytest.fixture
@@ -55,7 +56,7 @@ def test_ndjson_infer_library(basic_stream_ndjson):
     assert computed == get_basic_sql_reference(table_name="foo1")
 
 
-def test_ndjson_infer_cli_file_without_tablename(basic_stream_ndjson):
+def test_ndjson_infer_cli_file_without_tablename():
     """
     CLI test: Table name is correctly derived from the input file name or data.
     """
@@ -67,7 +68,7 @@ def test_ndjson_infer_cli_file_without_tablename(basic_stream_ndjson):
     assert computed == get_basic_sql_reference(table_name="basic")
 
 
-def test_ndjson_infer_cli_file_with_tablename(basic_stream_ndjson):
+def test_ndjson_infer_cli_file_with_tablename():
     """
     CLI test: Table name takes precedence when obtained from the user.
     """
