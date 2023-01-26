@@ -45,7 +45,7 @@ def basic_stream_ndjson():
     )
 
 
-def test_infer_ndjson_library(basic_stream_ndjson):
+def test_ndjson_infer_library(basic_stream_ndjson):
     """
     Verify basic library use.
     """
@@ -55,7 +55,7 @@ def test_infer_ndjson_library(basic_stream_ndjson):
     assert computed == get_basic_sql_reference(table_name="foo1")
 
 
-def test_infer_ndjson_cli_file_without_tablename(basic_stream_ndjson):
+def test_ndjson_infer_cli_file_without_tablename(basic_stream_ndjson):
     """
     CLI test: Table name is correctly derived from the input file name or data.
     """
@@ -67,7 +67,7 @@ def test_infer_ndjson_cli_file_without_tablename(basic_stream_ndjson):
     assert computed == get_basic_sql_reference(table_name="basic")
 
 
-def test_infer_ndjson_cli_file_with_tablename(basic_stream_ndjson):
+def test_ndjson_infer_cli_file_with_tablename(basic_stream_ndjson):
     """
     CLI test: Table name takes precedence when obtained from the user.
     """
@@ -79,7 +79,7 @@ def test_infer_ndjson_cli_file_with_tablename(basic_stream_ndjson):
     assert computed == get_basic_sql_reference(table_name="foo2")
 
 
-def test_infer_json_cli_stdin(basic_stream_ndjson):
+def test_ndjson_infer_json_cli_stdin(basic_stream_ndjson):
     """
     CLI test: Read data from stdin.
     """
