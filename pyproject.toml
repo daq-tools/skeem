@@ -27,6 +27,7 @@ dependencies = [
   "crash",
   "crate[sqlalchemy]",
   "ddlgenerator<0.2",
+  "pandas<1.6",
   "sql-formatter<0.7",
   "sqlmakeuper<0.2",
 ]
@@ -77,6 +78,7 @@ classifiers = [
 [project.optional-dependencies]
 develop = [
   "black<23",
+  "mypy==0.991",
   "poethepoet<0.19",
   "pyproject-fmt<0.6",
   "ruff==0.0.231",
@@ -106,9 +108,15 @@ eskema = "eskema.cli:cli"
 line-length = 120
 
 [tool.coverage.run]
-branch = false
-# TODO: Improve this?
 source = ["eskema"]
+branch = false
+
+[tool.mypy]
+packages = ["eskema"]
+install_types = true
+ignore_missing_imports = true
+implicit_optional = true
+non_interactive = true
 
 [tool.pytest.ini_options]
 addopts = "-ra -q --verbosity=3 --doctest-modules --cov --cov-report=term-missing --cov-report=xml"
@@ -178,13 +186,15 @@ test = { cmd = "pytest" }
 
 format = [
   { cmd = "black ." },
-  { cmd = "ruff --fix --ignore=T201 ." },
+  # Configure Ruff not to auto-fix (remove!) unused variables (F841) and `print` statements (T201).
+  { cmd = "ruff --fix --ignore=F841 --ignore=T201 ." },
   { cmd = "pyproject-fmt pyproject.toml" },
 ]
 lint = [
   { cmd = "ruff ." },
   { cmd = "black --check ." },
   { cmd = "validate-pyproject pyproject.toml" },
+  { cmd = "mypy" },
 ]
 
 release = [

@@ -11,20 +11,23 @@ About
 *****
 
 Infer SQL DDL statements from tabular data, based on the excellent
-`ddlgenerator`_.
+`SQLAlchemy`_ and `ddlgenerator`_.
 
-Supported input data: `JSON`_, `ndjson`_ aka. `JSON Lines`_.
+Supported input data: `ndjson`_ aka. `JSON Lines`_.
 
 
 ********
 Synopsis
 ********
-::
+
+Read data from given file::
 
     eskema infer-ddl --dialect=postgresql data.ndjson
 
-    cat data.ndjson | eskema --verbose infer-ddl --dialect=crate --table-name=foo -
-    eskema --verbose infer-ddl --dialect=crate --table-name=foo - < data.ndjson
+Reading data from stdin needs to obtain the table name separately::
+
+    eskema infer-ddl --dialect=crate --table-name=foo - < data.ndjson
+    cat data.ndjson | eskema infer-ddl --dialect=crate --table-name=foo -
 
 
 ***********
@@ -52,6 +55,7 @@ Credits
   Python itself, and turtles all the way down.
 
 
+.. _CSV: https://en.wikipedia.org/wiki/Comma-separated_values
 .. _ddlgenerator: https://pypi.org/project/ddlgenerator/
 .. _Catherine Devlin: https://github.com/catherinedevlin
 .. _JSON: https://www.json.org/

@@ -33,6 +33,11 @@ def coerce_to_specific(datum):
     0
     >>> coerce_to_specific(1)
     1
+    >>> coerce_to_specific("yes")
+    True
+    >>> coerce_to_specific("no")
+    False
+    >>> coerce_to_specific(None)
     """
     if datum is None:
         return None

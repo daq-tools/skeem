@@ -15,14 +15,19 @@ Iteration I
 - [x] Handle ndjson
 - [x] Read from stdin
 - [x] Primary key detection
-- [o] Content type detection using file extension
-- [o] Handle JSON
+- [x] Slight refactoring
+- [x] More OO
+- [/] assert_sql_equal
+- [x] Remedy magic numbers
+- [x] Content type detection using file extension or ``--content-type`` option
+- [x] Naming things
+- [o] Handle "empty input"
 - [o] Handle CSV
-- [o] Slight refactoring
+- [o] Handle JSON
 - [o] CI/GHA
-- [o] More OO
 - [o] Docker build & publish
 - [o] Docs: Add "other projects"
+- [o] File headers
 - [o] Release
 
 
@@ -30,6 +35,9 @@ Iteration I
 Iteration II
 ************
 
+- [o] Process multiple items
+- [o] Read archive files
+- [o] HTTP API endpoint
 - [o] Add more input formats
 
   - InfluxDB line protocol
@@ -42,3 +50,4 @@ Iteration II
   - XML?
 
 - [o] Content type detection using ``python-magic`` and/or ``identify``
+- [o] Add Mypy?
