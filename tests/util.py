@@ -14,7 +14,7 @@ def random_table_name(label: t.Union[Path, str]):
     return f"eskema-test-{name}-{random.randint(1, 999)}"
 
 
-def get_basic_sql_reference(table_name, primary_key="id"):
+def get_basic_sql_reference(table_name, primary_key="id", timestamp_not_null: bool = False):
     """
     The reference how the inferred SQL should look like.
     """
@@ -24,7 +24,7 @@ def get_basic_sql_reference(table_name, primary_key="id"):
         CREATE TABLE "{clean_key_name(table_name)}" (
             "id" INT NOT NULL,
             "name" STRING NOT NULL,
-            "date" TIMESTAMP,
+            "date" TIMESTAMP{" NOT NULL" if timestamp_not_null else ""},
             "fruits" STRING NOT NULL,
             "price" DOUBLE NOT NULL,
             PRIMARY KEY ("{primary_key}")

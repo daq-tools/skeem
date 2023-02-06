@@ -33,6 +33,7 @@ dependencies = [
   "crash",
   "crate[sqlalchemy]",
   "ddlgenerator<0.2",
+  "json_stream<3",
   "pandas<1.6",
   "sql-formatter<0.7",
   "sqlmakeuper<0.2",

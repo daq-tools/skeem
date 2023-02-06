@@ -7,7 +7,7 @@ from unittest import mock
 
 import pytest
 
-from eskema.util import boot_click, get_firstline, jd, sql_pretty
+from eskema.util import boot_click, get_firstline, jd, json_get_first_records, sql_pretty
 
 
 def test_jd():
@@ -73,3 +73,20 @@ def test_get_firstline_unknown_type():
     with pytest.raises(TypeError) as ex:
         get_firstline(42.42).read()
     assert ex.match(re.escape("Unable to decode first 1 line(s) from data. type=float"))
+
+
+def test_json_get_first_records_empty():
+    with pytest.raises(ValueError) as ex:
+        json_get_first_records(io.StringIO(""))
+    assert ex.match("Unable to parse JSON document in streaming mode. Reason: Document is empty")
+
+
+def test_json_get_first_records_invalid():
+    with pytest.raises(ValueError) as ex:
+        json_get_first_records(io.StringIO("foobar"))
+    assert ex.match("Unable to parse JSON document in streaming mode. Reason: Invalid JSON character: 'o' at index 1")
+
+
+def test_json_get_first_records_success():
+    records = json_get_first_records(io.StringIO('[{"foo":"bar"}]'))
+    assert dict(records[0]) == {"foo": "bar"}

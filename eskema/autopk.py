@@ -5,6 +5,7 @@ import typing as t
 import pandas as pd
 
 from eskema.type import ContentType
+from eskema.util import json_get_first_records
 
 PK_CANDIDATES_PRIMARY_PREFIXES = ["id"]
 PK_CANDIDATES_PRIMARY_LIST = ["pk", "key"]
@@ -47,6 +48,11 @@ def _infer_pk(data: t.Any, content_type: ContentType) -> t.Optional[str]:
         df = pd.read_json(data, lines=True, nrows=PEEK_LINES)
     elif content_type is ContentType.CSV:
         df = pd.read_csv(data, nrows=PEEK_LINES)
+
+    # Only load the first record(s) from a regular JSON document.
+    elif content_type is ContentType.JSON:
+        records = json_get_first_records(data, nrecords=PEEK_LINES)
+        df = pd.DataFrame.from_records(data=records)
 
     # Croak otherwise.
     else:

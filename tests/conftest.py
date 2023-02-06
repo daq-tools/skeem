@@ -14,6 +14,16 @@ def csv_file_basic():
     return Path("tests/testdata/basic.csv")
 
 
+@pytest.fixture
+def json_records_file_basic():
+    return Path("tests/testdata/basic-records.json")
+
+
+@pytest.fixture
+def json_document_file_basic():
+    return Path("tests/testdata/basic-document.json")
+
+
 class SqlAlchemyTableExtendExisting(sa.Table):
     """
     The test cases re-use the same table names within different test cases.

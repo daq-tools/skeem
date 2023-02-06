@@ -65,6 +65,8 @@ class ContentType(Enum):
             return ".ndjson"
         elif type_ is ContentType.CSV:
             return ".csv"
+        elif type_ is ContentType.JSON:
+            return ".json"
         else:
             raise ValueError(f"Unable to compute suffix for content type '{type_}'")
 
