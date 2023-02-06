@@ -1,6 +1,10 @@
+import io
+import logging
 import typing as t
 
 import pandas as pd
+
+from eskema.type import ContentType
 
 PK_CANDIDATES_PRIMARY_PREFIXES = ["id"]
 PK_CANDIDATES_PRIMARY_LIST = ["pk", "key"]
@@ -12,15 +16,41 @@ PK_CANDIDATES_SECONDARY = PK_CANDIDATES_SECONDARY_ENGLISH + PK_CANDIDATES_SECOND
 PEEK_LINES = 1000
 
 
-def infer_pk(data: t.Any) -> t.Optional[str]:
+logger = logging.getLogger(__name__)
+
+
+def infer_pk(data: t.Any, content_type: ContentType) -> t.Optional[str]:
     """
     Attempt to infer primary key from column names and data, DWIM [1].
 
     [1] https://en.wikipedia.org/wiki/DWIM
     """
+    pk = _infer_pk(data, content_type)
+    logger.info(f"Inferred primary key: {pk}")
+    return pk
+
+
+def _infer_pk(data: t.Any, content_type: ContentType) -> t.Optional[str]:
+    """
+    Attempt to infer primary key from column names and data, DWIM [1].
+
+    [1] https://en.wikipedia.org/wiki/DWIM
+    """
+
+    if isinstance(data, str):
+        data = io.StringIO(data)
+
     # Only peek at the first lines of data.
-    df = pd.read_json(data, lines=True, nrows=PEEK_LINES)
+    if ContentType.is_ndjson(content_type):
+        df = pd.read_json(data, lines=True, nrows=PEEK_LINES)
+    elif content_type is ContentType.CSV:
+        df = pd.read_csv(data, nrows=PEEK_LINES)
+    else:
+        raise NotImplementedError(f"Inferring primary key with content type '{content_type}' not implemented yet")
+
+    # Decode list of column names.
     columns = list(df.columns)
+    logger.info(f"Decoded list of column names: {columns}")
 
     # If there is any column starting with "id", use it as primary key right away.
     for column in columns:

@@ -1,4 +1,5 @@
 import dataclasses
+import io
 import logging
 import typing as t
 from pathlib import Path
@@ -7,6 +8,9 @@ from eskema.type import ContentType
 from eskema.util import sql_canonicalize, sql_pretty
 
 logger = logging.getLogger(__name__)
+
+
+PEEK_BYTES = 10000
 
 
 @dataclasses.dataclass
@@ -31,10 +35,15 @@ class Resource:
         # Derive content type from file extension or mimetype / short name.
         if self.path:
             self.type = ContentType.from_filename(self.path)
-            logger.info(f"Detected {self.type} from filename")
+            logger.info(f"Detected type from filename: {self.type}")
         if self.content_type:
             self.type = ContentType.from_name(self.content_type)
-            logger.info(f"Using {self.type} as specified")
+            logger.info(f"Using specified type: {self.type}")
+
+    def read_data(self):
+        # Only peek at the first bytes of data.
+        self.data.seek(0)
+        return io.StringIO(self.data.read(PEEK_BYTES))
 
 
 @dataclasses.dataclass

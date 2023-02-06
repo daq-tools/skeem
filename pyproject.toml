@@ -4,9 +4,14 @@ version = "0.0.0"
 description = "Infer SQL DDL statements from tabular data"
 readme = "README.rst"
 keywords = [
+  "csv",
   "ddl",
   "inference",
   "introspection",
+  "json",
+  "jsonl",
+  "ldjson",
+  "ndjson",
   "rdbms",
   "reflection",
   "schema",
@@ -187,7 +192,7 @@ test = { cmd = "pytest" }
 format = [
   { cmd = "black ." },
   # Configure Ruff not to auto-fix (remove!) unused variables (F841) and `print` statements (T201).
-  { cmd = "ruff --fix --ignore=F841 --ignore=T201 ." },
+  { cmd = "ruff --fix --ignore=F841 --ignore=T20 ." },
   { cmd = "pyproject-fmt pyproject.toml" },
 ]
 lint = [

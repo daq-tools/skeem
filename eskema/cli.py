@@ -53,11 +53,8 @@ def infer_ddl(
     # Read data from file.
     elif isinstance(indata, (Path, str)):
         path = Path(indata)
-        logger.info(f"Loading data from '{path}'")
+        logger.info(f"Loading data from: {path}")
         indata = path.open("r")
-
-    else:
-        raise click.BadArgumentUsage("Unable to read data. 'input' argument missing or empty")
 
     # Decode data.
     sg = SchemaGenerator(
@@ -75,4 +72,5 @@ def infer_ddl(
     result = sg.to_sql_ddl()
     print(result.pretty)  # noqa: T201
 
-    indata.close()
+    if indata is not None:
+        indata.close()

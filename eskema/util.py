@@ -33,8 +33,6 @@ def setup_logging(level=logging.INFO):
     logging.basicConfig(format=log_format, stream=sys.stderr, level=level, force=True)
 
     # Disable `ddlgenerator` logger.
-    root_logger = logging.getLogger("root")
-    root_logger.disabled = True
 
 
 def boot_click(ctx: click.Context, verbose: bool, debug: bool):
@@ -50,19 +48,31 @@ def boot_click(ctx: click.Context, verbose: bool, debug: bool):
     setup_logging(level=log_level)
 
 
-def get_firstline(data: t.Union[io.TextIOBase, Path, str]):
+def get_firstline(data: t.Union[io.TextIOBase, Path, str], nrows: int = 1):
     if isinstance(data, io.TextIOBase):
-        return stream_get_firstline(data)
+        return stream_get_firstline(data, nrows=nrows)
     elif isinstance(data, str):
-        return io.StringIO(data.splitlines()[0])
+        return str_get_firstline(data, nrows=nrows)
     elif isinstance(data, Path):
         data = Path(data)
         with open(data, "r") as f:
-            return stream_get_firstline(f)
+            return stream_get_firstline(f, nrows=nrows)
     else:
-        raise TypeError(f"Unable to decode first line from data. type={type(data).__name__}")
+        raise TypeError(f"Unable to decode first {nrows} line(s) from data. type={type(data).__name__}")
 
 
-def stream_get_firstline(stream: t.Union[io.TextIOBase, t.IO]):
-    firstline = stream.readline()
-    return io.StringIO(firstline.strip())
+def stream_get_firstline(stream: t.Union[io.TextIOBase, t.IO], nrows: int = 1):
+    buffer = io.StringIO()
+    for _ in range(nrows):
+        buffer.write(stream.readline())
+    buffer.seek(0)
+    return buffer
+
+
+def str_get_firstline(data: str, nrows: int = 1):
+    buffer = io.StringIO()
+    lines = data.splitlines()[:nrows]
+    for line in lines:
+        buffer.write(line)
+    buffer.seek(0)
+    return buffer

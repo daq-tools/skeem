@@ -2,9 +2,9 @@ import logging
 
 from eskema.autopk import infer_pk
 from eskema.model import Resource, SqlResult, SqlTarget
+from eskema.sources import SourcePlus
+from eskema.type import ContentType
 from eskema.util import get_firstline
-
-PEEK_BYTES = 10000
 
 logger = logging.getLogger(__name__)
 
@@ -37,21 +37,35 @@ class SchemaGenerator:
     def to_sql_ddl(self) -> SqlResult:
         from ddlgenerator.ddlgenerator import Table
 
+        if self.resource.type is None:
+            raise ValueError("Unable to infer schema without resource type")
+
         # Only peek at the first bytes of data.
-        indata = self.resource.data.read(PEEK_BYTES)
+        indata = self.resource.read_data()
+
+        # When inferring from NDJSON, use only the first line.
+        if ContentType.is_ndjson(self.resource.type):
+            indata = get_firstline(indata, nrows=1)
 
         # When primary key is not given, try to infer it from the data.
         if self.target.primary_key is None:
-            self.target.primary_key = infer_pk(indata)
+            self.target.primary_key = infer_pk(indata, self.resource.type)
+            indata.seek(0)
 
-        firstline = get_firstline(indata)
+        if self.resource.type is ContentType.CSV:
+            indata = get_firstline(indata, nrows=2)
+
+        # TODO: Still needed?
+        data = indata
+
+        suffix = ContentType.to_suffix(self.resource.type)
         table = Table(
-            firstline,
+            data=SourcePlus(data, ext=suffix),
             table_name=self.target.table_name,
             varying_length_text=True,
             uniques=False,
             pk_name=self.target.primary_key,
-            force_pk=True,
+            force_pk=False,
             reorder=False,
             loglevel=logging.DEBUG,
             limit=None,

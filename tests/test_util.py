@@ -1,6 +1,7 @@
 import io
 import json
 import logging
+import re
 from contextlib import redirect_stdout
 from unittest import mock
 
@@ -58,17 +59,17 @@ def test_get_firstline_string():
 def test_get_firstline_textwrapper():
     indata = io.TextIOWrapper(io.BytesIO(b"first\nsecond"))
     firstline = get_firstline(indata).read()
-    assert firstline == "first"
+    assert firstline == "first\n"
 
 
 def test_get_firstline_path(tmp_path):
     indata = tmp_path.joinpath("testfile")
     indata.write_text("first\nsecond")
     firstline = get_firstline(indata).read()
-    assert firstline == "first"
+    assert firstline == "first\n"
 
 
 def test_get_firstline_unknown_type():
     with pytest.raises(TypeError) as ex:
         get_firstline(42.42).read()
-    assert ex.match("Unable to decode first line from data. type=float")
+    assert ex.match(re.escape("Unable to decode first 1 line(s) from data. type=float"))

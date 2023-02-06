@@ -6,8 +6,9 @@ from pathlib import Path
 
 def init():
     """
-    Table comparing ndjson, JSON Lines, and LDJSON side-by-side
+    Add NDJSON variants to MIME types map.
 
+    Table comparing NDJSON (ex. LDJSON) and JSON Lines side-by-side:
     https://github.com/ndjson/ndjson.github.io/issues/1#issuecomment-109935996
     """
     mimetypes.init()
@@ -50,6 +51,22 @@ class ContentType(Enum):
             pass
 
         raise ValueError(f"'{name}' is not a valid ContentType or ContentTypeShort")
+
+    @classmethod
+    def is_ndjson(cls, type_: "ContentType"):
+        if type_ in [ContentType.NDJSON, ContentType.JSONL, ContentType.LDJSON]:
+            return True
+        else:
+            return False
+
+    @classmethod
+    def to_suffix(cls, type_: "ContentType"):
+        if cls.is_ndjson(type_):
+            return ".json"
+        elif type_ in [ContentType.CSV]:
+            return ".csv"
+        else:
+            raise ValueError(f"Unable to compute suffix for content type '{type_}'")
 
 
 class ContentTypeShort(Enum):
