@@ -62,8 +62,8 @@ class ContentType(Enum):
     @classmethod
     def to_suffix(cls, type_: "ContentType"):
         if cls.is_ndjson(type_):
-            return ".json"
-        elif type_ in [ContentType.CSV]:
+            return ".ndjson"
+        elif type_ is ContentType.CSV:
             return ".csv"
         else:
             raise ValueError(f"Unable to compute suffix for content type '{type_}'")

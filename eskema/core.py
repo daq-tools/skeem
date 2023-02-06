@@ -4,7 +4,6 @@ from eskema.autopk import infer_pk
 from eskema.model import Resource, SqlResult, SqlTarget
 from eskema.sources import SourcePlus
 from eskema.type import ContentType
-from eskema.util import get_firstline
 
 logger = logging.getLogger(__name__)
 
@@ -43,24 +42,17 @@ class SchemaGenerator:
         # Only peek at the first bytes of data.
         indata = self.resource.read_data()
 
-        # When inferring from NDJSON, use only the first line.
-        if ContentType.is_ndjson(self.resource.type):
-            indata = get_firstline(indata, nrows=1)
-
         # When primary key is not given, try to infer it from the data.
         if self.target.primary_key is None:
             self.target.primary_key = infer_pk(indata, self.resource.type)
-            indata.seek(0)
 
-        if self.resource.type is ContentType.CSV:
-            indata = get_firstline(indata, nrows=2)
-
-        # TODO: Still needed?
-        data = indata
-
+        # Wrap data into data-dispenser's `Source` instance.
         suffix = ContentType.to_suffix(self.resource.type)
+        data = SourcePlus(indata, ext=suffix)
+
+        # Infer schema from data.
         table = Table(
-            data=SourcePlus(data, ext=suffix),
+            data=data,
             table_name=self.target.table_name,
             varying_length_text=True,
             uniques=False,
@@ -70,5 +62,7 @@ class SchemaGenerator:
             loglevel=logging.DEBUG,
             limit=None,
         )
+
+        # Convert schema to SQL DDL statement.
         sql = table.sql(dialect=self.target.dialect, creates=True, drops=False, inserts=False)
         return SqlResult(sql)

@@ -18,7 +18,7 @@ def basic_stream_csv():
         """
 id,name,date,fruits,price
 1,"foo","2014-10-31T09:22:56","apple,banana",0.42
-2,"bar",\\N,"pear",0.84
+2,"bar",,"pear",0.84
     """.lstrip()
     )
 

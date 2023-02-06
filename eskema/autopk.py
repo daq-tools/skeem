@@ -26,6 +26,8 @@ def infer_pk(data: t.Any, content_type: ContentType) -> t.Optional[str]:
     [1] https://en.wikipedia.org/wiki/DWIM
     """
     pk = _infer_pk(data, content_type)
+    if hasattr(data, "seek"):
+        data.seek(0)
     logger.info(f"Inferred primary key: {pk}")
     return pk
 
@@ -45,6 +47,8 @@ def _infer_pk(data: t.Any, content_type: ContentType) -> t.Optional[str]:
         df = pd.read_json(data, lines=True, nrows=PEEK_LINES)
     elif content_type is ContentType.CSV:
         df = pd.read_csv(data, nrows=PEEK_LINES)
+
+    # Croak otherwise.
     else:
         raise NotImplementedError(f"Inferring primary key with content type '{content_type}' not implemented yet")
 

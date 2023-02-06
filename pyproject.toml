@@ -6,6 +6,7 @@ readme = "README.rst"
 keywords = [
   "csv",
   "ddl",
+  "infer",
   "inference",
   "introspection",
   "json",

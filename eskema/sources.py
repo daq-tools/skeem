@@ -16,6 +16,7 @@ except ImportError:
         pass
 
 
+# How many lines to read from input data.
 PEEK_LINES = 1000
 
 
@@ -108,6 +109,7 @@ class SourcePlus(Source):
 
     def improve(self):
         self.eval_funcs_by_ext[".csv"] = [_eval_csv]
+        self.eval_funcs_by_ext[".ndjson"] = [_eval_ndjson]
 
     def _source_is_readable(self, src, ext="*"):
         if hasattr(src, "name"):
@@ -118,8 +120,20 @@ class SourcePlus(Source):
 
 def _eval_csv(target, fieldnames=None, *args, **kwargs):
     """
-    Yields records from a CSV string, using pandas' `pd.read_csv`.
+    Generate records from a CSV string, using pandas' `pd.read_csv`.
     """
-    df = pd.read_csv(target, nrows=PEEK_LINES)
+    df = pd.read_csv(target, parse_dates=False, keep_default_na=False, nrows=PEEK_LINES)
+    return _generate_records(df)
+
+
+def _eval_ndjson(target, fieldnames=None, *args, **kwargs):
+    """
+    Generate records from an NDJSON string, using pandas' `pd.read_json`.
+    """
+    df = pd.read_json(target, convert_dates=False, lines=True, nrows=PEEK_LINES)
+    return _generate_records(df)
+
+
+def _generate_records(df):
     for record in df.to_dict(orient="records"):
         yield record

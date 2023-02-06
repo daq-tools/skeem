@@ -24,7 +24,7 @@ def get_basic_sql_reference(table_name, primary_key="id"):
         CREATE TABLE "{clean_key_name(table_name)}" (
             "id" INT NOT NULL,
             "name" STRING NOT NULL,
-            "date" TIMESTAMP NOT NULL,
+            "date" TIMESTAMP,
             "fruits" STRING NOT NULL,
             "price" DOUBLE NOT NULL,
             PRIMARY KEY ("{primary_key}")
