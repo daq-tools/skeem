@@ -32,6 +32,7 @@ Misc
 - https://stackoverflow.com/questions/69874809/how-can-i-infer-the-candidate-key-from-csv-files
 - https://stackabuse.com/python-how-to-flatten-list-of-lists/
 - https://github.com/ndjson/ndjson.github.io/issues/1
+- https://agate.readthedocs.io/en/latest/cookbook/create.html#override-type-inference
 
 csvkit
 ======
