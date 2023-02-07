@@ -13,14 +13,23 @@ from sqlformatter.sqlformatter import SQLFormatter
 
 
 def jd(data: t.Any):
+    """
+    Pretty-print JSON with indentation.
+    """
     print(json.dumps(data, indent=2))  # noqa: T201
 
 
 def sql_canonicalize(sql: str) -> str:
+    """
+    Compute canonical representation for SQL statement.
+    """
     return sql_pretty(sql)
 
 
 def sql_pretty(sql: str, reindent: bool = False) -> str:
+    """
+    Prettify SQL statement.
+    """
     sql = sql.strip().replace("\t", "    ")
     return SQLFormatter(
         reindent=reindent, indent_width=2, keyword_case="upper", identifier_case=None, comma_first=False
@@ -28,6 +37,9 @@ def sql_pretty(sql: str, reindent: bool = False) -> str:
 
 
 def setup_logging(level=logging.INFO):
+    """
+    Setup loggers.
+    """
 
     # Define log format.
     log_format = "%(asctime)-15s [%(name)-26s] %(levelname)-7s: %(message)s"
@@ -39,6 +51,9 @@ def setup_logging(level=logging.INFO):
 
 
 def boot_click(ctx: click.Context, verbose: bool, debug: bool):
+    """
+    Bootstrap the CLI application.
+    """
 
     # Adjust log level according to `verbose` / `debug` flags.
     log_level = logging.WARNING
@@ -52,6 +67,9 @@ def boot_click(ctx: click.Context, verbose: bool, debug: bool):
 
 
 def get_firstline(data: t.Union[io.TextIOBase, Path, str], nrows: int = 1) -> t.IO:
+    """
+    Get first N lines of input data.
+    """
     if isinstance(data, io.TextIOBase):
         return stream_get_firstline(data, nrows=nrows)
     elif isinstance(data, str):
@@ -65,6 +83,9 @@ def get_firstline(data: t.Union[io.TextIOBase, Path, str], nrows: int = 1) -> t.
 
 
 def stream_get_firstline(stream: t.Union[io.TextIOBase, t.IO], nrows: int = 1) -> t.IO:
+    """
+    Get first N lines of input data from stream.
+    """
     buffer = io.StringIO()
     for _ in range(nrows):
         buffer.write(stream.readline())
@@ -73,6 +94,9 @@ def stream_get_firstline(stream: t.Union[io.TextIOBase, t.IO], nrows: int = 1) -
 
 
 def str_get_firstline(data: str, nrows: int = 1) -> t.IO:
+    """
+    Get first N lines of input data from str.
+    """
     buffer = io.StringIO()
     lines = data.splitlines()[:nrows]
     for line in lines:

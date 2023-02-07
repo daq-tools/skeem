@@ -23,23 +23,41 @@ def init():
 
 
 class ContentType(Enum):
+    """
+    Enumerate all supported content types and derive content type from input data.
+    """
 
     # Primary definitions.
     CSV = "text/csv"
     JSON = "application/json"
     NDJSON = "application/x-ndjson"
-    LDJSON = "application/x-ldjson"
 
     # Secondary aliases.
+    LDJSON = "application/x-ldjson"
     JSONL = "application/x-ndjson"
 
     @classmethod
     def from_filename(cls, filename: t.Union[Path, str]) -> "ContentType":
+        """
+        Derive content type from filename extension.
+
+        >>> ContentType.from_filename("foo.csv")
+        <ContentType.CSV: 'text/csv'>
+        """
         mimetype, _ = mimetypes.guess_type(filename)
         return cls(mimetype)
 
     @classmethod
     def from_name(cls, name: str) -> "ContentType":
+        """
+        Derive content type from long and short name.
+
+        >>> ContentType.from_name("csv")
+        <ContentType.CSV: 'text/csv'>
+
+        >>> ContentType.from_name("text/csv")
+        <ContentType.CSV: 'text/csv'>
+        """
         try:
             return ContentType(name)
         except ValueError:
@@ -54,6 +72,9 @@ class ContentType(Enum):
 
     @classmethod
     def is_ndjson(cls, type_: "ContentType") -> bool:
+        """
+        Is content type any variant of NDJSON?
+        """
         if type_ in [ContentType.NDJSON, ContentType.JSONL, ContentType.LDJSON]:
             return True
         else:
@@ -61,6 +82,9 @@ class ContentType(Enum):
 
     @classmethod
     def to_suffix(cls, type_: "ContentType") -> str:
+        """
+        Derive filename extension from content type.
+        """
         if cls.is_ndjson(type_):
             return ".ndjson"
         elif type_ is ContentType.CSV:
@@ -72,6 +96,9 @@ class ContentType(Enum):
 
 
 class ContentTypeShort(Enum):
+    """
+    Manage short names of content types, mapping them to their corresponding mimetype counterparts.
+    """
 
     CSV = "csv"
     JSON = "json"

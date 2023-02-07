@@ -15,12 +15,22 @@ PEEK_BYTES = 10000
 
 @dataclasses.dataclass
 class Resource:
+    """
+    A wrapper around input data.
+    """
+
     data: t.Any
     path: t.Optional[t.Union[Path, str]] = None
     content_type: t.Optional[t.Union[ContentType, str]] = None
     type: t.Optional[ContentType] = None  # noqa: A003
 
-    def configure(self):
+    def peek(self):
+        """
+        Introspect input data and derive content type.
+        Currently, it only detects the content type from the filename extension.
+
+        # TODO: Implement introspection-based content type detection.
+        """
 
         # Default values.
         self.path = Path(self.path) if self.path else None
@@ -41,13 +51,19 @@ class Resource:
             logger.info(f"Using specified type: {self.type}")
 
     def read_data(self) -> t.TextIO:
-        # Only peek at the first bytes of data.
+        """
+        Only peek at the first bytes of data.
+        """
         self.data.seek(0)
         return io.StringIO(self.data.read(PEEK_BYTES))
 
 
 @dataclasses.dataclass
 class SqlTarget:
+    """
+    Manage SQL target definition metadata.
+    """
+
     dialect: t.Optional[str] = None
     table_name: t.Optional[str] = None
     primary_key: t.Optional[str] = None
@@ -55,6 +71,10 @@ class SqlTarget:
 
 @dataclasses.dataclass
 class SqlResult:
+    """
+    Manage result SQL DDL statement.
+    """
+
     sql: str
 
     @property

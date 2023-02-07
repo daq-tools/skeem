@@ -69,6 +69,8 @@ def infer_ddl(
             primary_key=primary_key,
         ),
     )
+
+    # Convert to SQL DDL.
     result = sg.to_sql_ddl()
     print(result.pretty)  # noqa: T201
 

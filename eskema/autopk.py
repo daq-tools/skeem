@@ -7,12 +7,16 @@ import pandas as pd
 from eskema.type import ContentType
 from eskema.util import json_get_first_records
 
+# Primary list of field name prefixes to consider as primary key.
 PK_CANDIDATES_PRIMARY_PREFIXES = ["id"]
+
+# Primary list of absolute field names to consider as primary key.
 PK_CANDIDATES_PRIMARY_LIST = ["pk", "key"]
 
+# Secondary list of absolute field names to consider as primary key.
 PK_CANDIDATES_SECONDARY_ENGLISH = ["#", "number", "nr"]
 PK_CANDIDATES_SECONDARY_GERMAN = ["nummer", "no", "kennung", "bezeichner", "identifikator"]
-PK_CANDIDATES_SECONDARY = PK_CANDIDATES_SECONDARY_ENGLISH + PK_CANDIDATES_SECONDARY_GERMAN
+PK_CANDIDATES_SECONDARY_LIST = PK_CANDIDATES_SECONDARY_ENGLISH + PK_CANDIDATES_SECONDARY_GERMAN
 
 PEEK_LINES = 1000
 
@@ -27,18 +31,13 @@ def infer_pk(data: t.Any, content_type: ContentType) -> t.Optional[str]:
     [1] https://en.wikipedia.org/wiki/DWIM
     """
     pk = _infer_pk(data, content_type)
+    logger.info(f"Inferred primary key: {pk}")
     if hasattr(data, "seek"):
         data.seek(0)
-    logger.info(f"Inferred primary key: {pk}")
     return pk
 
 
 def _infer_pk(data: t.Any, content_type: ContentType) -> t.Optional[str]:
-    """
-    Attempt to infer primary key from column names and data, DWIM [1].
-
-    [1] https://en.wikipedia.org/wiki/DWIM
-    """
 
     if isinstance(data, str):
         data = io.StringIO(data)
@@ -74,7 +73,7 @@ def _infer_pk(data: t.Any, content_type: ContentType) -> t.Optional[str]:
 
     # Choose primary key based on a list of other candidates.
     for column in columns:
-        if column.lower() in PK_CANDIDATES_SECONDARY:
+        if column.lower() in PK_CANDIDATES_SECONDARY_LIST:
             return column
 
     # If the values of the first column are unique, use that as primary key.

@@ -23,6 +23,13 @@ class SchemaGenerator:
         self.configure()
 
     def configure(self):
+        """
+        Apply default configuration.
+
+        - Run sanity checks.
+        - Derive table name from file name.
+        - Peek input resource and derive content type.
+        """
         # Sanity checks.
         if not self.target.dialect:
             raise ValueError("Inferring the database schema needs an SQLAlchemy dialect")
@@ -31,9 +38,12 @@ class SchemaGenerator:
         if not self.target.table_name and self.resource.path:
             self.target.table_name = self.resource.path.stem
 
-        self.resource.configure()
+        self.resource.peek()
 
     def to_sql_ddl(self) -> SqlResult:
+        """
+        Infer field/column schema from input data and generate SQL DDL statement.
+        """
         from ddlgenerator.ddlgenerator import Table
 
         if self.resource.type is None:

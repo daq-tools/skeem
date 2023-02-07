@@ -49,6 +49,9 @@ class SourcePlus(Source):
         self.autodetect()
 
     def autodetect(self):
+        """
+        Dispatch input data by its type to the corresponding handler function.
+        """
         src = self.src
         table = self.table
         ext = self.ext
@@ -111,10 +114,16 @@ class SourcePlus(Source):
         raise NotImplementedError("Could not read data source %s of type %s" % (str(src), str(type(src))))
 
     def improve(self):
+        """
+        Register improved content type handler functions for certain data formats.
+        """
         self.eval_funcs_by_ext[".csv"] = [_eval_csv]
         self.eval_funcs_by_ext[".ndjson"] = [_eval_ndjson]
 
     def _source_is_readable(self, src, ext="*"):
+        """
+        A generic deserializer function for reading open files or buffers.
+        """
         if hasattr(src, "name"):
             self.table_name = src.name
         self.deserializers = self.eval_funcs_by_ext.get(ext or "*")
@@ -138,5 +147,8 @@ def _eval_ndjson(target, fieldnames: t.List[str] = None, *args, **kwargs):
 
 
 def _generate_records(df: pd.DataFrame):
+    """
+    Generate individual dict-type records from pandas dataframe.
+    """
     for record in df.to_dict(orient="records"):
         yield record
