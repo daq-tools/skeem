@@ -12,7 +12,7 @@ from tests.util import get_basic_sql_reference
 @pytest.fixture
 def basic_stream_ndjson():
     """
-    A stream of input data. Here, in ndjson format, aka. jsonl.
+    A stream of input data. Here, in NDJSON (ex. LDJSON) format, aka. JSON Lines.
 
     http://ndjson.org/
     """

@@ -1,7 +1,8 @@
 import datetime
+import typing as t
 from decimal import Decimal, InvalidOperation
 
-import dateutil
+import dateutil.parser
 import ddlgenerator.ddlgenerator
 import ddlgenerator.typehelpers
 import sqlalchemy as sa
@@ -9,8 +10,10 @@ from ddlgenerator.ddlgenerator import _dump
 from ddlgenerator.reshape import _illegal_in_column_name
 from ddlgenerator.typehelpers import _complex_enough_to_be_date, _digits_only
 
+CoercionType = t.Union[str, int, float, bool, Decimal, datetime.datetime]
 
-def coerce_to_specific(datum):
+
+def coerce_to_specific(datum: CoercionType) -> t.Optional[CoercionType]:
     """
     Coerces datum to the most specific data type possible
     Order of preference: datetime, boolean, integer, decimal, float, string
@@ -42,22 +45,25 @@ def coerce_to_specific(datum):
     if datum is None:
         return None
     try:
-        result = dateutil.parser.parse(datum)
-        # but even if this does not raise an exception, may
-        # not be a date -- dateutil's parser is very aggressive
-        # check for nonsense unprintable date
-        str(result)
+        if isinstance(datum, (bytes, str, t.IO)):
+            result = dateutil.parser.parse(datum)
+            # but even if this does not raise an exception, may
+            # not be a date -- dateutil's parser is very aggressive
+            # check for nonsense unprintable date
+            str(result)
+
         # most false date hits will be interpreted as times today
         # or as unlikely far-future or far-past years
-        clean_datum = datum.strip().lstrip("-").lstrip("0").rstrip(".")
-        if len(_complex_enough_to_be_date.findall(clean_datum)) < 2:
-            digits = _digits_only.search(clean_datum)
-            if (not digits) or (len(digits.group(0)) not in (4, 6, 8, 12, 14, 17)):
-                raise Exception("false date hit for %s" % datum)
-            if result.date() == datetime.datetime.now().date():
-                raise Exception("false date hit (%s) for %s" % (str(result), datum))
-            if not (1700 < result.year < 2150):
-                raise Exception("false date hit (%s) for %s" % (str(result), datum))
+        if isinstance(datum, str):
+            clean_datum = datum.strip().lstrip("-").lstrip("0").rstrip(".")
+            if len(_complex_enough_to_be_date.findall(clean_datum)) < 2:
+                digits = _digits_only.search(clean_datum)
+                if (not digits) or (len(digits.group(0)) not in (4, 6, 8, 12, 14, 17)):
+                    raise Exception("false date hit for %s" % datum)
+                if result.date() == datetime.datetime.now().date():
+                    raise Exception("false date hit (%s) for %s" % (str(result), datum))
+                if not (1700 < result.year < 2150):
+                    raise Exception("false date hit (%s) for %s" % (str(result), datum))
         return result
     except Exception:
         pass
@@ -99,14 +105,14 @@ class AnyDialect(dict):
     sqlalchemy.exc.NoSuchModuleError: Can't load plugin: sqlalchemy.dialects:foo
     """
 
-    def __contains__(self, item):
+    def __contains__(self, item) -> bool:
         return True
 
     def __getitem__(self, item):
         return sa.create_mock_engine(f"{item}://", executor=_dump)
 
 
-def clean_key_name(key):
+def clean_key_name(key: str) -> str:
     """
     Makes ``key`` a valid and appropriate SQL column name:
 

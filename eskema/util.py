@@ -12,7 +12,7 @@ from json_stream.base import StreamingJSONList, StreamingJSONObject
 from sqlformatter.sqlformatter import SQLFormatter
 
 
-def jd(data):
+def jd(data: t.Any):
     print(json.dumps(data, indent=2))  # noqa: T201
 
 
@@ -51,7 +51,7 @@ def boot_click(ctx: click.Context, verbose: bool, debug: bool):
     setup_logging(level=log_level)
 
 
-def get_firstline(data: t.Union[io.TextIOBase, Path, str], nrows: int = 1):
+def get_firstline(data: t.Union[io.TextIOBase, Path, str], nrows: int = 1) -> t.IO:
     if isinstance(data, io.TextIOBase):
         return stream_get_firstline(data, nrows=nrows)
     elif isinstance(data, str):
@@ -64,7 +64,7 @@ def get_firstline(data: t.Union[io.TextIOBase, Path, str], nrows: int = 1):
         raise TypeError(f"Unable to decode first {nrows} line(s) from data. type={type(data).__name__}")
 
 
-def stream_get_firstline(stream: t.Union[io.TextIOBase, t.IO], nrows: int = 1):
+def stream_get_firstline(stream: t.Union[io.TextIOBase, t.IO], nrows: int = 1) -> t.IO:
     buffer = io.StringIO()
     for _ in range(nrows):
         buffer.write(stream.readline())
@@ -72,7 +72,7 @@ def stream_get_firstline(stream: t.Union[io.TextIOBase, t.IO], nrows: int = 1):
     return buffer
 
 
-def str_get_firstline(data: str, nrows: int = 1):
+def str_get_firstline(data: str, nrows: int = 1) -> t.IO:
     buffer = io.StringIO()
     lines = data.splitlines()[:nrows]
     for line in lines:
@@ -81,7 +81,7 @@ def str_get_firstline(data: str, nrows: int = 1):
     return buffer
 
 
-def json_get_first_records(data: io.TextIOBase, nrecords=5) -> t.List[t.OrderedDict[t.AnyStr, t.Any]]:
+def json_get_first_records(data: io.TextIOBase, nrecords: int = 5) -> t.List[t.OrderedDict[t.AnyStr, t.Any]]:
     """
     Read JSON data lazily, without loading the whole document into memory.
 

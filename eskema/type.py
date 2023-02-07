@@ -53,14 +53,14 @@ class ContentType(Enum):
         raise ValueError(f"'{name}' is not a valid ContentType or ContentTypeShort")
 
     @classmethod
-    def is_ndjson(cls, type_: "ContentType"):
+    def is_ndjson(cls, type_: "ContentType") -> bool:
         if type_ in [ContentType.NDJSON, ContentType.JSONL, ContentType.LDJSON]:
             return True
         else:
             return False
 
     @classmethod
-    def to_suffix(cls, type_: "ContentType"):
+    def to_suffix(cls, type_: "ContentType") -> str:
         if cls.is_ndjson(type_):
             return ".ndjson"
         elif type_ is ContentType.CSV:

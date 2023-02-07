@@ -1,5 +1,6 @@
 import io
 import logging
+import typing as t
 
 import pandas as pd
 import sqlalchemy
@@ -21,7 +22,9 @@ PEEK_LINES = 1000
 
 
 class SourcePlus(Source):
-    def __init__(self, src, limit=None, fieldnames=None, table="*", ext=None):
+    def __init__(
+        self, src: t.Any, limit: int = None, fieldnames: t.List[str] = None, table: str = "*", ext: str = None
+    ):
         """
         For ``.csv`` and ``.xls``, field names will be taken from
         the first line of data found - unless ``fieldnames`` is given,
@@ -33,7 +36,7 @@ class SourcePlus(Source):
 
         self.counter = 0
         self.limit = limit
-        self.deserializers = []
+        self.deserializers: t.List[t.Callable] = []
         self.table_name = "Table%d" % (SourcePlus.table_count)
         self.fieldnames = fieldnames
         self.db_engine = None
@@ -118,7 +121,7 @@ class SourcePlus(Source):
         self._deserialize(src)
 
 
-def _eval_csv(target, fieldnames=None, *args, **kwargs):
+def _eval_csv(target, fieldnames: t.List[str] = None, *args, **kwargs):
     """
     Generate records from a CSV string, using pandas' `pd.read_csv`.
     """
@@ -126,7 +129,7 @@ def _eval_csv(target, fieldnames=None, *args, **kwargs):
     return _generate_records(df)
 
 
-def _eval_ndjson(target, fieldnames=None, *args, **kwargs):
+def _eval_ndjson(target, fieldnames: t.List[str] = None, *args, **kwargs):
     """
     Generate records from an NDJSON string, using pandas' `pd.read_json`.
     """
@@ -134,6 +137,6 @@ def _eval_ndjson(target, fieldnames=None, *args, **kwargs):
     return _generate_records(df)
 
 
-def _generate_records(df):
+def _generate_records(df: pd.DataFrame):
     for record in df.to_dict(orient="records"):
         yield record

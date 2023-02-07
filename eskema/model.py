@@ -40,7 +40,7 @@ class Resource:
             self.type = ContentType.from_name(self.content_type)
             logger.info(f"Using specified type: {self.type}")
 
-    def read_data(self):
+    def read_data(self) -> t.TextIO:
         # Only peek at the first bytes of data.
         self.data.seek(0)
         return io.StringIO(self.data.read(PEEK_BYTES))
@@ -58,9 +58,9 @@ class SqlResult:
     sql: str
 
     @property
-    def canonical(self):
+    def canonical(self) -> str:
         return sql_canonicalize(self.sql)
 
     @property
-    def pretty(self):
+    def pretty(self) -> str:
         return sql_pretty(self.sql)
