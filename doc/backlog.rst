@@ -32,7 +32,9 @@ Features
 
 - [x] Handle CSV
 - [x] Handle basic JSON: records + single document
+- [x] Handle spreadsheet formats: XLSX and ODF
 - [x] More type annotations
+- [o] eskema --list-input-formats
 
 Documentation
 =============
@@ -41,7 +43,7 @@ Documentation
 - [x] Add "other projects" section
 - [x] Document library use
 - [x] Add example program
-- [o] File headers
+- [/] File headers
 
 Infrastructure
 ==============
@@ -50,6 +52,7 @@ Infrastructure
 - [o] Docker build & publish
 - [o] Docs: RTD
 - [o] Release 0.1.0
+- [o] Issues: Hello world, Collection of bogus input data
 
 
 ***********
@@ -60,6 +63,9 @@ Iteration 3
 - [o] Handle "empty" input
 - [o] Process multiple items
 - [o] Read archive files
+
+  - https://s3.amazonaws.com/crate.sampledata/nyc.yellowcab/yc.2019.07.gz
+
 - [o] Handle JSON and NDJSON with nested objects: ``OBJECT`` and ``ARRAY``
 - [o] Support more data types, like ``BOOLEAN``, ``GEO_*``, ``BIT``, ``IP``
 - [o] Improve type inference.
@@ -76,7 +82,7 @@ Iteration 4
   - InfluxDB line protocol
   - Parquet and friends
   - Fixed-width, using ``pd.read_fwf()``
-  - XLSX, ODF, and other spreadsheets like Google Sheets, its Microsoft pendant, and friends
+  - Spreadsheet formats: Google Sheets, its Microsoft pendant, and friends
   - pandas Dataframes
   - Avro
   - JSON Schema
