@@ -53,12 +53,13 @@ class SchemaGenerator:
         indata = self.resource.read_data()
 
         # When primary key is not given, try to infer it from the data.
+        # TODO: Make `infer_pk` obtain a `Resource` instance, and/or refactor as method.
         if self.target.primary_key is None:
-            self.target.primary_key = infer_pk(indata, self.resource.type)
+            self.target.primary_key = infer_pk(indata, self.resource.type, address=self.resource.address)
 
         # Wrap data into data-dispenser's `Source` instance.
         suffix = ContentType.to_suffix(self.resource.type)
-        data = SourcePlus(indata, ext=suffix)
+        data = SourcePlus(indata, ext=suffix, table=self.resource.address)
 
         # Infer schema from data.
         table = Table(

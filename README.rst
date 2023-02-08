@@ -16,6 +16,7 @@ Infer SQL DDL statements from tabular data, based on the excellent
 Supported input data:
 
 - `CSV`_
+- `Excel Workbook`_
 - `JSON`_
 - `NDJSON`_ (formerly LDJSON) aka. `JSON Lines`_, see also `JSON streaming`_
 
@@ -52,6 +53,8 @@ Read data from given file::
     eskema infer-ddl --dialect=postgresql data.ndjson
     eskema infer-ddl --dialect=postgresql data.json
     eskema infer-ddl --dialect=postgresql data.csv
+    eskema infer-ddl --dialect=postgresql data.xlsx
+    eskema infer-ddl --dialect=postgresql data.xlsx --address="Sheet2"
 
 Reading data from stdin needs to obtain both the table name and content type separately::
 
@@ -126,6 +129,7 @@ Credits and prior art
 .. _data_dispenser: https://pypi.org/project/data_dispenser/
 .. _ddlgenerator: https://pypi.org/project/ddlgenerator/
 .. _development: doc/development.rst
+.. _Excel Workbook: https://en.wikipedia.org/wiki/Microsoft_Excel
 .. _JSON: https://www.json.org/
 .. _JSON streaming: https://en.wikipedia.org/wiki/JSON_streaming
 .. _JSON Lines: https://jsonlines.org/

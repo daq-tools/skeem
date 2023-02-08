@@ -19,7 +19,8 @@ class Resource:
     A wrapper around input data.
     """
 
-    data: t.Any
+    data: t.Union[t.IO[t.Any], None]
+    address: t.Optional[str] = None
     path: t.Optional[t.Union[Path, str]] = None
     content_type: t.Optional[t.Union[ContentType, str]] = None
     type: t.Optional[ContentType] = None  # noqa: A003
@@ -50,12 +51,27 @@ class Resource:
             self.type = ContentType.from_name(self.content_type)
             logger.info(f"Using specified type: {self.type}")
 
-    def read_data(self) -> t.TextIO:
+    def read_data(self) -> t.IO:
         """
         Only peek at the first bytes of data.
         """
+        binary_files = [ContentType.XLSX, ContentType.ODS]
+
+        if self.data is None and self.path is not None:
+            self.data = open(self.path, mode="rb")
+
+        # Sanity checks
+        if self.data is None:
+            raise ValueError("Unable to open resource")
+
         self.data.seek(0)
-        return io.StringIO(self.data.read(PEEK_BYTES))
+        if self.type in binary_files:
+            return io.BytesIO(self.data.read())
+        else:
+            payload = self.data.read(PEEK_BYTES)
+            if isinstance(payload, str):
+                payload = payload.encode()
+            return io.BytesIO(payload)
 
 
 @dataclasses.dataclass

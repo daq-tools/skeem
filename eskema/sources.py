@@ -23,7 +23,12 @@ PEEK_LINES = 1000
 
 class SourcePlus(Source):
     def __init__(
-        self, src: t.Any, limit: int = None, fieldnames: t.List[str] = None, table: str = "*", ext: str = None
+        self,
+        src: t.Any,
+        limit: int = None,
+        fieldnames: t.List[str] = None,
+        table: t.Optional[str] = None,
+        ext: t.Optional[str] = None,
     ):
         """
         For ``.csv`` and ``.xls``, field names will be taken from
@@ -56,7 +61,7 @@ class SourcePlus(Source):
         table = self.table
         ext = self.ext
         if isinstance(src, sqlalchemy.sql.schema.MetaData):
-            self._source_is_sqlalchemy_metadata(src, table)
+            self._source_is_sqlalchemy_metadata(src, table or "*")
             return
         if isinstance(src, MongoCollection):
             self._source_is_mongo(src)
@@ -65,7 +70,10 @@ class SourcePlus(Source):
             self._source_is_url(src)
             return
         if hasattr(src, "read"):  # open file or buffer
-            self._source_is_readable(src, ext=ext)
+            if ext in [".xlsx", ".ods"]:
+                self._source_is_excel(src, sheet=table or 0)
+            else:
+                self._source_is_readable(src, ext=ext)
             return
         if hasattr(src, "__next__"):
             self._source_is_generator(src)
@@ -120,6 +128,8 @@ class SourcePlus(Source):
         self.eval_funcs_by_ext[".csv"] = [_eval_csv]
         self.eval_funcs_by_ext[".ndjson"] = [_eval_ndjson]
 
+        # TODO: Use the generic interface if deserializer can be created with `sheet_name` option.
+
     def _source_is_readable(self, src, ext="*"):
         """
         A generic deserializer function for reading open files or buffers.
@@ -128,6 +138,10 @@ class SourcePlus(Source):
             self.table_name = src.name
         self.deserializers = self.eval_funcs_by_ext.get(ext or "*")
         self._deserialize(src)
+
+    def _source_is_excel(self, spreadsheet, sheet=None):
+        df = pd.read_excel(spreadsheet, sheet_name=sheet, parse_dates=False, keep_default_na=False, nrows=PEEK_LINES)
+        self.generator = _generate_records(df)
 
 
 def _eval_csv(target, fieldnames: t.List[str] = None, *args, **kwargs):

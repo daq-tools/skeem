@@ -23,6 +23,7 @@ def cli(ctx: click.Context, verbose: bool, debug: bool):
 
 @cli.command("infer-ddl")
 @click.argument("input", type=str, required=True)
+@click.option("--address", type=str, required=False)
 @click.option("--content-type", type=str, required=False)
 @click.option("--dialect", type=str, required=False)
 @click.option("--table-name", type=str, required=False)
@@ -31,6 +32,7 @@ def cli(ctx: click.Context, verbose: bool, debug: bool):
 def infer_ddl(
     ctx: click.Context,
     input: t.Optional[t.Union[Path, str]] = None,  # noqa: A002
+    address: t.Optional[str] = None,
     content_type: t.Optional[str] = None,
     dialect: t.Optional[str] = None,
     table_name: t.Optional[str] = None,
@@ -48,18 +50,19 @@ def infer_ddl(
         if not sys.stdin.readable():
             logger.error("stdin is not readable")
             sys.exit(-1)
-        indata = sys.stdin
+        indata = sys.stdin.buffer
 
     # Read data from file.
     elif isinstance(indata, (Path, str)):
         path = Path(indata)
         logger.info(f"Loading data from: {path}")
-        indata = path.open("r")
+        indata = None
 
     # Decode data.
     sg = SchemaGenerator(
         resource=Resource(
             data=indata,
+            address=address,
             path=path,
             content_type=content_type,
         ),

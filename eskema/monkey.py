@@ -5,6 +5,7 @@ from decimal import Decimal, InvalidOperation
 import dateutil.parser
 import ddlgenerator.ddlgenerator
 import ddlgenerator.typehelpers
+import pandas as pd
 import sqlalchemy as sa
 from ddlgenerator.ddlgenerator import _dump
 from ddlgenerator.reshape import _illegal_in_column_name
@@ -40,11 +41,18 @@ def coerce_to_specific(datum: CoercionType) -> t.Optional[CoercionType]:
     True
     >>> coerce_to_specific("no")
     False
+    >>> coerce_to_specific(pd.Timestamp("2014-10-31T09:22:56"))
+    datetime.datetime(2014, 10, 31, 9, 22, 56)
     >>> coerce_to_specific(None)
+    >>> coerce_to_specific(pd.NA)
+    >>> coerce_to_specific(pd.NaT)
     """
-    if datum is None:
+    if datum is None or pd.isna(datum):
         return None
     try:
+        if isinstance(datum, pd.Timestamp):
+            datum = str(datum)
+
         if isinstance(datum, (bytes, str, t.IO)):
             result = dateutil.parser.parse(datum)
             # but even if this does not raise an exception, may
@@ -52,19 +60,19 @@ def coerce_to_specific(datum: CoercionType) -> t.Optional[CoercionType]:
             # check for nonsense unprintable date
             str(result)
 
-        # most false date hits will be interpreted as times today
-        # or as unlikely far-future or far-past years
-        if isinstance(datum, str):
-            clean_datum = datum.strip().lstrip("-").lstrip("0").rstrip(".")
-            if len(_complex_enough_to_be_date.findall(clean_datum)) < 2:
-                digits = _digits_only.search(clean_datum)
-                if (not digits) or (len(digits.group(0)) not in (4, 6, 8, 12, 14, 17)):
-                    raise Exception("false date hit for %s" % datum)
-                if result.date() == datetime.datetime.now().date():
-                    raise Exception("false date hit (%s) for %s" % (str(result), datum))
-                if not (1700 < result.year < 2150):
-                    raise Exception("false date hit (%s) for %s" % (str(result), datum))
-        return result
+            # most false date hits will be interpreted as times today
+            # or as unlikely far-future or far-past years
+            if isinstance(datum, str):
+                clean_datum = datum.strip().lstrip("-").lstrip("0").rstrip(".")
+                if len(_complex_enough_to_be_date.findall(clean_datum)) < 2:
+                    digits = _digits_only.search(clean_datum)
+                    if (not digits) or (len(digits.group(0)) not in (4, 6, 8, 12, 14, 17)):
+                        raise Exception("false date hit for %s" % datum)
+                    if result.date() == datetime.datetime.now().date():
+                        raise Exception("false date hit (%s) for %s" % (str(result), datum))
+                    if not (1700 < result.year < 2150):
+                        raise Exception("false date hit (%s) for %s" % (str(result), datum))
+            return result
     except Exception:
         pass
     try:

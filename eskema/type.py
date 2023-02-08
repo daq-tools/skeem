@@ -31,6 +31,8 @@ class ContentType(Enum):
     CSV = "text/csv"
     JSON = "application/json"
     NDJSON = "application/x-ndjson"
+    XLSX = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    ODS = "application/vnd.oasis.opendocument.spreadsheet"
 
     # Secondary aliases.
     LDJSON = "application/x-ldjson"
@@ -91,6 +93,10 @@ class ContentType(Enum):
             return ".csv"
         elif type_ is ContentType.JSON:
             return ".json"
+        elif type_ is ContentType.XLSX:
+            return ".xlsx"
+        elif type_ is ContentType.ODS:
+            return ".ods"
         else:
             raise ValueError(f"Unable to compute suffix for content type '{type_}'")
 
@@ -105,6 +111,8 @@ class ContentTypeShort(Enum):
     JSONL = "jsonl"
     LDJSON = "ldjson"
     NDJSON = "ndjson"
+    ODS = "ods"
+    XLSX = "xlsx"
 
     @classmethod
     def resolve(cls, label: str) -> str:
@@ -115,6 +123,8 @@ class ContentTypeShort(Enum):
             cls.JSONL: "application/x-ndjson",
             cls.LDJSON: "application/x-ldjson",
             cls.NDJSON: "application/x-ndjson",
+            cls.ODS: ContentType.ODS.value,
+            cls.XLSX: ContentType.XLSX.value,
         }
         v2 = mapping[v1]
         return v2

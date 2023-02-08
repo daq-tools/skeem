@@ -7,6 +7,9 @@ import pandas as pd
 from eskema.type import ContentType
 from eskema.util import json_get_first_records
 
+IntOrString = t.TypeVar("IntOrString", int, str)
+AddressType = t.Union[int, str, t.List[IntOrString]]
+
 # Primary list of field name prefixes to consider as primary key.
 PK_CANDIDATES_PRIMARY_PREFIXES = ["id"]
 
@@ -24,20 +27,20 @@ PEEK_LINES = 1000
 logger = logging.getLogger(__name__)
 
 
-def infer_pk(data: t.Any, content_type: ContentType) -> t.Optional[str]:
+def infer_pk(data: t.Any, content_type: ContentType, address: t.Optional[AddressType] = None) -> t.Optional[str]:
     """
     Attempt to infer primary key from column names and data, DWIM [1].
 
     [1] https://en.wikipedia.org/wiki/DWIM
     """
-    pk = _infer_pk(data, content_type)
+    pk = _infer_pk(data, content_type, address)
     logger.info(f"Inferred primary key: {pk}")
     if hasattr(data, "seek"):
         data.seek(0)
     return pk
 
 
-def _infer_pk(data: t.Any, content_type: ContentType) -> t.Optional[str]:
+def _infer_pk(data: t.Any, content_type: ContentType, address: t.Optional[AddressType] = None) -> t.Optional[str]:
 
     if isinstance(data, str):
         data = io.StringIO(data)
@@ -47,6 +50,9 @@ def _infer_pk(data: t.Any, content_type: ContentType) -> t.Optional[str]:
         df = pd.read_json(data, lines=True, nrows=PEEK_LINES)
     elif content_type is ContentType.CSV:
         df = pd.read_csv(data, nrows=PEEK_LINES)
+    elif content_type in [ContentType.XLSX, ContentType.ODS]:
+        sheet_name = address or 0
+        df = pd.read_excel(data, sheet_name=sheet_name, nrows=PEEK_LINES)
 
     # Only load the first record(s) from a regular JSON document.
     elif content_type is ContentType.JSON:
@@ -78,7 +84,7 @@ def _infer_pk(data: t.Any, content_type: ContentType) -> t.Optional[str]:
 
     # If the values of the first column are unique, use that as primary key.
     column1_series = df[df.columns[0]]
-    if column1_series.is_unique:
+    if column1_series.dtype not in ["float64"] and column1_series.is_unique:
         return df.columns[0]
 
     return None

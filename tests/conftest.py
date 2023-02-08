@@ -24,6 +24,16 @@ def json_document_file_basic():
     return Path("tests/testdata/basic-document.json")
 
 
+@pytest.fixture
+def xlsx_file_basic():
+    return Path("tests/testdata/basic.xlsx")
+
+
+@pytest.fixture
+def ods_file_basic():
+    return Path("tests/testdata/basic.ods")
+
+
 class SqlAlchemyTableExtendExisting(sa.Table):
     """
     The test cases re-use the same table names within different test cases.
