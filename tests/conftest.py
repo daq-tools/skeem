@@ -25,6 +25,11 @@ def json_document_file_basic():
 
 
 @pytest.fixture
+def json_nested_file_basic():
+    return Path("tests/testdata/basic-nested.json")
+
+
+@pytest.fixture
 def xlsx_file_basic():
     return Path("tests/testdata/basic.xlsx")
 

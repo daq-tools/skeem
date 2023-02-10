@@ -16,6 +16,7 @@ in progress
 - Content type detection using file extension or ``--content-type`` option
 - Add support for CSV input format
 - Add support for XLSX and ODS input formats
+- Add test case for basic nested JSON document
 
 
 2023-01-xx 0.0.0
