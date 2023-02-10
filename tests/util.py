@@ -3,7 +3,8 @@ import textwrap
 import typing as t
 from pathlib import Path
 
-from eskema.monkey import clean_key_name
+from ddlgenerator.reshape import clean_key_name
+
 from eskema.util import sql_canonicalize
 
 

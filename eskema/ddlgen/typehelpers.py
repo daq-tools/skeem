@@ -3,12 +3,7 @@ import typing as t
 from decimal import Decimal, InvalidOperation
 
 import dateutil.parser
-import ddlgenerator.ddlgenerator
-import ddlgenerator.typehelpers
 import pandas as pd
-import sqlalchemy as sa
-from ddlgenerator.ddlgenerator import _dump
-from ddlgenerator.reshape import _illegal_in_column_name
 from ddlgenerator.typehelpers import _complex_enough_to_be_date, _digits_only
 
 CoercionType = t.Union[str, int, float, bool, Decimal, datetime.datetime]
@@ -41,11 +36,20 @@ def coerce_to_specific(datum: CoercionType) -> t.Optional[CoercionType]:
     True
     >>> coerce_to_specific("no")
     False
-    >>> coerce_to_specific(pd.Timestamp("2014-10-31T09:22:56"))
-    datetime.datetime(2014, 10, 31, 9, 22, 56)
+
+    A few additional test cases.
+
     >>> coerce_to_specific(None)
     >>> coerce_to_specific(pd.NA)
     >>> coerce_to_specific(pd.NaT)
+
+    >>> coerce_to_specific(pd.Timestamp(None))
+    >>> coerce_to_specific(pd.Timestamp(pd.NaT))
+    >>> coerce_to_specific(pd.Timestamp("2014-10-31T09:22:56"))
+    datetime.datetime(2014, 10, 31, 9, 22, 56)
+
+    >>> coerce_to_specific("0704.0001")
+    Decimal('704.0001')
     """
     if datum is None or pd.isna(datum):
         return None
@@ -94,67 +98,48 @@ def coerce_to_specific(datum: CoercionType) -> t.Optional[CoercionType]:
     return str(datum)
 
 
-class AnyDialect(dict):
+def best_coercable(data):
     """
-    Make `ddlgenerator` accept any dialect, to let SQLAlchemy decide
-    whether it is supported or not.
+    Given an iterable of scalar data, returns the datum representing the most specific
+    data type the list overall can be coerced into, preferring datetimes, then bools,
+    then integers, then decimals, then floats, then strings.
 
-    >>> dd = AnyDialect()
-
-    >>> dd["postgresql"]
-    <sqlalchemy.engine.mock.MockConnection object at ...>
-
-    >>> "foo" in dd
-    True
-
-    >>> dd["foo"]
-    Traceback (most recent call last):
-    ...
-    sqlalchemy.exc.NoSuchModuleError: Can't load plugin: sqlalchemy.dialects:foo
+    >>> best_coercable((6, '2', 9))
+    6
+    >>> best_coercable((Decimal('6.1'), 2, 9))
+    Decimal('6.1')
+    >>> best_coercable(('2014 jun 7', '2011 may 2'))
+    datetime.datetime(2014, 6, 7, 0, 0)
+    >>> best_coercable((7, 21.4, 'ruining everything'))
+    'ruining everything'
+    >>> best_coercable(("0704.0001",))
+    '0704.0001'
     """
+    from ddlgenerator.typehelpers import worst_decimal
 
-    def __contains__(self, item) -> bool:
-        return True
+    preference = (datetime.datetime, bool, int, Decimal, float, str)
+    worst_pref = 0
+    worst = ""
+    for datum in data:
+        coerced_candidate = coerce_to_specific(datum)
 
-    def __getitem__(self, item):
-        return sa.create_mock_engine(f"{item}://", executor=_dump)
+        # PATCH: Decimals like `"0704.0001"` should be treated as strings, see `nested.json`.
+        if isinstance(datum, str) and isinstance(coerced_candidate, Decimal):
+            coerced = datum
+        else:
+            coerced = coerced_candidate
 
-
-def clean_key_name(key: str) -> str:
-    """
-    Makes ``key`` a valid and appropriate SQL column name:
-
-    1. Replaces illegal characters in column names with ``_``
-
-    2. Prevents name from beginning with a digit (prepends ``_``)
-
-    3. Lowercases name.  If you want case-sensitive table
-    or column names, you are a bad person, and you should feel bad.
-
-    >>> clean_key_name("foo-bar")
-    'foo_bar'
-
-    >>> clean_key_name("1")
-    '_1'
-
-    >>> clean_key_name(42.42)
-    '_42_42'
-
-    >>> clean_key_name("date")
-    'date'
-    """
-    result = _illegal_in_column_name.sub("_", str(key).strip())
-    if result[0].isdigit():
-        result = "_%s" % result
-    # Patch: Not necessarily needed? In our case, we don't want `date` to be renamed to `_date`.
-    # if result.upper() in sql_reserved_words:
-    result = result.lower()
-    # Patch: Just to make sure?
-    result = sa.sql.quoted_name(result, quote='"')
-    return result
-
-
-def activate():
-    ddlgenerator.typehelpers.coerce_to_specific = coerce_to_specific
-    ddlgenerator.ddlgenerator.mock_engines = AnyDialect()
-    ddlgenerator.reshape.clean_key_name = clean_key_name
+        pref = preference.index(type(coerced))
+        if pref > worst_pref:
+            worst_pref = pref
+            worst = coerced
+        elif pref == worst_pref:
+            if isinstance(coerced, Decimal):
+                worst = worst_decimal(coerced, worst)
+            elif isinstance(coerced, float):
+                worst = max(coerced, worst)
+            else:  # int, str
+                if len(str(coerced)) > len(str(worst)):
+                    worst = coerced
+    # print("worst:", worst, type(worst))  # noqa: ERA001
+    return worst

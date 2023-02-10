@@ -44,7 +44,7 @@ class SchemaGenerator:
         """
         Infer field/column schema from input data and generate SQL DDL statement.
         """
-        from ddlgenerator.ddlgenerator import Table
+        from eskema.ddlgen.ddlgenerator import TablePlus
 
         if self.resource.type is None:
             raise ValueError("Unable to infer schema without resource type")
@@ -62,7 +62,7 @@ class SchemaGenerator:
         data = SourcePlus(indata, ext=suffix, table=self.resource.address)
 
         # Infer schema from data.
-        table = Table(
+        table = TablePlus(
             data=data,
             table_name=self.target.table_name,
             varying_length_text=True,
