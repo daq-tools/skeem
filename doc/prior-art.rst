@@ -18,6 +18,11 @@ Devlin`_ and `Iuliia Volkova`_. Eskema is currently based on ``ddlgenerator``.
 - https://pypi.org/project/py-models-parser/
 - https://pypi.org/project/table-meta/
 
+tabulator-py, the successor of messytables, is also worth a look.
+
+- https://github.com/frictionlessdata/tabulator-py
+- https://github.com/okfn/messytables
+
 
 Miscellaneous
 =============

@@ -6,11 +6,12 @@ Eskema notes
 ############
 
 
-The early days
-==============
+OKFN and friends
+================
 - https://github.com/rufuspollock/csv2sqlite
-- http://okfnlabs.org/dataconverters/
+- https://okfnlabs.org/dataconverters/
 - https://github.com/okfn/messytables/
+- https://github.com/frictionlessdata/tabulator-py
 
 
 Converting arbitrary nested json to CSV?
@@ -60,3 +61,54 @@ csvkit
         price BOOLEAN
     );
 
+
+Outlook
+=======
+- Tanker is a Python database library targeting analytic operations
+  https://github.com/bertrandchenal/tanker
+- An implementation of the JSON Schema specification for Python
+  https://github.com/python-jsonschema/jsonschema
+
+
+Online spreadsheets
+===================
+
+
+- Google Drive at ``drive.google.com`` or ``docs.google.com``:
+
+  - | https://drive.google.com/file/d/1v7x-s79pQUV3ayVfTAeUG-xsXRHTQ9iz/view
+    | ``http "https://drive.google.com/uc?export=download&id=1v7x-s79pQUV3ayVfTAeUG-xsXRHTQ9iz" --follow``
+
+- Google Sheets:
+
+  - VES:
+
+    - basic: https://docs.google.com/spreadsheets/d/1ExyrawjlyksbC6DOM6nLolJDbU8qiRrrhxSuxf5ScB0/edit
+    - Sheet2: https://docs.google.com/spreadsheets/d/1ExyrawjlyksbC6DOM6nLolJDbU8qiRrrhxSuxf5ScB0/edit#gid=883324548
+  - CSV:
+
+    - basic: https://docs.google.com/spreadsheets/d/1ExyrawjlyksbC6DOM6nLolJDbU8qiRrrhxSuxf5ScB0/export?format=csv
+    - Sheet2: https://docs.google.com/spreadsheets/d/1ExyrawjlyksbC6DOM6nLolJDbU8qiRrrhxSuxf5ScB0/export?gid=883324548&format=csv
+  - XLSX: https://docs.google.com/spreadsheets/d/1ExyrawjlyksbC6DOM6nLolJDbU8qiRrrhxSuxf5ScB0/export?format=xlsx
+  - ODS: https://docs.google.com/spreadsheets/d/1ExyrawjlyksbC6DOM6nLolJDbU8qiRrrhxSuxf5ScB0/export?format=ods
+  - More formats: tsv, zip, pdf
+
+- Google AppSheet App:
+
+  - https://www.appsheet.com/Template/AppDef?appName=basic-285352295&appId=f6f7024c-5ab6-46c1-863b-c446eb2f4c28&channel=gdrive
+  - Table editor: https://www.appsheet.com/Template/AppDef?appName=basic-285352295#Data.Tables.basic
+  - Table view: https://www.appsheet.com/template/showtable?appId=basic-285352295&tableName=basic
+  - Share » Editor: https://www.appsheet.com/Template/AppDef?appName=basic-285352295&utm_source=share_app_link
+  - Share » Browser: https://www.appsheet.com/start/f6f7024c-5ab6-46c1-863b-c446eb2f4c28
+  - Share » Install: https://www.appsheet.com/newshortcut/f6f7024c-5ab6-46c1-863b-c446eb2f4c28
+  - Report » Looker Studio: https://lookerstudio.google.com/reporting/create?c.mode=edit&c.reportId=8225cc90-e702-42a1-9d9b-4aca626f6d1e&c.explain=true&ds.connector=COMMUNITY&ds.deploymentId=AKfycbxy0_bVIUsKVRWtvA0fJfEq_F_wdP2whFOQGskykubSizkpmQojrOFMe1EN9rz6klk0&ds.appId=f6f7024c-5ab6-46c1-863b-c446eb2f4c28&ds.tableName=basic&ds.refreshFields=true&plugin.id=AppSheet&plugin.report=%7B%20%22v1%22:%20%7B%20%22t%22:%20%22basic:%20basic%22,%20%22c%22:%20%7B%20%7D,%20%22b%22:%20%7B%20%22t%22:%20%7B%20%22d%22:%20%5B%20%22name%22,%20%22date%22,%20%22fruits%22%20%5D,%20%22m%22:%20%5B%20%7B%20%22d%22:%20%22price%22,%20%22a%22:%20%22METRIC_AGGREGATION_MAX%22%20%7D%20%5D%20%7D%20%7D%20%7D%20%7D
+
+- AppSheet database, table »basic«:
+
+  - Edit: https://www.appsheet.com/dbs/database/sqnDBz26zA4gU-gNcB8eZa/table/EmXXq1RtFn4a2elXmJ3Le4
+  - Share: https://www.appsheet.com/dbs/database/sqnDBz26zA4gU-gNcB8eZa
+
+- TODO: Google AppSheet » New table » New source » On-premises database » Add DreamFactory connection » Postgres
+
+  - https://www.appsheet.com/Account/DreamFactoryAuthInfo?state=e2a33e28-9026-46d8-8230-93c36fbc837d
+  - https://www.dreamfactory.com/
