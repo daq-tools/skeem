@@ -1,4 +1,6 @@
 import logging
+import typing as t
+import warnings
 
 from eskema.autopk import infer_pk
 from eskema.model import Resource, SqlResult, SqlTarget
@@ -17,9 +19,11 @@ class SchemaGenerator:
         self,
         resource: Resource,
         target: SqlTarget,
+        backend: t.Optional[str] = "ddlgen",
     ):
         self.resource = resource
         self.target = target
+        self.backend = backend
         self.configure()
 
     def configure(self):
@@ -44,8 +48,63 @@ class SchemaGenerator:
         """
         Infer field/column schema from input data and generate SQL DDL statement.
         """
+        if self.backend == "ddlgen":
+            return self._ddl_ddlgen()
+        elif self.backend == "frictionless" or self.backend == "fl":
+            return self._ddl_frictionless()
+        else:
+            raise NotImplementedError(f"Backend '{self.backend}' not implemented")
+
+    def _ddl_frictionless(self) -> SqlResult:
+
+        # Suppress warnings of BeautifulSoup
+        from bs4 import GuessedAtParserWarning
+
+        warnings.filterwarnings("ignore", category=GuessedAtParserWarning)
+
+        import frictionless.formats
+        import sqlalchemy as sa
+        from ddlgenerator.ddlgenerator import _dump
+
         from eskema.ddlgen.ddlgenerator import TablePlus
 
+        # Sanity checks.
+        if self.resource.type is None:
+            raise ValueError("Unable to infer schema without resource type")
+
+        # When primary key is not given, try to infer it from the data.
+        # TODO: Make `infer_pk` obtain a `Resource` instance, and/or refactor as method.
+        if self.target.primary_key is None:
+
+            resource = frictionless.Resource(self.resource.path)
+            df = resource.to_pandas()
+
+            self.target.primary_key = infer_pk(df, self.resource.type, address=self.resource.address)
+
+        # Infer schema.
+        engine = sa.create_mock_engine(f"{self.target.dialect}://", executor=_dump)
+        mapper = frictionless.formats.sql.SqlMapper(engine)
+        schema = frictionless.Schema.describe(self.resource.path)
+
+        # Amend schema with primary key information.
+        pk_field = schema.get_field(self.target.primary_key)
+        pk_field.required = True
+        schema.primary_key = [self.target.primary_key]
+
+        # Create SQLAlchemy table from schema.
+        table = mapper.write_schema(schema, table_name=self.target.table_name, with_metadata=False)
+
+        # Serialize SQLAlchemy table instance to SQL DDL, using `ddlgenerator`.
+        tt = TablePlus(data="")
+        tt.table = table
+        sql = tt.ddl(dialect=self.target.dialect, creates=True, drops=False)
+        return SqlResult(sql)
+
+    def _ddl_ddlgen(self) -> SqlResult:
+
+        from eskema.ddlgen.ddlgenerator import TablePlus
+
+        # Sanity checks.
         if self.resource.type is None:
             raise ValueError("Unable to infer schema without resource type")
 

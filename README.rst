@@ -11,7 +11,7 @@ About
 *****
 
 Infer SQL DDL statements from tabular data, based on the excellent
-`SQLAlchemy`_ and `ddlgenerator`_ packages.
+`SQLAlchemy`_, `ddlgenerator`_, and `frictionless`_ packages.
 
 Supported input data:
 
@@ -51,6 +51,8 @@ Command line use
 Read data from given file::
 
     eskema infer-ddl --dialect=postgresql data.ndjson
+    eskema infer-ddl --dialect=postgresql data.ndjson --backend=frictionless
+
     eskema infer-ddl --dialect=postgresql data.json
     eskema infer-ddl --dialect=postgresql data.csv
     eskema infer-ddl --dialect=postgresql data.xlsx
@@ -118,6 +120,7 @@ Credits and prior art
 
 - `Mike Bayer`_ for `SQLAlchemy`_.
 - `Catherine Devlin`_ for `ddlgenerator`_ and `data_dispenser`_.
+- `Paul Walsh`_ and `Evgeny Karev`_ for `frictionless`_.
 - All the other countless authors of excellent Python packages,
   Python itself, and turtles all the way down.
 - More prior art: We are maintaining a `list of other projects`_ with the same
@@ -129,11 +132,14 @@ Credits and prior art
 .. _data_dispenser: https://pypi.org/project/data_dispenser/
 .. _ddlgenerator: https://pypi.org/project/ddlgenerator/
 .. _development: doc/development.rst
+.. _Evgeny Karev: https://github.com/roll
 .. _Excel Workbook: https://en.wikipedia.org/wiki/Microsoft_Excel
+.. _frictionless: https://github.com/frictionlessdata/framework
 .. _JSON: https://www.json.org/
 .. _JSON streaming: https://en.wikipedia.org/wiki/JSON_streaming
 .. _JSON Lines: https://jsonlines.org/
 .. _list of other projects: doc/prior-art.rst
 .. _Mike Bayer: https://github.com/zzzeek
 .. _NDJSON: http://ndjson.org/
+.. _Paul Walsh: https://github.com/pwalsh
 .. _SQLAlchemy: https://pypi.org/project/SQLAlchemy/

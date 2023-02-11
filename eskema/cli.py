@@ -28,6 +28,7 @@ def cli(ctx: click.Context, verbose: bool, debug: bool):
 @click.option("--dialect", type=str, required=False)
 @click.option("--table-name", type=str, required=False)
 @click.option("--primary-key", type=str, required=False)
+@click.option("--backend", type=click.Choice(["ddlgen", "frictionless", "fl"]), required=False, default="ddlgen")
 @click.pass_context
 def infer_ddl(
     ctx: click.Context,
@@ -37,6 +38,7 @@ def infer_ddl(
     dialect: t.Optional[str] = None,
     table_name: t.Optional[str] = None,
     primary_key: t.Optional[str] = None,
+    backend: t.Optional[str] = "ddlgen",
 ):
     """
     Infer SQL DDL from input data.
@@ -71,6 +73,7 @@ def infer_ddl(
             table_name=table_name,
             primary_key=primary_key,
         ),
+        backend=backend,
     )
 
     # Convert to SQL DDL.

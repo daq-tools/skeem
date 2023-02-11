@@ -45,23 +45,10 @@ def _infer_pk(data: t.Any, content_type: ContentType, address: t.Optional[Addres
     if isinstance(data, str):
         data = io.StringIO(data)
 
-    # Only peek at the first lines of data.
-    if ContentType.is_ndjson(content_type):
-        df = pd.read_json(data, lines=True, nrows=PEEK_LINES)
-    elif content_type is ContentType.CSV:
-        df = pd.read_csv(data, nrows=PEEK_LINES)
-    elif content_type in [ContentType.XLSX, ContentType.ODS]:
-        sheet_name = address or 0
-        df = pd.read_excel(data, sheet_name=sheet_name, nrows=PEEK_LINES)
-
-    # Only load the first record(s) from a regular JSON document.
-    elif content_type is ContentType.JSON:
-        records = json_get_first_records(data, nrecords=PEEK_LINES)
-        df = pd.DataFrame.from_records(data=records)
-
-    # Croak otherwise.
+    if isinstance(data, pd.DataFrame):
+        df = data
     else:
-        raise NotImplementedError(f"Inferring primary key with content type '{content_type}' not implemented yet")
+        df = to_dataframe(data=data, content_type=content_type, address=address)
 
     # Decode list of column names.
     columns = list(df.columns)
@@ -88,3 +75,25 @@ def _infer_pk(data: t.Any, content_type: ContentType, address: t.Optional[Addres
         return df.columns[0]
 
     return None
+
+
+def to_dataframe(data: t.Any, content_type: ContentType, address: t.Optional[AddressType] = None) -> pd.DataFrame:
+    # Only peek at the first lines of data.
+    if ContentType.is_ndjson(content_type):
+        df = pd.read_json(data, lines=True, nrows=PEEK_LINES)
+    elif content_type is ContentType.CSV:
+        df = pd.read_csv(data, nrows=PEEK_LINES)
+    elif content_type in [ContentType.XLSX, ContentType.ODS]:
+        sheet_name = address or 0
+        df = pd.read_excel(data, sheet_name=sheet_name, nrows=PEEK_LINES)
+
+    # Only load the first record(s) from a regular JSON document.
+    elif content_type is ContentType.JSON:
+        records = json_get_first_records(data, nrecords=PEEK_LINES)
+        df = pd.DataFrame.from_records(data=records)
+
+    # Croak otherwise.
+    else:
+        raise NotImplementedError(f"Inferring primary key with content type '{content_type}' not implemented yet")
+
+    return df
