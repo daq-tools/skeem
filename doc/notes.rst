@@ -76,7 +76,7 @@ Online spreadsheets
 
 - Google Drive at ``drive.google.com`` or ``docs.google.com``:
 
-  - | https://drive.google.com/file/d/1v7x-s79pQUV3ayVfTAeUG-xsXRHTQ9iz/view
+  - | https://docs.google.com/file/d/1v7x-s79pQUV3ayVfTAeUG-xsXRHTQ9iz/view
     | ``http "https://drive.google.com/uc?export=download&id=1v7x-s79pQUV3ayVfTAeUG-xsXRHTQ9iz" --follow``
 
 - Google Sheets:

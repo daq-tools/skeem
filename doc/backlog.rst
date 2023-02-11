@@ -34,13 +34,16 @@ Features
 - [x] Handle basic JSON: records + single document
 - [x] Handle spreadsheet formats: XLSX and ODF
 - [x] More type annotations
+- [x] Use https://github.com/frictionlessdata/framework
 - [o] eskema infer-ddl --list-input-formats
 - [o] Add "examples" to test suite
-- [o] Handle spreadsheet format/source: Google Sheets
+- [o] Handle spreadsheet format/source: Google Sheets, via frictionless' ``gsheet`` reader
 
   - CSV on Google Drive: https://drive.google.com/file/d/1v7x-s79pQUV3ayVfTAeUG-xsXRHTQ9iz/view
-  - Google Sheets: https://docs.google.com/spreadsheets/d/1ExyrawjlyksbC6DOM6nLolJDbU8qiRrrhxSuxf5ScB0/edit
-  - Maybe use tabulator-py? https://github.com/frictionlessdata/tabulator-py#gsheet-read-only
+  - Google Sheets:
+
+    - basic: https://docs.google.com/spreadsheets/d/1ExyrawjlyksbC6DOM6nLolJDbU8qiRrrhxSuxf5ScB0/edit
+    - Sheet2: https://docs.google.com/spreadsheets/d/1ExyrawjlyksbC6DOM6nLolJDbU8qiRrrhxSuxf5ScB0/edit#gid=883324548
 
 Documentation
 =============
@@ -71,7 +74,6 @@ Iteration 3
 ***********
 
 - [o] Unlock more input data formats from ``data_dispenser.sources``, like Excel, XML, HTML, MongoDB
-- [o] Use https://github.com/frictionlessdata/tabulator-py
 - [o] Handle "empty" input
 - [o] Process multiple items
 - [o] Read archive files
@@ -89,18 +91,22 @@ Iteration 4
 ***********
 
 - [o] HTTP API endpoint
-- [o] Add more input formats
+- [o] Add more input formats and sources
 
   - InfluxDB line protocol
   - Parquet and friends
   - Fixed-width, using ``pd.read_fwf()``
+  - pandas Dataframes
+  - Avro
+  - JSON Schema
+  - XML?
   - Spreadsheet formats: Microsoft pendant to Google Sheets, and friends
   - Tables from PDF and others
-
-- [o] pandas Dataframes
-- [o] Avro
-- [o] JSON Schema
-- [o] XML?
+  - DuckDB can currently directly run queries on Parquet files, CSV files,
+    SQLite files, Pandas, R and Julia data frames as well as Apache Arrow
+    sources. This new extension adds the capability to directly query
+    PostgreSQL tables from DuckDB.
+    -- https://duckdb.org/2022/09/30/postgres-scanner.html
 
 - [o] Content type detection using ``python-magic`` and/or ``identify``
 - [o] Add Mypy?
