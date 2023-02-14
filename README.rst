@@ -60,6 +60,10 @@ Read data from given file::
     eskema infer-ddl --dialect=postgresql data.xlsx
     eskema infer-ddl --dialect=postgresql data.xlsx --address="Sheet2"
 
+Read data from URL::
+
+    eskema infer-ddl --dialect=postgresql --table-name=foo https://docs.google.com/spreadsheets/d/1ExyrawjlyksbC6DOM6nLolJDbU8qiRrrhxSuxf5ScB0/view
+
 Reading data from stdin needs to obtain both the table name and content type separately::
 
     eskema infer-ddl --dialect=crate --table-name=foo --content-type=ndjson - < data.ndjson
