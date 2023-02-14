@@ -137,6 +137,9 @@ testpaths = [
   "tests",
 ]
 xfail_strict = true
+markers = [
+  "slow",
+]
 
 
 [tool.ruff]

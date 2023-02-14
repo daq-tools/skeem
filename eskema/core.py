@@ -6,6 +6,7 @@ import pandas as pd
 from frictionless.formats import ExcelControl, OdsControl
 
 from eskema.autopk import infer_pk
+from eskema.exception import UnknownContentType
 from eskema.model import Resource, SqlResult, SqlTarget
 from eskema.sources import SourcePlus
 from eskema.type import ContentType
@@ -46,15 +47,18 @@ class SchemaGenerator:
         if not self.target.table_name and self.resource.path:
             self.target.table_name = self.resource.path.stem
 
-        self.resource.peek()
-
     def to_sql_ddl(self) -> SqlResult:
         """
         Infer field/column schema from input data and generate SQL DDL statement.
         """
-        if self.backend == "ddlgen":
+        fallback = False
+        try:
+            self.resource.peek()
+        except UnknownContentType:
+            fallback = True
+        if self.backend == "ddlgen" and not fallback:
             return self._ddl_ddlgen()
-        elif self.backend == "frictionless" or self.backend == "fl":
+        elif self.backend == "frictionless" or self.backend == "fl" or fallback:
             return self._ddl_frictionless()
         else:
             raise NotImplementedError(f"Backend '{self.backend}' not implemented")
@@ -72,14 +76,13 @@ class SchemaGenerator:
 
         from eskema.ddlgen.ddlgenerator import TablePlus
 
-        # Sanity checks.
-        if self.resource.type is None:
-            raise ValueError("Unable to infer schema without resource type")
-
         frictionless_args: t.Dict[str, t.Union[str, t.IO]] = {}
         if self.resource.path is not None:
             frictionless_args["path"] = str(self.resource.path)
         elif self.resource.data is not None:
+            # Sanity checks.
+            if self.resource.type is None:
+                raise ValueError("Unable to infer schema without resource type")
             frictionless_args["format"] = ContentType.to_suffix(self.resource.type).lstrip(".")
 
             payload = self.resource.data.read()

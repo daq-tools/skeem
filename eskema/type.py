@@ -3,6 +3,8 @@ import typing as t
 from enum import Enum
 from pathlib import Path
 
+from eskema.exception import UnknownContentType
+
 
 def init():
     """
@@ -47,6 +49,8 @@ class ContentType(Enum):
         <ContentType.CSV: 'text/csv'>
         """
         mimetype, _ = mimetypes.guess_type(filename)
+        if mimetype is None:
+            raise UnknownContentType(f"Unable to guess content type from '{filename}'")
         return cls(mimetype)
 
     @classmethod

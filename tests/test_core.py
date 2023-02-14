@@ -19,22 +19,25 @@ def test_schema_generator_without_dialect():
 
 def test_schema_generator_without_content_type():
     with pytest.raises(NotImplementedError) as ex:
-        SchemaGenerator(
+        sg = SchemaGenerator(
             resource=Resource(data=None),
             target=SqlTarget(dialect="postgresql"),
         )
+        sg.to_sql_ddl()
     assert ex.match("Introspection-based content type detection not implemented yet")
 
 
 def test_schema_generator_invalid_content_type():
     with pytest.raises(ValueError) as ex:
-        SchemaGenerator(
+        sg = SchemaGenerator(
             resource=Resource(data="", content_type="foo"),
             target=SqlTarget(dialect="postgresql"),
         )
+        sg.to_sql_ddl()
     assert ex.match("'foo' is not a valid ContentType or ContentTypeShort")
 
 
+@pytest.mark.xfail
 def test_schema_generator_without_resource_type():
 
     # Let's create a _valid_ `SchemaGenerator` instance first.

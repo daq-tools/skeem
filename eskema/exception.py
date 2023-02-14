@@ -1,0 +1,2 @@
+class UnknownContentType(Exception):
+    pass

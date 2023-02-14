@@ -14,7 +14,7 @@ def random_table_name(label: t.Union[Path, str]):
     name = label
     if isinstance(label, Path):
         name = label.name
-    return f"eskema-test-{name}-{random.randint(1, 999)}"
+    return f"eskema-test-{name}-{random.randint(1, 9999)}"
 
 
 def get_basic_sql_reference(
@@ -22,6 +22,7 @@ def get_basic_sql_reference(
     primary_key="id",
     primary_key_is_string: bool = False,
     timestamp_not_null: bool = False,
+    timestamp_is_string: bool = False,
     backend: str = "ddlgen",
 ):
     """
@@ -43,7 +44,7 @@ def get_basic_sql_reference(
     CREATE TABLE {clean_key_name(table_name)} (
         id {"INT" if not primary_key_is_string else "STRING"} NOT NULL,
         name STRING,
-        date TIMESTAMP{" NOT NULL" if timestamp_not_null else ""},
+        date {"TIMESTAMP" if not timestamp_is_string else "STRING"}{" NOT NULL" if timestamp_not_null else ""},
         fruits STRING,
         price FLOAT,
         PRIMARY KEY ({primary_key})
