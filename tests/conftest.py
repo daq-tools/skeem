@@ -1,4 +1,4 @@
-from io import StringIO
+from io import BytesIO, StringIO
 from pathlib import Path
 
 import pytest
@@ -53,6 +53,21 @@ def xlsx_file_basic():
 @pytest.fixture
 def ods_file_basic():
     return Path("tests/testdata/basic.ods")
+
+
+@pytest.fixture
+def parquet_file_basic():
+    return Path("tests/testdata/basic.parquet")
+
+
+@pytest.fixture
+def parquet_stream_basic(parquet_file_basic):
+    """
+    A stream of input data. Here, in Parquet format.
+
+    https://en.wikipedia.org/wiki/Apache_Parquet
+    """
+    return BytesIO(open(parquet_file_basic, "rb").read())
 
 
 class SqlAlchemyTableExtendExisting(sa.Table):

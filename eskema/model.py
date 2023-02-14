@@ -19,7 +19,7 @@ class Resource:
     A wrapper around input data.
     """
 
-    data: t.Union[t.IO[t.Any], None]
+    data: t.Optional[t.Union[t.IO[t.Any], None]] = None
     address: t.Optional[str] = None
     path: t.Optional[t.Union[Path, str]] = None
     content_type: t.Optional[t.Union[ContentType, str]] = None

@@ -15,6 +15,7 @@ Infer SQL DDL statements from tabular data, based on the excellent
 
 Supported input data:
 
+- `Apache Parquet`_
 - `CSV`_
 - `Google Sheets`_
 - `JSON`_
@@ -52,8 +53,10 @@ Command line use
 
 Read data from given file::
 
+    # NDJSON and Parquet formats.
     eskema infer-ddl --dialect=postgresql data.ndjson
     eskema infer-ddl --dialect=postgresql data.ndjson --backend=frictionless
+    eskema infer-ddl --dialect=postgresql data.parquet
 
     eskema infer-ddl --dialect=postgresql data.json
     eskema infer-ddl --dialect=postgresql data.csv
@@ -133,6 +136,7 @@ Credits and prior art
   or similar goals like Eskema.
 
 
+.. _Apache Parquet: https://en.wikipedia.org/wiki/Apache_Parquet
 .. _Catherine Devlin: https://github.com/catherinedevlin
 .. _CSV: https://en.wikipedia.org/wiki/Comma-separated_values
 .. _data_dispenser: https://pypi.org/project/data_dispenser/
