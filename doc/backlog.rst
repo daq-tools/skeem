@@ -34,16 +34,14 @@ Features
 - [x] Handle basic JSON: records + single document
 - [x] Handle spreadsheet formats: XLSX and ODF
 - [x] More type annotations
-- [x] Use https://github.com/frictionlessdata/framework
+- [x] Add ``frictionless`` backend, see https://github.com/frictionlessdata/framework
+- [x] Add software tests for ``frictionless`` backend
+- [x] Add support for Google Sheets input format
+- [o] Add support for Parquet input format
+- [o] Enable ``frictionless`` backend using environment variable ``ESKEMA_BACKEND=frictionless``
+- [o] Add help texts to CLI options
 - [o] eskema infer-ddl --list-input-formats
 - [o] Add "examples" to test suite
-- [o] Handle spreadsheet format/source: Google Sheets, via frictionless' ``gsheet`` reader
-
-  - CSV on Google Drive: https://drive.google.com/file/d/1v7x-s79pQUV3ayVfTAeUG-xsXRHTQ9iz/view
-  - Google Sheets:
-
-    - basic: https://docs.google.com/spreadsheets/d/1ExyrawjlyksbC6DOM6nLolJDbU8qiRrrhxSuxf5ScB0/edit
-    - Sheet2: https://docs.google.com/spreadsheets/d/1ExyrawjlyksbC6DOM6nLolJDbU8qiRrrhxSuxf5ScB0/edit#gid=883324548
 
 Documentation
 =============
@@ -73,6 +71,8 @@ Infrastructure
 Iteration 3
 ***********
 
+- [o] Add support for Google Drive input source
+  https://drive.google.com/file/d/1v7x-s79pQUV3ayVfTAeUG-xsXRHTQ9iz/view
 - [o] Unlock more input data formats from ``data_dispenser.sources``, like Excel, XML, HTML, MongoDB
 - [o] Handle "empty" input
 - [o] Process multiple items
@@ -110,3 +110,13 @@ Iteration 4
 
 - [o] Content type detection using ``python-magic`` and/or ``identify``
 - [o] Add Mypy?
+- [o] Text-to-SQL
+
+  - https://github.com/paulfitz/mlsql
+  - https://github.com/Microsoft/rat-sql
+
+- [o] Support for Grist
+
+  - https://github.com/gristlabs/grist-core
+  - https://docs.getgrist.com/doc/new~vhzPQwVDmAKY5nJXcGvcH7
+  - https://paulfitz.github.io/2020/08/01/translate-english-to-sql-progress-updates.html

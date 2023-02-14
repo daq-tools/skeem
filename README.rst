@@ -16,16 +16,18 @@ Infer SQL DDL statements from tabular data, based on the excellent
 Supported input data:
 
 - `CSV`_
-- `Excel Workbook`_
+- `Google Sheets`_
 - `JSON`_
 - `NDJSON`_ (formerly LDJSON) aka. `JSON Lines`_, see also `JSON streaming`_
+- `Office Open XML Workbook`_ (`Microsoft Excel`_)
+- `OpenDocument Spreadsheet`_ (`LibreOffice`_)
 
 
 ********
 Synopsis
 ********
 
-::
+.. code-block:: sh
 
     eskema infer-ddl --dialect=postgresql data.ndjson
 
@@ -133,13 +135,17 @@ Credits and prior art
 .. _ddlgenerator: https://pypi.org/project/ddlgenerator/
 .. _development: doc/development.rst
 .. _Evgeny Karev: https://github.com/roll
-.. _Excel Workbook: https://en.wikipedia.org/wiki/Microsoft_Excel
 .. _frictionless: https://github.com/frictionlessdata/framework
+.. _Google Sheets: https://en.wikipedia.org/wiki/Google_Sheets
 .. _JSON: https://www.json.org/
 .. _JSON streaming: https://en.wikipedia.org/wiki/JSON_streaming
 .. _JSON Lines: https://jsonlines.org/
+.. _LibreOffice: https://en.wikipedia.org/wiki/LibreOffice
 .. _list of other projects: doc/prior-art.rst
+.. _Microsoft Excel: https://en.wikipedia.org/wiki/Microsoft_Excel
 .. _Mike Bayer: https://github.com/zzzeek
 .. _NDJSON: http://ndjson.org/
+.. _Office Open XML Workbook: https://en.wikipedia.org/wiki/Office_Open_XML
+.. _OpenDocument Spreadsheet: https://en.wikipedia.org/wiki/OpenDocument
 .. _Paul Walsh: https://github.com/pwalsh
 .. _SQLAlchemy: https://pypi.org/project/SQLAlchemy/
