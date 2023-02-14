@@ -1,7 +1,9 @@
 import io
 
+import pandas as pd
 import pytest
 
+from eskema.autopk import infer_pk
 from eskema.core import SchemaGenerator
 from eskema.model import Resource, SqlTarget
 
@@ -48,3 +50,16 @@ def test_schema_generator_without_resource_type():
     with pytest.raises(ValueError) as ex:
         sg.to_sql_ddl()
     assert ex.match("Unable to infer schema without resource type")
+
+
+def test_infer_pk_from_dataframe():
+    """
+    Infer primary key from pandas DataFrame.
+    """
+    data = [
+        {"id": 1, "name": "foo", "date": pd.Timestamp("2014-10-31 09:22:56"), "fruits": "apple,banana", "price": 0.42},
+        {"id": 2, "name": "bar", "date": pd.NaT, "fruits": "pear", "price": 0.84},
+    ]
+    df = pd.DataFrame.from_dict(data=data)
+    pk = infer_pk(df)
+    assert pk == "id"

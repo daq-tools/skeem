@@ -7,6 +7,8 @@ from ddlgenerator.reshape import clean_key_name
 
 from eskema.util import sql_canonicalize
 
+BACKENDS = ["ddlgen", "frictionless"]
+
 
 def random_table_name(label: t.Union[Path, str]):
     name = label
@@ -15,22 +17,67 @@ def random_table_name(label: t.Union[Path, str]):
     return f"eskema-test-{name}-{random.randint(1, 999)}"
 
 
-def get_basic_sql_reference(table_name, primary_key="id", timestamp_not_null: bool = False):
+def get_basic_sql_reference(
+    table_name,
+    primary_key="id",
+    primary_key_is_string: bool = False,
+    timestamp_not_null: bool = False,
+    backend: str = "ddlgen",
+):
     """
     The reference how the inferred SQL should look like.
     """
-    basic_reference = sql_canonicalize(
-        textwrap.dedent(
-            f"""
-        CREATE TABLE "{clean_key_name(table_name)}" (
-            "id" INT NOT NULL,
-            "name" STRING NOT NULL,
-            "date" TIMESTAMP{" NOT NULL" if timestamp_not_null else ""},
-            "fruits" STRING NOT NULL,
-            "price" DOUBLE NOT NULL,
-            PRIMARY KEY ("{primary_key}")
-        );
+    if backend == "ddlgen":
+        ddl = f"""
+    CREATE TABLE "{clean_key_name(table_name)}" (
+        "id" INT NOT NULL,
+        "name" STRING NOT NULL,
+        "date" TIMESTAMP{" NOT NULL" if timestamp_not_null else ""},
+        "fruits" STRING NOT NULL,
+        "price" DOUBLE NOT NULL,
+        PRIMARY KEY ("{primary_key}")
+    );
     """
-        )
-    )
-    return basic_reference.strip("\n")
+    elif backend == "frictionless":
+        ddl = f"""
+    CREATE TABLE {clean_key_name(table_name)} (
+        id {"INT" if not primary_key_is_string else "STRING"} NOT NULL,
+        name STRING,
+        date TIMESTAMP{" NOT NULL" if timestamp_not_null else ""},
+        fruits STRING,
+        price FLOAT,
+        PRIMARY KEY ({primary_key})
+    );
+    """
+    else:
+        raise ValueError(f"Unknown SQL DDL backend: {backend}")
+    return sql_canonicalize(textwrap.dedent(ddl)).strip("\n")
+
+
+def get_basic_sql_reference_alt(backend: str) -> str:
+    if backend == "ddlgen":
+        ddl = """
+        CREATE TABLE "sheet2" (
+            "foo" DOUBLE NOT NULL,
+            "bar" DOUBLE NOT NULL
+        );
+        """
+    elif backend == "frictionless":
+        ddl = """
+        CREATE TABLE sheet2 (
+            foo FLOAT,
+            bar FLOAT
+        );
+        """
+    return textwrap.dedent(ddl).strip()
+
+
+def getcmd(
+    filename: t.Optional[str] = None, more_args: t.Optional[str] = None, dialect: str = "crate", backend: str = "ddlgen"
+) -> str:
+    cmd = f"infer-ddl --dialect={dialect} --backend={backend}"
+    if filename is not None:
+        cmd += f" {filename}"
+    if more_args is not None:
+        cmd += f" {more_args}"
+    return cmd

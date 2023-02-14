@@ -27,7 +27,9 @@ PEEK_LINES = 1000
 logger = logging.getLogger(__name__)
 
 
-def infer_pk(data: t.Any, content_type: ContentType, address: t.Optional[AddressType] = None) -> t.Optional[str]:
+def infer_pk(
+    data: t.Any, content_type: t.Optional[ContentType] = None, address: t.Optional[AddressType] = None
+) -> t.Optional[str]:
     """
     Attempt to infer primary key from column names and data, DWIM [1].
 
@@ -40,14 +42,17 @@ def infer_pk(data: t.Any, content_type: ContentType, address: t.Optional[Address
     return pk
 
 
-def _infer_pk(data: t.Any, content_type: ContentType, address: t.Optional[AddressType] = None) -> t.Optional[str]:
-
-    if isinstance(data, str):
-        data = io.StringIO(data)
+def _infer_pk(
+    data: t.Any, content_type: t.Optional[ContentType] = None, address: t.Optional[AddressType] = None
+) -> t.Optional[str]:
 
     if isinstance(data, pd.DataFrame):
         df = data
     else:
+        if content_type is None:
+            raise ValueError("Unable to infer primary key without content type")
+        if isinstance(data, str):
+            data = io.StringIO(data)
         df = to_dataframe(data=data, content_type=content_type, address=address)
 
     # Decode list of column names.

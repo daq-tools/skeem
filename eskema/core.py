@@ -2,10 +2,14 @@ import logging
 import typing as t
 import warnings
 
+import pandas as pd
+from frictionless.formats import ExcelControl, OdsControl
+
 from eskema.autopk import infer_pk
 from eskema.model import Resource, SqlResult, SqlTarget
 from eskema.sources import SourcePlus
 from eskema.type import ContentType
+from eskema.util import to_bytes
 
 logger = logging.getLogger(__name__)
 
@@ -72,24 +76,47 @@ class SchemaGenerator:
         if self.resource.type is None:
             raise ValueError("Unable to infer schema without resource type")
 
+        frictionless_args: t.Dict[str, t.Union[str, t.IO]] = {}
+        if self.resource.path is not None:
+            frictionless_args["path"] = str(self.resource.path)
+        elif self.resource.data is not None:
+            frictionless_args["format"] = ContentType.to_suffix(self.resource.type).lstrip(".")
+
+            payload = self.resource.data.read()
+            data = to_bytes(payload)
+            frictionless_args["data"] = data
+        else:
+            raise ValueError("Unable to read any data")
+
+        control = None
+        if self.resource.type is ContentType.ODS:
+            control = OdsControl(sheet=self.resource.address or 1)
+        elif self.resource.type is ContentType.XLSX:
+            control = ExcelControl(sheet=self.resource.address or 1)
+
         # When primary key is not given, try to infer it from the data.
         # TODO: Make `infer_pk` obtain a `Resource` instance, and/or refactor as method.
         if self.target.primary_key is None:
 
-            resource = frictionless.Resource(self.resource.path)
-            df = resource.to_pandas()
+            resource = frictionless.Resource(**frictionless_args, control=control)
+            df: pd.DataFrame = resource.to_pandas()
 
             self.target.primary_key = infer_pk(df, self.resource.type, address=self.resource.address)
 
         # Infer schema.
         engine = sa.create_mock_engine(f"{self.target.dialect}://", executor=_dump)
         mapper = frictionless.formats.sql.SqlMapper(engine)
-        schema = frictionless.Schema.describe(self.resource.path)
+        # FIXME: `resource.to_pandas()` will apparently, close the input byte stream.
+        #        To work around it, we have to supply a new `BytesIO` instance.
+        if "data" in frictionless_args:
+            frictionless_args["data"] = to_bytes(payload)
+        schema = frictionless.Schema.describe(**frictionless_args, control=control)
 
         # Amend schema with primary key information.
-        pk_field = schema.get_field(self.target.primary_key)
-        pk_field.required = True
-        schema.primary_key = [self.target.primary_key]
+        if self.target.primary_key is not None:
+            pk_field = schema.get_field(self.target.primary_key)
+            pk_field.required = True
+            schema.primary_key = [self.target.primary_key]
 
         # Create SQLAlchemy table from schema.
         table = mapper.write_schema(schema, table_name=self.target.table_name, with_metadata=False)

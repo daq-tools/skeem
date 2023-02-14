@@ -1,3 +1,4 @@
+from io import StringIO
 from pathlib import Path
 
 import pytest
@@ -7,6 +8,21 @@ import sqlalchemy as sa
 @pytest.fixture
 def ndjson_file_basic():
     return Path("tests/testdata/basic.ndjson")
+
+
+@pytest.fixture
+def ndjson_stream_basic():
+    """
+    A stream of input data. Here, in NDJSON (ex. LDJSON) format, aka. JSON Lines.
+
+    http://ndjson.org/
+    """
+    return StringIO(
+        """
+{"id":1,"name":"foo","date":"2014-10-31 09:22:56","fruits":"apple,banana","price":0.42}
+{"id":2,"name":"bar","date":null,"fruits":"pear","price":0.84}
+    """.strip()
+    )
 
 
 @pytest.fixture

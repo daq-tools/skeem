@@ -33,7 +33,7 @@ dependencies = [
   "crash",
   "crate[sqlalchemy]",
   "ddlgenerator<0.2",
-  "frictionless[sql]<6",
+  "frictionless[excel,json,ods,sql]<6",
   "json_stream<3",
   "odfpy<2",
   "pandas<1.6",

@@ -1,5 +1,3 @@
-import textwrap
-
 import pytest
 from click.testing import CliRunner
 
@@ -7,10 +5,11 @@ from eskema.cli import cli
 from eskema.core import SchemaGenerator
 from eskema.model import Resource, SqlResult, SqlTarget
 from eskema.type import ContentType
-from tests.util import get_basic_sql_reference
+from tests.util import BACKENDS, get_basic_sql_reference, get_basic_sql_reference_alt, getcmd
 
 
-def test_xlsx_infer_library_success(xlsx_file_basic):
+@pytest.mark.parametrize("backend", BACKENDS)
+def test_xlsx_infer_library_success(xlsx_file_basic, backend: str):
     """
     Verify basic library use.
     """
@@ -26,42 +25,46 @@ def test_xlsx_infer_library_success(xlsx_file_basic):
             table_name=table_name,
             primary_key="id",
         ),
+        backend=backend,
     )
 
     computed = sg.to_sql_ddl().canonical
-    reference = get_basic_sql_reference(table_name=table_name)
+    reference = get_basic_sql_reference(table_name=table_name, backend=backend)
     assert computed == reference
 
 
-def test_xlsx_infer_cli_file_without_tablename(xlsx_file_basic):
+@pytest.mark.parametrize("backend", BACKENDS)
+def test_xlsx_infer_cli_file_without_tablename(xlsx_file_basic, backend: str):
     """
     CLI test: Table name is correctly derived from the input file name or data.
     """
     runner = CliRunner()
-    result = runner.invoke(cli, f"infer-ddl --dialect=crate {xlsx_file_basic}")
+    result = runner.invoke(cli, getcmd(xlsx_file_basic, backend=backend))
     assert result.exit_code == 0
 
     computed = SqlResult(result.stdout).canonical
-    reference = get_basic_sql_reference(table_name="basic")
+    reference = get_basic_sql_reference(table_name="basic", backend=backend)
     assert computed == reference
 
 
-def test_xlsx_infer_cli_file_with_tablename(xlsx_file_basic):
+@pytest.mark.parametrize("backend", BACKENDS)
+def test_xlsx_infer_cli_file_with_tablename(xlsx_file_basic, backend: str):
     """
     CLI test: Table name takes precedence when obtained from the user.
     """
     table_name = "foo"
 
     runner = CliRunner()
-    result = runner.invoke(cli, f"infer-ddl --dialect=crate --table-name={table_name} {xlsx_file_basic}")
+    result = runner.invoke(cli, getcmd(xlsx_file_basic, more_args=f"--table-name={table_name}", backend=backend))
     assert result.exit_code == 0
 
     computed = SqlResult(result.stdout).canonical
-    reference = get_basic_sql_reference(table_name=table_name)
+    reference = get_basic_sql_reference(table_name=table_name, backend=backend)
     assert computed == reference
 
 
-def test_xlsx_infer_cli_file_with_sheet(xlsx_file_basic):
+@pytest.mark.parametrize("backend", BACKENDS)
+def test_xlsx_infer_cli_file_with_sheet(xlsx_file_basic, backend: str):
     """
     CLI test: Table name takes precedence when obtained from the user.
     """
@@ -69,26 +72,18 @@ def test_xlsx_infer_cli_file_with_sheet(xlsx_file_basic):
 
     runner = CliRunner()
     result = runner.invoke(
-        cli, f"infer-ddl --dialect=crate --table-name={table_name} {xlsx_file_basic} --address=Sheet2"
+        cli, getcmd(xlsx_file_basic, more_args=f"--table-name={table_name} --address=Sheet2", backend=backend)
     )
     assert result.exit_code == 0
 
     computed = SqlResult(result.stdout).canonical
-    assert (
-        computed
-        == textwrap.dedent(
-            """
-    CREATE TABLE "sheet2" (
-        "foo" DOUBLE NOT NULL,
-        "bar" DOUBLE NOT NULL
-    );
-    """
-        ).strip()
-    )
+    reference = get_basic_sql_reference_alt(backend)
+    assert computed == reference
 
 
+@pytest.mark.parametrize("backend", BACKENDS)
 @pytest.mark.parametrize("content_type", ["xlsx", ContentType.XLSX.value])
-def test_xlsx_infer_cli_stdin_with_content_type(xlsx_file_basic, content_type: str):
+def test_xlsx_infer_cli_stdin_with_content_type(xlsx_file_basic, content_type: str, backend: str):
     """
     CLI test: Read data from stdin.
     """
@@ -97,11 +92,11 @@ def test_xlsx_infer_cli_stdin_with_content_type(xlsx_file_basic, content_type: s
     runner = CliRunner()
     result = runner.invoke(
         cli,
-        args=f"infer-ddl --dialect=crate --table-name={table_name} --content-type={content_type} -",
+        args=getcmd(more_args=f"--table-name={table_name} --content-type={content_type} -", backend=backend),
         input=open(xlsx_file_basic, "rb"),
     )
     assert result.exit_code == 0
 
     computed = SqlResult(result.stdout).canonical
-    reference = get_basic_sql_reference(table_name=table_name)
+    reference = get_basic_sql_reference(table_name=table_name, backend=backend)
     assert computed == reference

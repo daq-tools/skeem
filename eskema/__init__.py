@@ -1,5 +1,7 @@
 from eskema import type
-from eskema.ddlgen import monkey
+from eskema.ddlgen import monkey as ddlgen_monkey
+from eskema.frictionless import monkey as frictionless_monkey
 
-monkey.activate()
+ddlgen_monkey.activate()
+frictionless_monkey.activate()
 type.init()

@@ -6,7 +6,7 @@ from click.testing import CliRunner
 from eskema.cli import cli
 from eskema.core import SchemaGenerator
 from eskema.model import PEEK_BYTES, Resource, SqlResult, SqlTarget
-from tests.util import get_basic_sql_reference
+from tests.util import BACKENDS, get_basic_sql_reference, getcmd
 
 
 @pytest.fixture
@@ -23,7 +23,8 @@ id,name,date,fruits,price
     )
 
 
-def test_csv_infer_library_success(basic_stream_csv):
+@pytest.mark.parametrize("backend", BACKENDS)
+def test_csv_infer_library_success(basic_stream_csv, backend: str):
     """
     Verify basic library use.
     """
@@ -38,43 +39,47 @@ def test_csv_infer_library_success(basic_stream_csv):
             table_name=table_name,
             primary_key="id",
         ),
+        backend=backend,
     )
 
     computed = sg.to_sql_ddl().canonical
-    reference = get_basic_sql_reference(table_name=table_name)
+    reference = get_basic_sql_reference(table_name=table_name, primary_key_is_string=True, backend=backend)
     assert computed == reference
 
 
-def test_csv_infer_cli_file_without_tablename(csv_file_basic):
+@pytest.mark.parametrize("backend", BACKENDS)
+def test_csv_infer_cli_file_without_tablename(csv_file_basic, backend: str):
     """
     CLI test: Table name is correctly derived from the input file name or data.
     """
     runner = CliRunner()
-    result = runner.invoke(cli, f"infer-ddl --dialect=crate {csv_file_basic}")
+    result = runner.invoke(cli, getcmd(csv_file_basic, backend=backend))
     assert result.exit_code == 0
 
     computed = SqlResult(result.stdout).canonical
-    reference = get_basic_sql_reference(table_name="basic")
+    reference = get_basic_sql_reference(table_name="basic", backend=backend)
     assert computed == reference
 
 
-def test_csv_infer_cli_file_with_tablename(csv_file_basic):
+@pytest.mark.parametrize("backend", BACKENDS)
+def test_csv_infer_cli_file_with_tablename(csv_file_basic, backend: str):
     """
     CLI test: Table name takes precedence when obtained from the user.
     """
     table_name = "foo"
 
     runner = CliRunner()
-    result = runner.invoke(cli, f"infer-ddl --dialect=crate --table-name={table_name} {csv_file_basic}")
+    result = runner.invoke(cli, getcmd(csv_file_basic, more_args=f"--table-name={table_name}", backend=backend))
     assert result.exit_code == 0
 
     computed = SqlResult(result.stdout).canonical
-    reference = get_basic_sql_reference(table_name=table_name)
+    reference = get_basic_sql_reference(table_name=table_name, backend=backend)
     assert computed == reference
 
 
+@pytest.mark.parametrize("backend", BACKENDS)
 @pytest.mark.parametrize("content_type", ["csv", "text/csv"])
-def test_csv_infer_cli_stdin_with_content_type(basic_stream_csv, content_type: str):
+def test_csv_infer_cli_stdin_with_content_type(basic_stream_csv, content_type: str, backend: str):
     """
     CLI test: Read data from stdin.
     """
@@ -83,11 +88,11 @@ def test_csv_infer_cli_stdin_with_content_type(basic_stream_csv, content_type: s
     runner = CliRunner()
     result = runner.invoke(
         cli,
-        args=f"infer-ddl --dialect=crate --table-name={table_name} --content-type={content_type} -",
+        args=getcmd(more_args=f"--table-name={table_name} --content-type={content_type} -", backend=backend),
         input=basic_stream_csv.read(PEEK_BYTES),
     )
     assert result.exit_code == 0
 
     computed = SqlResult(result.stdout).canonical
-    reference = get_basic_sql_reference(table_name=table_name)
+    reference = get_basic_sql_reference(table_name=table_name, primary_key_is_string=True, backend=backend)
     assert computed == reference

@@ -135,3 +135,11 @@ def json_get_first_records(data: io.TextIOBase, nrecords: int = 5) -> t.List[t.O
         return records
 
     return []  # pragma: no cover
+
+
+def to_bytes(payload: t.Union[str, bytes], name: t.Optional[str] = None) -> io.BytesIO:
+    if isinstance(payload, str):
+        payload = payload.encode()
+    data = io.BytesIO(payload)
+    data.name = name or "UNKNOWN"
+    return data
