@@ -34,7 +34,7 @@ def test_parquet_infer_cli_file_without_tablename(parquet_file_basic):
     CLI test: Table name is correctly derived from the input file name or data.
     """
     runner = CliRunner()
-    result = runner.invoke(cli, getcmd(parquet_file_basic, backend=BACKEND))
+    result = runner.invoke(cli, getcmd(parquet_file_basic, backend=BACKEND), catch_exceptions=False)
     assert result.exit_code == 0
 
     computed = SqlResult(result.stdout).canonical
@@ -49,7 +49,9 @@ def test_parquet_infer_cli_file_with_tablename(parquet_file_basic):
     table_name = "foo"
 
     runner = CliRunner()
-    result = runner.invoke(cli, getcmd(parquet_file_basic, more_args=f"--table-name={table_name}", backend=BACKEND))
+    result = runner.invoke(
+        cli, getcmd(parquet_file_basic, more_args=f"--table-name={table_name}", backend=BACKEND), catch_exceptions=False
+    )
     assert result.exit_code == 0
 
     computed = SqlResult(result.stdout).canonical

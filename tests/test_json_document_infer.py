@@ -54,7 +54,7 @@ def test_json_records_infer_cli_file_without_tablename(json_document_file_basic)
     CLI test: Table name is correctly derived from the input file name or data.
     """
     runner = CliRunner()
-    result = runner.invoke(cli, f"infer-ddl --dialect=crate {json_document_file_basic}")
+    result = runner.invoke(cli, f"infer-ddl --dialect=crate {json_document_file_basic}", catch_exceptions=False)
     assert result.exit_code == 0
 
     computed = SqlResult(result.stdout).canonical
@@ -69,7 +69,9 @@ def test_json_records_infer_cli_file_with_tablename(json_document_file_basic):
     table_name = "foo"
 
     runner = CliRunner()
-    result = runner.invoke(cli, f"infer-ddl --dialect=crate --table-name={table_name} {json_document_file_basic}")
+    result = runner.invoke(
+        cli, f"infer-ddl --dialect=crate --table-name={table_name} {json_document_file_basic}", catch_exceptions=False
+    )
     assert result.exit_code == 0
 
     computed = SqlResult(result.stdout).canonical
@@ -89,6 +91,7 @@ def test_json_records_infer_cli_stdin_with_content_type(basic_stream_json_docume
         cli,
         args=f"infer-ddl --dialect=crate --table-name={table_name} --content-type={content_type} -",
         input=basic_stream_json_document.read(PEEK_BYTES),
+        catch_exceptions=False,
     )
     assert result.exit_code == 0
 

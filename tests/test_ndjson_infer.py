@@ -37,7 +37,7 @@ def test_ndjson_infer_cli_file_without_tablename(ndjson_file_basic, backend: str
     CLI test: Table name is correctly derived from the input file name or data.
     """
     runner = CliRunner()
-    result = runner.invoke(cli, getcmd(ndjson_file_basic, backend=backend))
+    result = runner.invoke(cli, getcmd(ndjson_file_basic, backend=backend), catch_exceptions=False)
     assert result.exit_code == 0
 
     computed = SqlResult(result.stdout).canonical
@@ -53,7 +53,9 @@ def test_ndjson_infer_cli_file_with_tablename(ndjson_file_basic, backend: str):
     table_name = "foo"
 
     runner = CliRunner()
-    result = runner.invoke(cli, getcmd(ndjson_file_basic, more_args=f"--table-name={table_name}", backend=backend))
+    result = runner.invoke(
+        cli, getcmd(ndjson_file_basic, more_args=f"--table-name={table_name}", backend=backend), catch_exceptions=False
+    )
     assert result.exit_code == 0
 
     computed = SqlResult(result.stdout).canonical
@@ -74,6 +76,7 @@ def test_ndjson_infer_cli_stdin_with_content_type(ndjson_stream_basic, content_t
         cli,
         args=getcmd(more_args=f"--table-name={table_name} --content-type={content_type} -", backend=backend),
         input=ndjson_stream_basic.read(PEEK_BYTES),
+        catch_exceptions=False,
     )
     assert result.exit_code == 0
 

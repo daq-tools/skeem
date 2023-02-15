@@ -11,7 +11,7 @@ def test_json_nested_infer_cli_file(json_nested_file_basic):
     Test a nested JSON document.
     """
     runner = CliRunner()
-    result = runner.invoke(cli, f"infer-ddl --dialect=postgresql {json_nested_file_basic}")
+    result = runner.invoke(cli, f"infer-ddl --dialect=postgresql {json_nested_file_basic}", catch_exceptions=False)
     assert result.exit_code == 0
 
     computed = SqlResult(result.stdout).canonical

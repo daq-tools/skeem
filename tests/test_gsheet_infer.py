@@ -45,7 +45,7 @@ def test_gsheet_infer_cli_file_without_tablename():
     CLI test: Table name is correctly derived from the input file name or data.
     """
     runner = CliRunner()
-    result = runner.invoke(cli, getcmd(GSHEET_URL_SHEET_BASIC, backend=BACKEND))
+    result = runner.invoke(cli, getcmd(GSHEET_URL_SHEET_BASIC, backend=BACKEND), catch_exceptions=False)
     assert result.exit_code == 0
 
     computed = SqlResult(result.stdout).canonical
@@ -60,7 +60,11 @@ def test_gsheet_infer_cli_file_with_tablename():
     table_name = "foo"
 
     runner = CliRunner()
-    result = runner.invoke(cli, getcmd(GSHEET_URL_SHEET_BASIC, more_args=f"--table-name={table_name}", backend=BACKEND))
+    result = runner.invoke(
+        cli,
+        getcmd(GSHEET_URL_SHEET_BASIC, more_args=f"--table-name={table_name}", backend=BACKEND),
+        catch_exceptions=False,
+    )
     assert result.exit_code == 0
 
     computed = SqlResult(result.stdout).canonical
@@ -76,7 +80,9 @@ def test_gsheet_infer_cli_file_with_sheet():
 
     runner = CliRunner()
     result = runner.invoke(
-        cli, getcmd(GSHEET_URL_SHEET_SHEET2, more_args=f"--table-name={table_name} --address=Sheet2", backend=BACKEND)
+        cli,
+        getcmd(GSHEET_URL_SHEET_SHEET2, more_args=f"--table-name={table_name} --address=Sheet2", backend=BACKEND),
+        catch_exceptions=False,
     )
     assert result.exit_code == 0
 

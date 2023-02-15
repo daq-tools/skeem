@@ -39,7 +39,7 @@ def test_ods_infer_cli_file_without_tablename(ods_file_basic, backend: str):
     CLI test: Table name is correctly derived from the input file name or data.
     """
     runner = CliRunner()
-    result = runner.invoke(cli, getcmd(ods_file_basic, backend=backend))
+    result = runner.invoke(cli, getcmd(ods_file_basic, backend=backend), catch_exceptions=False)
     assert result.exit_code == 0
 
     computed = SqlResult(result.stdout).canonical
@@ -55,7 +55,9 @@ def test_ods_infer_cli_file_with_tablename(ods_file_basic, backend: str):
     table_name = "foo"
 
     runner = CliRunner()
-    result = runner.invoke(cli, getcmd(ods_file_basic, more_args=f"--table-name={table_name}", backend=backend))
+    result = runner.invoke(
+        cli, getcmd(ods_file_basic, more_args=f"--table-name={table_name}", backend=backend), catch_exceptions=False
+    )
     assert result.exit_code == 0
 
     computed = SqlResult(result.stdout).canonical
@@ -72,7 +74,9 @@ def test_ods_infer_cli_file_with_sheet(ods_file_basic, backend: str):
 
     runner = CliRunner()
     result = runner.invoke(
-        cli, getcmd(ods_file_basic, more_args=f"--table-name={table_name} --address=Sheet2", backend=backend)
+        cli,
+        getcmd(ods_file_basic, more_args=f"--table-name={table_name} --address=Sheet2", backend=backend),
+        catch_exceptions=False,
     )
     assert result.exit_code == 0
 
@@ -94,6 +98,7 @@ def test_ods_infer_cli_stdin_with_content_type(ods_file_basic, content_type: str
         cli,
         args=getcmd(more_args=f"--table-name={table_name} --content-type={content_type} -", backend=backend),
         input=open(ods_file_basic, "rb"),
+        catch_exceptions=False,
     )
     assert result.exit_code == 0
 

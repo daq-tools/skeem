@@ -12,7 +12,9 @@ def test_xlsx_autopk_cli_file_without_primary_key(xlsx_file_basic):
     table_name = random_table_name("foo")
 
     runner = CliRunner()
-    result = runner.invoke(cli, f"infer-ddl --dialect=crate --table-name={table_name} {xlsx_file_basic}")
+    result = runner.invoke(
+        cli, f"infer-ddl --dialect=crate --table-name={table_name} {xlsx_file_basic}", catch_exceptions=False
+    )
     assert result.exit_code == 0
 
     computed = sql_canonicalize(result.stdout)
@@ -27,7 +29,9 @@ def test_xlsx_autopk_cli_file_with_primary_key(xlsx_file_basic):
 
     runner = CliRunner()
     result = runner.invoke(
-        cli, f"infer-ddl --dialect=crate --table-name={table_name} --primary-key=name {xlsx_file_basic}"
+        cli,
+        f"infer-ddl --dialect=crate --table-name={table_name} --primary-key=name {xlsx_file_basic}",
+        catch_exceptions=False,
     )
     assert result.exit_code == 0
 

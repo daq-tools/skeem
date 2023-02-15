@@ -53,7 +53,7 @@ def test_csv_infer_cli_file_without_tablename(csv_file_basic, backend: str):
     CLI test: Table name is correctly derived from the input file name or data.
     """
     runner = CliRunner()
-    result = runner.invoke(cli, getcmd(csv_file_basic, backend=backend))
+    result = runner.invoke(cli, getcmd(csv_file_basic, backend=backend), catch_exceptions=False)
     assert result.exit_code == 0
 
     computed = SqlResult(result.stdout).canonical
@@ -69,7 +69,9 @@ def test_csv_infer_cli_file_with_tablename(csv_file_basic, backend: str):
     table_name = "foo"
 
     runner = CliRunner()
-    result = runner.invoke(cli, getcmd(csv_file_basic, more_args=f"--table-name={table_name}", backend=backend))
+    result = runner.invoke(
+        cli, getcmd(csv_file_basic, more_args=f"--table-name={table_name}", backend=backend), catch_exceptions=False
+    )
     assert result.exit_code == 0
 
     computed = SqlResult(result.stdout).canonical
@@ -90,6 +92,7 @@ def test_csv_infer_cli_stdin_with_content_type(basic_stream_csv, content_type: s
         cli,
         args=getcmd(more_args=f"--table-name={table_name} --content-type={content_type} -", backend=backend),
         input=basic_stream_csv.read(PEEK_BYTES),
+        catch_exceptions=False,
     )
     assert result.exit_code == 0
 
