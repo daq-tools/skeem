@@ -3,7 +3,6 @@ import typing as t
 import warnings
 
 import pandas as pd
-from frictionless.formats import ExcelControl, OdsControl
 
 from eskema.autopk import infer_pk
 from eskema.exception import UnknownContentType
@@ -75,6 +74,7 @@ class SchemaGenerator:
         import frictionless.formats
         import sqlalchemy as sa
         from ddlgenerator.ddlgenerator import _dump
+        from frictionless.formats import ExcelControl, OdsControl
 
         from eskema.ddlgen.ddlgenerator import TablePlus
 

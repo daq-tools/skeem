@@ -19,6 +19,7 @@ in progress
 - Add test case for basic nested JSON document
 - Add ``frictionless`` backend
 - Add support for Google Sheets and Parquet input formats
+- Improve sampling large files
 
 
 2023-01-xx 0.0.0

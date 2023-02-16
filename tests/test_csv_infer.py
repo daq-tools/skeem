@@ -5,7 +5,7 @@ from click.testing import CliRunner
 
 from eskema.cli import cli
 from eskema.core import SchemaGenerator
-from eskema.model import PEEK_BYTES, Resource, SqlResult, SqlTarget
+from eskema.model import Resource, SqlResult, SqlTarget
 from tests.util import BACKENDS, get_basic_sql_reference, getcmd
 
 
@@ -19,7 +19,7 @@ def basic_stream_csv():
 id,name,date,fruits,price
 1,"foo","2014-10-31T09:22:56","apple,banana",0.42
 2,"bar",,"pear",0.84
-    """.lstrip()
+    """.strip()
     )
 
 
@@ -43,7 +43,7 @@ def test_csv_infer_library_success(basic_stream_csv, backend: str):
     )
 
     computed = sg.to_sql_ddl().canonical
-    reference = get_basic_sql_reference(table_name=table_name, primary_key_is_string=True, backend=backend)
+    reference = get_basic_sql_reference(table_name=table_name, backend=backend)
     assert computed == reference
 
 
@@ -91,11 +91,11 @@ def test_csv_infer_cli_stdin_with_content_type(basic_stream_csv, content_type: s
     result = runner.invoke(
         cli,
         args=getcmd(more_args=f"--table-name={table_name} --content-type={content_type} -", backend=backend),
-        input=basic_stream_csv.read(PEEK_BYTES),
+        input=basic_stream_csv.read(),
         catch_exceptions=False,
     )
     assert result.exit_code == 0
 
     computed = SqlResult(result.stdout).canonical
-    reference = get_basic_sql_reference(table_name=table_name, primary_key_is_string=True, backend=backend)
+    reference = get_basic_sql_reference(table_name=table_name, backend=backend)
     assert computed == reference

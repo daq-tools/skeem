@@ -4,6 +4,7 @@ import typing as t
 
 import pandas as pd
 
+from eskema.settings import PEEK_LINES
 from eskema.type import ContentType
 from eskema.util import json_get_first_records
 
@@ -20,8 +21,6 @@ PK_CANDIDATES_PRIMARY_LIST = ["pk", "key"]
 PK_CANDIDATES_SECONDARY_ENGLISH = ["#", "number", "nr"]
 PK_CANDIDATES_SECONDARY_GERMAN = ["nummer", "no", "kennung", "bezeichner", "identifikator"]
 PK_CANDIDATES_SECONDARY_LIST = PK_CANDIDATES_SECONDARY_ENGLISH + PK_CANDIDATES_SECONDARY_GERMAN
-
-PEEK_LINES = 1000
 
 
 logger = logging.getLogger(__name__)

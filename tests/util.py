@@ -20,7 +20,6 @@ def random_table_name(label: t.Union[Path, str]):
 def get_basic_sql_reference(
     table_name,
     primary_key="id",
-    primary_key_is_string: bool = False,
     timestamp_not_null: bool = False,
     timestamp_is_string: bool = False,
     backend: str = "ddlgen",
@@ -42,7 +41,7 @@ def get_basic_sql_reference(
     elif backend == "frictionless":
         ddl = f"""
     CREATE TABLE {clean_key_name(table_name)} (
-        id {"INT" if not primary_key_is_string else "STRING"} NOT NULL,
+        id INT NOT NULL,
         name STRING,
         date {"TIMESTAMP" if not timestamp_is_string else "STRING"}{" NOT NULL" if timestamp_not_null else ""},
         fruits STRING,

@@ -4,13 +4,11 @@ import logging
 import typing as t
 from pathlib import Path
 
+from eskema.settings import PEEK_LINES
 from eskema.type import ContentType
 from eskema.util import sql_canonicalize, sql_pretty
 
 logger = logging.getLogger(__name__)
-
-
-PEEK_BYTES = 10000
 
 
 @dataclasses.dataclass
@@ -54,6 +52,8 @@ class Resource:
     def read_data(self) -> t.IO:
         """
         Only peek at the first bytes of data.
+
+        TODO: Refactor to `loader` module?
         """
         binary_files = [ContentType.XLSX, ContentType.ODS]
 
@@ -64,11 +64,18 @@ class Resource:
         if self.data is None:
             raise ValueError("Unable to open resource")
 
-        self.data.seek(0)
+        if self.data.seekable():
+            self.data.seek(0)
         if self.type in binary_files:
             return io.BytesIO(self.data.read())
         else:
-            payload = self.data.read(PEEK_BYTES)
+            if self.type is ContentType.JSON:
+                payload = self.data.read()
+            else:
+                empty = ""
+                if isinstance(self.data, io.BytesIO) or (hasattr(self.data, "mode") and "b" in self.data.mode):
+                    empty = b""  # type: ignore[assignment]
+                payload = empty.join(self.data.readlines(PEEK_LINES))  # type: ignore[arg-type]
             if isinstance(payload, str):
                 payload = payload.encode()
             return io.BytesIO(payload)

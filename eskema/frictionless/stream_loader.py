@@ -1,10 +1,13 @@
-from frictionless import FrictionlessException, errors
-from frictionless.schemes.stream.loader import ReusableByteStream
-
-
 def read_byte_stream_create(self):
+    """
+    Don't croak when reading streams without `name` attribute.
+    """
+    from frictionless import FrictionlessException, errors
+    from frictionless.schemes.stream.loader import ReusableByteStream
+
     byte_stream = self.resource.data
-    # PATCH for Eskema
+    # TODO: Submit patch to upstream.
+    # PATCH for Eskema to enable reading from nameless streams.
     """
     if not os.path.isfile(byte_stream.name):  # type: ignore
         note = f"only local streams are supported: {byte_stream}"

@@ -6,6 +6,8 @@ import pandas as pd
 import sqlalchemy
 from data_dispenser import Source
 
+from eskema.settings import PEEK_LINES
+
 logger = logging.getLogger(__name__)
 
 try:
@@ -15,10 +17,6 @@ except ImportError:
 
     class MongoCollection:  # type: ignore[no-redef]
         pass
-
-
-# How many lines to read from input data.
-PEEK_LINES = 1000
 
 
 class SourcePlus(Source):
