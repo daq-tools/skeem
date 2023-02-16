@@ -112,3 +112,21 @@ Online spreadsheets
 
   - https://www.appsheet.com/Account/DreamFactoryAuthInfo?state=e2a33e28-9026-46d8-8230-93c36fbc837d
   - https://www.dreamfactory.com/
+
+
+Parquet
+=======
+
+The ``basic.parquet`` file has been created using this code snippet::
+
+    # pip install "pandas<1.6" "pyarrow<12"
+    df: pd.DataFrame = pd.read_csv("tests/testdata/basic.csv")
+    df = df.set_index("id")
+    df["date"] = df["date"].astype("datetime64")
+    df.to_parquet("tests/testdata/basic.parquet")
+
+The ``basic.parquet`` file can be explored using the ``parquet-tools`` program like::
+
+    parquet-tools schema tests/testdata/basic.parquet
+    parquet-tools dump tests/testdata/basic.parquet
+

@@ -10,8 +10,11 @@ Eskema
 About
 *****
 
-Infer SQL DDL statements from tabular data, based on the excellent
-`SQLAlchemy`_, `ddlgenerator`_, and `frictionless`_ packages.
+You can use Eskema to infer SQL DDL statements from tabular data.
+
+Eskema is based on the excellent `SQLAlchemy`_, `ddlgenerator`_, and
+`frictionless`_ packages, and can be used both as a standalone program, and as
+a library.
 
 Supported input data:
 
@@ -55,17 +58,23 @@ Read data from given file::
 
     # NDJSON and Parquet formats.
     eskema infer-ddl --dialect=postgresql data.ndjson
-    eskema infer-ddl --dialect=postgresql data.ndjson --backend=frictionless
     eskema infer-ddl --dialect=postgresql data.parquet
 
-    eskema infer-ddl --dialect=postgresql data.json
+    # CSV, JSON, ODS, and XLSX formats.
     eskema infer-ddl --dialect=postgresql data.csv
+    eskema infer-ddl --dialect=postgresql data.json
+    eskema infer-ddl --dialect=postgresql data.ods
     eskema infer-ddl --dialect=postgresql data.xlsx
     eskema infer-ddl --dialect=postgresql data.xlsx --address="Sheet2"
 
 Read data from URL::
 
+    # Google Sheets
     eskema infer-ddl --dialect=postgresql --table-name=foo https://docs.google.com/spreadsheets/d/1ExyrawjlyksbC6DOM6nLolJDbU8qiRrrhxSuxf5ScB0/view
+
+Use a different backend (default: ``ddlgen``)::
+
+    eskema infer-ddl --dialect=postgresql --backend=frictionless data.ndjson
 
 Reading data from stdin needs to obtain both the table name and content type separately::
 

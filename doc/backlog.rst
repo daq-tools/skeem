@@ -38,10 +38,12 @@ Features
 - [x] Add software tests for ``frictionless`` backend
 - [x] Add support for Google Sheets input format
 - [o] Add support for Parquet input format
+- [o] Support reading data from the web. HTTP and S3 would be a minimum?
 - [o] Enable ``frictionless`` backend using environment variable ``ESKEMA_BACKEND=frictionless``
 - [o] Add help texts to CLI options
 - [o] eskema infer-ddl --list-input-formats
 - [o] Add "examples" to test suite
+- [o] Control sample size
 
 Documentation
 =============
@@ -99,7 +101,8 @@ Iteration 4
   - pandas Dataframes
   - Avro
   - JSON Schema
-  - XML?
+  - XML, RDF, RSS
+    https://data.cityofnewyork.us/Transportation/2017-Yellow-Taxi-Trip-Data/biws-g3hs
   - Spreadsheet formats: Microsoft pendant to Google Sheets, and friends
   - Tables from PDF and others
   - DuckDB can currently directly run queries on Parquet files, CSV files,
