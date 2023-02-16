@@ -23,9 +23,7 @@ def test_gsheet_infer_library_success():
     table_name = "foo"
     sg = SchemaGenerator(
         resource=Resource(
-            data=None,
             path=GSHEET_URL_SHEET_BASIC,
-            content_type="ods",
         ),
         target=SqlTarget(
             dialect="crate",

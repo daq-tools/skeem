@@ -43,7 +43,6 @@ dependencies = [
 classifiers = [
   "Development Status :: 3 - Alpha",
   "Environment :: Console",
-  "Framework :: Pytest",
   "Intended Audience :: Customer Service",
   "Intended Audience :: Developers",
   "Intended Audience :: Education",
