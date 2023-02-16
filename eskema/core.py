@@ -65,6 +65,8 @@ class SchemaGenerator:
 
     def _ddl_frictionless(self) -> SqlResult:
 
+        logger.info("Using 'frictionless' backend")
+
         # Suppress warnings of BeautifulSoup
         from bs4 import GuessedAtParserWarning
 
@@ -99,14 +101,20 @@ class SchemaGenerator:
 
         # When primary key is not given, try to infer it from the data.
         # TODO: Make `infer_pk` obtain a `Resource` instance, and/or refactor as method.
+        # TODO: Optimize runtime by not needing to open the resource twice.
         if self.target.primary_key is None:
 
+            logger.info(f"Opening resource {frictionless_args} with {control}")
             resource = frictionless.Resource(**frictionless_args, control=control)
+
+            logger.info("Converging resource to pandas DataFrame")
             df: pd.DataFrame = resource.to_pandas()
 
+            logger.info("Inferring primary key")
             self.target.primary_key = infer_pk(df, self.resource.type, address=self.resource.address)
 
         # Infer schema.
+        logger.info("Inferring schema")
         engine = sa.create_mock_engine(f"{self.target.dialect}://", executor=_dump)
         mapper = frictionless.formats.sql.SqlMapper(engine)
         # FIXME: `resource.to_pandas()` will apparently, close the input byte stream.
@@ -122,15 +130,19 @@ class SchemaGenerator:
             schema.primary_key = [self.target.primary_key]
 
         # Create SQLAlchemy table from schema.
+        logger.info("Converging schema to SQLAlchemy")
         table = mapper.write_schema(schema, table_name=self.target.table_name, with_metadata=False)
 
         # Serialize SQLAlchemy table instance to SQL DDL, using `ddlgenerator`.
+        logger.info("Serialize SQLAlchemy schema to SQL DDL statement")
         tt = TablePlus(data="")
         tt.table = table
         sql = tt.ddl(dialect=self.target.dialect, creates=True, drops=False)
         return SqlResult(sql)
 
     def _ddl_ddlgen(self) -> SqlResult:
+
+        logger.info("Using 'ddlgen' backend")
 
         from eskema.ddlgen.ddlgenerator import TablePlus
 
@@ -139,18 +151,22 @@ class SchemaGenerator:
             raise ValueError("Unable to infer schema without resource type")
 
         # Only peek at the first bytes of data.
+        logger.info(f"Opening resource {self.resource}")
         indata = self.resource.read_data()
 
         # When primary key is not given, try to infer it from the data.
         # TODO: Make `infer_pk` obtain a `Resource` instance, and/or refactor as method.
         if self.target.primary_key is None:
+            logger.info("Inferring primary key")
             self.target.primary_key = infer_pk(indata, self.resource.type, address=self.resource.address)
 
         # Wrap data into data-dispenser's `Source` instance.
+        logger.info("Converging resource to ddlgen source object")
         suffix = ContentType.to_suffix(self.resource.type)
         data = SourcePlus(indata, ext=suffix, table=self.resource.address)
 
         # Infer schema from data.
+        logger.info("Inferring schema")
         table = TablePlus(
             data=data,
             table_name=self.target.table_name,

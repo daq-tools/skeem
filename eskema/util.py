@@ -42,7 +42,7 @@ def setup_logging(level=logging.INFO):
     """
 
     # Define log format.
-    log_format = "%(asctime)-15s [%(name)-26s] %(levelname)-7s: %(message)s"
+    log_format = "%(asctime)-15s [%(name)-34s] %(levelname)-7s: %(message)s"
 
     # Because `ddlgenerator` already invokes `logging.basicConfig()`, we need to apply `force`.
     logging.basicConfig(format=log_format, stream=sys.stderr, level=level, force=True)
