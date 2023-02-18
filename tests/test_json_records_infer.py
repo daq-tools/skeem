@@ -7,7 +7,7 @@ from eskema.cli import cli
 from eskema.core import SchemaGenerator
 from eskema.model import Resource, SqlResult, SqlTarget
 from eskema.settings import PEEK_BYTES
-from tests.util import get_basic_sql_reference
+from tests.util import get_basic_sql_reference, getcmd
 
 
 @pytest.fixture
@@ -44,6 +44,24 @@ def test_json_records_infer_library_success(basic_stream_json_records):
 
     computed = sg.to_sql_ddl().canonical
     reference = get_basic_sql_reference(table_name=table_name)
+    assert computed == reference
+
+
+@pytest.mark.parametrize("url", ["json_records_file_basic", "json_records_url_basic"])
+def test_json_records_infer_url(request, url):
+    """
+    CLI test: Table name is correctly derived from the input file or URL.
+    """
+    backend = "ddlgen"
+
+    url = request.getfixturevalue(url)
+
+    runner = CliRunner()
+    result = runner.invoke(cli, getcmd(url, backend=backend), catch_exceptions=False)
+    assert result.exit_code == 0
+
+    computed = SqlResult(result.stdout).canonical
+    reference = get_basic_sql_reference(table_name="basic_records", backend=backend)
     assert computed == reference
 
 

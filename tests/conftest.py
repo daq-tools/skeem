@@ -11,6 +11,81 @@ def ndjson_file_basic():
 
 
 @pytest.fixture
+def ndjson_url_basic():
+    return "https://raw.githubusercontent.com/daq-tools/eskema/main/tests/testdata/basic.ndjson"
+
+
+@pytest.fixture
+def csv_file_basic():
+    return Path("tests/testdata/basic.csv")
+
+
+@pytest.fixture
+def csv_url_basic():
+    return "https://raw.githubusercontent.com/daq-tools/eskema/main/tests/testdata/basic.csv"
+
+
+@pytest.fixture
+def json_records_file_basic():
+    return Path("tests/testdata/basic-records.json")
+
+
+@pytest.fixture
+def json_records_url_basic():
+    return "https://raw.githubusercontent.com/daq-tools/eskema/main/tests/testdata/basic-records.json"
+
+
+@pytest.fixture
+def json_document_file_basic():
+    return Path("tests/testdata/basic-document.json")
+
+
+@pytest.fixture
+def json_document_url_basic():
+    return "https://raw.githubusercontent.com/daq-tools/eskema/main/tests/testdata/basic-document.json"
+
+
+@pytest.fixture
+def json_nested_file_basic():
+    return Path("tests/testdata/basic-nested.json")
+
+
+@pytest.fixture
+def json_nested_url_basic():
+    return "https://raw.githubusercontent.com/daq-tools/eskema/main/tests/testdata/basic-nested.json"
+
+
+@pytest.fixture
+def xlsx_file_basic():
+    return Path("tests/testdata/basic.xlsx")
+
+
+@pytest.fixture
+def xlsx_url_basic():
+    return "https://raw.githubusercontent.com/daq-tools/eskema/main/tests/testdata/basic.xlsx"
+
+
+@pytest.fixture
+def ods_file_basic():
+    return Path("tests/testdata/basic.ods")
+
+
+@pytest.fixture
+def ods_url_basic():
+    return "https://raw.githubusercontent.com/daq-tools/eskema/main/tests/testdata/basic.ods"
+
+
+@pytest.fixture
+def parquet_file_basic():
+    return Path("tests/testdata/basic.parquet")
+
+
+@pytest.fixture
+def parquet_url_basic():
+    return "https://raw.githubusercontent.com/daq-tools/eskema/main/tests/testdata/basic.parquet"
+
+
+@pytest.fixture
 def ndjson_stream_basic():
     """
     A stream of input data. Here, in NDJSON (ex. LDJSON) format, aka. JSON Lines.
@@ -23,41 +98,6 @@ def ndjson_stream_basic():
 {"id":2,"name":"bar","date":null,"fruits":"pear","price":0.84}
     """.strip()
     )
-
-
-@pytest.fixture
-def csv_file_basic():
-    return Path("tests/testdata/basic.csv")
-
-
-@pytest.fixture
-def json_records_file_basic():
-    return Path("tests/testdata/basic-records.json")
-
-
-@pytest.fixture
-def json_document_file_basic():
-    return Path("tests/testdata/basic-document.json")
-
-
-@pytest.fixture
-def json_nested_file_basic():
-    return Path("tests/testdata/basic-nested.json")
-
-
-@pytest.fixture
-def xlsx_file_basic():
-    return Path("tests/testdata/basic.xlsx")
-
-
-@pytest.fixture
-def ods_file_basic():
-    return Path("tests/testdata/basic.ods")
-
-
-@pytest.fixture
-def parquet_file_basic():
-    return Path("tests/testdata/basic.parquet")
 
 
 @pytest.fixture

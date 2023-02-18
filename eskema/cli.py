@@ -44,7 +44,7 @@ def infer_ddl(
     Infer SQL DDL from input data.
     """
     indata: t.Union[t.IO, Path, str, None] = input
-    path: t.Optional[Path] = None
+    path: t.Optional[t.Union[Path, str]] = None
 
     # Read data from stdin.
     if indata == "-":
@@ -56,7 +56,7 @@ def infer_ddl(
 
     # Read data from file.
     elif isinstance(indata, (Path, str)):
-        path = Path(indata)
+        path = indata
         logger.info(f"Loading data from: {path}")
         indata = None
 

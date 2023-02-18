@@ -1,3 +1,4 @@
+import pytest
 from click.testing import CliRunner
 
 from eskema.cli import cli
@@ -26,6 +27,23 @@ def test_parquet_infer_library_success(parquet_file_basic):
 
     computed = sg.to_sql_ddl().canonical
     reference = get_basic_sql_reference(table_name=table_name, backend=BACKEND)
+    assert computed == reference
+
+
+@pytest.mark.parametrize("url", ["parquet_file_basic", "parquet_url_basic"])
+def test_parquet_infer_url(request, url):
+    """
+    CLI test: Table name is correctly derived from the input file or URL.
+    """
+
+    url = request.getfixturevalue(url)
+
+    runner = CliRunner()
+    result = runner.invoke(cli, getcmd(url, backend=BACKEND), catch_exceptions=False)
+    assert result.exit_code == 0
+
+    computed = SqlResult(result.stdout).canonical
+    reference = get_basic_sql_reference(table_name="basic", backend=BACKEND)
     assert computed == reference
 
 

@@ -32,6 +32,24 @@ def test_ndjson_infer_library_success(ndjson_stream_basic, backend: str):
     assert computed == reference
 
 
+@pytest.mark.parametrize("url", ["ndjson_file_basic", "ndjson_url_basic"])
+@pytest.mark.parametrize("backend", BACKENDS)
+def test_ndjson_infer_url(request, url, backend: str):
+    """
+    CLI test: Table name is correctly derived from the input file or URL.
+    """
+
+    url = request.getfixturevalue(url)
+
+    runner = CliRunner()
+    result = runner.invoke(cli, getcmd(url, backend=backend), catch_exceptions=False)
+    assert result.exit_code == 0
+
+    computed = SqlResult(result.stdout).canonical
+    reference = get_basic_sql_reference(table_name="basic", backend=backend)
+    assert computed == reference
+
+
 @pytest.mark.parametrize("backend", BACKENDS)
 def test_ndjson_infer_cli_file_without_tablename(ndjson_file_basic, backend: str):
     """

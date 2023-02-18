@@ -47,13 +47,17 @@ def test_csv_infer_library_success(basic_stream_csv, backend: str):
     assert computed == reference
 
 
+@pytest.mark.parametrize("url", ["csv_file_basic", "csv_url_basic"])
 @pytest.mark.parametrize("backend", BACKENDS)
-def test_csv_infer_cli_file_without_tablename(csv_file_basic, backend: str):
+def test_csv_infer_url(request, url, backend: str):
     """
-    CLI test: Table name is correctly derived from the input file name or data.
+    CLI test: Table name is correctly derived from the input file or URL.
     """
+
+    url = request.getfixturevalue(url)
+
     runner = CliRunner()
-    result = runner.invoke(cli, getcmd(csv_file_basic, backend=backend), catch_exceptions=False)
+    result = runner.invoke(cli, getcmd(url, backend=backend), catch_exceptions=False)
     assert result.exit_code == 0
 
     computed = SqlResult(result.stdout).canonical

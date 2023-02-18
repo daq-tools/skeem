@@ -1,6 +1,7 @@
 import logging
 import typing as t
 import warnings
+from pathlib import Path
 
 import pandas as pd
 
@@ -44,7 +45,7 @@ class SchemaGenerator:
 
         # Derive table name from input file name or data.
         if not self.target.table_name and self.resource.path:
-            self.target.table_name = self.resource.path.stem
+            self.target.table_name = Path(self.resource.path).stem
 
     def to_sql_ddl(self) -> SqlResult:
         """

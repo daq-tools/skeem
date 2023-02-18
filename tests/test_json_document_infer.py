@@ -7,7 +7,7 @@ from eskema.cli import cli
 from eskema.core import SchemaGenerator
 from eskema.model import Resource, SqlResult, SqlTarget
 from eskema.settings import PEEK_BYTES
-from tests.util import get_basic_sql_reference
+from tests.util import get_basic_sql_reference, getcmd
 
 
 @pytest.fixture
@@ -28,7 +28,7 @@ def basic_stream_json_document():
     )
 
 
-def test_json_records_infer_library_success(basic_stream_json_document):
+def test_json_document_infer_library_success(basic_stream_json_document):
     """
     Verify basic library use.
     """
@@ -50,20 +50,25 @@ def test_json_records_infer_library_success(basic_stream_json_document):
     assert computed == reference
 
 
-def test_json_records_infer_cli_file_without_tablename(json_document_file_basic):
+@pytest.mark.parametrize("url", ["json_document_file_basic", "json_document_url_basic"])
+def test_json_document_infer_url(request, url):
     """
-    CLI test: Table name is correctly derived from the input file name or data.
+    CLI test: Table name is correctly derived from the input file or URL.
     """
+    backend = "ddlgen"
+
+    url = request.getfixturevalue(url)
+
     runner = CliRunner()
-    result = runner.invoke(cli, f"infer-ddl --dialect=crate {json_document_file_basic}", catch_exceptions=False)
+    result = runner.invoke(cli, getcmd(url, backend=backend), catch_exceptions=False)
     assert result.exit_code == 0
 
     computed = SqlResult(result.stdout).canonical
-    reference = get_basic_sql_reference(table_name="basic_document", timestamp_not_null=True)
+    reference = get_basic_sql_reference(table_name="basic_document", timestamp_not_null=True, backend=backend)
     assert computed == reference
 
 
-def test_json_records_infer_cli_file_with_tablename(json_document_file_basic):
+def test_json_document_infer_cli_file_with_tablename(json_document_file_basic):
     """
     CLI test: Table name takes precedence when obtained from the user.
     """
@@ -81,7 +86,7 @@ def test_json_records_infer_cli_file_with_tablename(json_document_file_basic):
 
 
 @pytest.mark.parametrize("content_type", ["json", "application/json"])
-def test_json_records_infer_cli_stdin_with_content_type(basic_stream_json_document, content_type: str):
+def test_json_document_infer_cli_stdin_with_content_type(basic_stream_json_document, content_type: str):
     """
     CLI test: Read data from stdin.
     """

@@ -51,6 +51,10 @@ Synopsis
 Usage
 *****
 
+This section display some example invocations of Eskema, both on the command
+line, and per library use. Other than the resources available from the web,
+testing data can be acquired from the repository's `testdata`_ folder.
+
 Command line use
 ================
 
@@ -69,8 +73,14 @@ Read data from given file::
 
 Read data from URL::
 
-    # Google Sheets
+    # CSV, NDJSON, XLSX
+    eskema infer-ddl --dialect=postgresql https://raw.githubusercontent.com/daq-tools/eskema/main/tests/testdata/basic.csv
+    eskema infer-ddl --dialect=postgresql https://raw.githubusercontent.com/daq-tools/eskema/main/tests/testdata/basic.ndjson
+    eskema infer-ddl --dialect=postgresql https://raw.githubusercontent.com/daq-tools/eskema/main/tests/testdata/basic.xlsx --address="Sheet2"
+
+    # Google Sheets: Address first sheet, and specific sheet of workbook.
     eskema infer-ddl --dialect=postgresql --table-name=foo https://docs.google.com/spreadsheets/d/1ExyrawjlyksbC6DOM6nLolJDbU8qiRrrhxSuxf5ScB0/view
+    eskema infer-ddl --dialect=postgresql --table-name=foo https://docs.google.com/spreadsheets/d/1ExyrawjlyksbC6DOM6nLolJDbU8qiRrrhxSuxf5ScB0/view#gid=883324548
 
 Use a different backend (default: ``ddlgen``)::
 
@@ -166,3 +176,4 @@ Credits and prior art
 .. _OpenDocument Spreadsheet: https://en.wikipedia.org/wiki/OpenDocument
 .. _Paul Walsh: https://github.com/pwalsh
 .. _SQLAlchemy: https://pypi.org/project/SQLAlchemy/
+.. _testdata: https://github.com/daq-tools/eskema/tree/main/tests/testdata

@@ -4,6 +4,8 @@ import logging
 import typing as t
 from pathlib import Path
 
+import fsspec
+
 from eskema.settings import PEEK_LINES
 from eskema.type import ContentType
 from eskema.util import sql_canonicalize, sql_pretty
@@ -32,7 +34,7 @@ class Resource:
         """
 
         # Default values.
-        self.path = Path(self.path) if self.path else None
+        self.path = self.path or None
 
         # Croak if content type can not be derived.
         if not self.path and not self.content_type:
@@ -58,13 +60,14 @@ class Resource:
         binary_files = [ContentType.XLSX, ContentType.ODS]
 
         if self.data is None and self.path is not None:
-            self.data = open(self.path, mode="rb")
+            self.data = fsspec.open(self.path, mode="rb").open()
 
         # Sanity checks
         if self.data is None:
             raise ValueError("Unable to open resource")
 
-        if self.data.seekable():
+        if hasattr(self.data, "seekable") and self.data.seekable():
+            # if self.data.seekable():
             self.data.seek(0)
         if self.type in binary_files:
             return io.BytesIO(self.data.read())

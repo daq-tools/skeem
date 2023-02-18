@@ -1,22 +1,14 @@
 import textwrap
 
+import pytest
 from click.testing import CliRunner
 
 from eskema.cli import cli
 from eskema.model import SqlResult
+from tests.util import getcmd
 
-
-def test_json_nested_infer_cli_file(json_nested_file_basic):
+reference = textwrap.dedent(
     """
-    Test a nested JSON document.
-    """
-    runner = CliRunner()
-    result = runner.invoke(cli, f"infer-ddl --dialect=postgresql {json_nested_file_basic}", catch_exceptions=False)
-    assert result.exit_code == 0
-
-    computed = SqlResult(result.stdout).canonical
-    reference = textwrap.dedent(
-        """
 CREATE TABLE "basic_nested" (
     "id" TEXT NOT NULL,
     "submitter" TEXT NOT NULL,
@@ -41,5 +33,33 @@ CREATE TABLE "versions" (
     FOREIGN KEY("basic_nested_id") REFERENCES "basic_nested" ("id")
 );
     """
-    ).strip()
+).strip()
+
+
+def test_json_nested_infer_cli_file(json_nested_file_basic):
+    """
+    Test a nested JSON document.
+    """
+    runner = CliRunner()
+    result = runner.invoke(cli, f"infer-ddl --dialect=postgresql {json_nested_file_basic}", catch_exceptions=False)
+    assert result.exit_code == 0
+
+    computed = SqlResult(result.stdout).canonical
+    assert computed == reference
+
+
+@pytest.mark.parametrize("url", ["json_nested_file_basic", "json_nested_url_basic"])
+def test_json_nested_infer_url(request, url):
+    """
+    CLI test: Table name is correctly derived from the input file or URL.
+    """
+    backend = "ddlgen"
+
+    url = request.getfixturevalue(url)
+
+    runner = CliRunner()
+    result = runner.invoke(cli, getcmd(url, dialect="postgresql", backend=backend), catch_exceptions=False)
+    assert result.exit_code == 0
+
+    computed = SqlResult(result.stdout).canonical
     assert computed == reference
