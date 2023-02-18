@@ -12,9 +12,9 @@ About
 
 You can use Eskema to infer SQL DDL statements from tabular data.
 
-Eskema is based on the excellent `SQLAlchemy`_, `ddlgenerator`_, and
-`frictionless`_ packages, and can be used both as a standalone program, and as
-a library.
+Eskema is based on the excellent `ddlgenerator`_, `frictionless`_, `fsspec`_,
+`pandas`_, and `SQLAlchemy`_ packages, and can be used both as a standalone
+program, and as a library.
 
 Supported input data:
 
@@ -25,6 +25,11 @@ Supported input data:
 - `NDJSON`_ (formerly LDJSON) aka. `JSON Lines`_, see also `JSON streaming`_
 - `Office Open XML Workbook`_ (`Microsoft Excel`_)
 - `OpenDocument Spreadsheet`_ (`LibreOffice`_)
+
+Supported input sources:
+
+- Local files
+- HTTP resources
 
 
 ********
@@ -163,6 +168,7 @@ Credits and prior art
 .. _development: doc/development.rst
 .. _Evgeny Karev: https://github.com/roll
 .. _frictionless: https://github.com/frictionlessdata/framework
+.. _fsspec: https://pypi.org/project/fsspec/
 .. _Google Sheets: https://en.wikipedia.org/wiki/Google_Sheets
 .. _JSON: https://www.json.org/
 .. _JSON streaming: https://en.wikipedia.org/wiki/JSON_streaming
@@ -174,6 +180,7 @@ Credits and prior art
 .. _NDJSON: http://ndjson.org/
 .. _Office Open XML Workbook: https://en.wikipedia.org/wiki/Office_Open_XML
 .. _OpenDocument Spreadsheet: https://en.wikipedia.org/wiki/OpenDocument
+.. _pandas: https://pypi.org/project/pandas/
 .. _Paul Walsh: https://github.com/pwalsh
 .. _SQLAlchemy: https://pypi.org/project/SQLAlchemy/
 .. _testdata: https://github.com/daq-tools/eskema/tree/main/tests/testdata
