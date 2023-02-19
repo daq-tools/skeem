@@ -49,10 +49,6 @@ def setup_logging(level=logging.INFO):
     # Because `ddlgenerator` already invokes `logging.basicConfig()`, we need to apply `force`.
     logging.basicConfig(format=log_format, stream=sys.stderr, level=level, force=True)
 
-    # Disable `ddlgenerator` logger.
-    # root_logger = logging.getLogger("root")  # noqa: ERA001
-    # root_logger.disabled = True  # noqa: ERA001
-
 
 def boot_click(ctx: click.Context, verbose: bool = False, debug: bool = False, trace_modules: t.List[str] = None):
     """
@@ -69,6 +65,11 @@ def boot_click(ctx: click.Context, verbose: bool = False, debug: bool = False, t
 
     # Setup logging, according to `verbose` / `debug` flags.
     setup_logging(level=log_level)
+
+    # Enable `ddlgenerator` logger only with `--debug`.
+    if not debug:
+        root_logger = logging.getLogger("root")  # noqa: ERA001
+        root_logger.disabled = True  # noqa: ERA001
 
     # Optionally enable code tracing.
     if trace_modules:

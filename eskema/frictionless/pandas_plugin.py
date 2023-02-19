@@ -12,8 +12,9 @@ def create_parser(self, resource):
     if resource.format == "pandas":
         # TODO: Submit patch to upstream.
         # PATCH for Eskema to speed up inference by not loading the whole file.
-        logger.info(f"Using sample size: {resource.detector.sample_size}")
+        logger.info(f"Loading data using sample_size={resource.detector.sample_size}")
         resource.data = resource.data.head(resource.detector.sample_size)
+        logger.info(f"Data loaded with size={len(resource.data)}")  # noqa: ERA001
         return PandasParser(resource)
 
     return None

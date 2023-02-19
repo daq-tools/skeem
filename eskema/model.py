@@ -66,13 +66,15 @@ class Resource:
         if self.data is None:
             raise ValueError("Unable to open resource")
 
+        # Only optionally seek to the file's beginning.
         if hasattr(self.data, "seekable") and self.data.seekable():
-            # if self.data.seekable():
             self.data.seek(0)
+
         if self.type in binary_files:
             return io.BytesIO(self.data.read())
         else:
             if self.type is ContentType.JSON:
+                logger.info("WARNING: Hitting a speed bump by needing to read JSON document as a whole")
                 payload = self.data.read()
             else:
                 empty = ""
