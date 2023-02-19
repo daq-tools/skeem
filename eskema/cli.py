@@ -7,7 +7,7 @@ import click
 
 from eskema.core import SchemaGenerator
 from eskema.model import Resource, SqlTarget
-from eskema.util import boot_click
+from eskema.util import boot_click, split_list
 
 logger = logging.getLogger(__name__)
 
@@ -16,9 +16,18 @@ logger = logging.getLogger(__name__)
 @click.version_option(package_name="eskema")
 @click.option("--verbose", is_flag=True, required=False)
 @click.option("--debug", is_flag=True, required=False)
+@click.option(
+    "--trace-modules",
+    is_flag=False,
+    show_default=True,
+    required=False,
+    type=click.STRING,
+    help="Set modules to be traced (comma-separated list)",
+    callback=lambda ctx, param, value: split_list(value),
+)
 @click.pass_context
-def cli(ctx: click.Context, verbose: bool, debug: bool):
-    return boot_click(ctx, verbose, debug)
+def cli(ctx: click.Context, verbose: bool, debug: bool, trace_modules: t.List[str]):
+    return boot_click(ctx, verbose, debug, trace_modules)
 
 
 @cli.command("infer-ddl")

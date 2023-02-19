@@ -89,6 +89,7 @@ classifiers = [
 [project.optional-dependencies]
 develop = [
   "black<23",
+  "hunter<4",
   "mypy==0.991",
   "poethepoet<0.19",
   "pyproject-fmt<0.6",

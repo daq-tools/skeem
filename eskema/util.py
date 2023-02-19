@@ -11,6 +11,8 @@ import json_stream
 from json_stream.base import StreamingJSONList, StreamingJSONObject
 from sqlformatter.sqlformatter import SQLFormatter
 
+logger = logging.getLogger(__name__)
+
 
 def jd(data: t.Any):
     """
@@ -48,12 +50,15 @@ def setup_logging(level=logging.INFO):
     logging.basicConfig(format=log_format, stream=sys.stderr, level=level, force=True)
 
     # Disable `ddlgenerator` logger.
+    # root_logger = logging.getLogger("root")  # noqa: ERA001
+    # root_logger.disabled = True  # noqa: ERA001
 
 
-def boot_click(ctx: click.Context, verbose: bool, debug: bool):
+def boot_click(ctx: click.Context, verbose: bool = False, debug: bool = False, trace_modules: t.List[str] = None):
     """
     Bootstrap the CLI application.
     """
+    trace_modules = trace_modules or []
 
     # Adjust log level according to `verbose` / `debug` flags.
     log_level = logging.WARNING
@@ -64,6 +69,10 @@ def boot_click(ctx: click.Context, verbose: bool, debug: bool):
 
     # Setup logging, according to `verbose` / `debug` flags.
     setup_logging(level=log_level)
+
+    # Optionally enable code tracing.
+    if trace_modules:
+        enable_tracing(modules=trace_modules)
 
 
 def get_firstline(data: t.Union[io.TextIOBase, Path, str], nrows: int = 1) -> t.IO:
@@ -143,3 +152,52 @@ def to_bytes(payload: t.Union[str, bytes], name: t.Optional[str] = None) -> io.B
     data = io.BytesIO(payload)
     data.name = name or "UNKNOWN"
     return data
+
+
+def split_list(value: str, delimiter: str = ",") -> t.List[str]:
+    if value is None:
+        return []
+    return [c.strip() for c in value.split(delimiter)]
+
+
+def to_list(x: t.Any, default: t.List[t.Any] = None) -> t.List[t.Any]:
+    if not isinstance(default, t.List):
+        raise ValueError("Default value is not a list")
+    if x is None:
+        return default
+    if not isinstance(x, t.Iterable) or isinstance(x, str):
+        return [x]
+    elif isinstance(x, list):
+        return x
+    else:
+        return list(x)
+
+
+def enable_tracing(modules: t.List[str] = None):
+    effective_modules = []
+    for module in to_list(modules):
+        if module == "machinery":
+            effective_modules += ["eskema", "fastparquet", "frictionless", "fsspec", "pandas"]
+        if module == "core":
+            effective_modules += ["eskema"]
+        else:
+            effective_modules += [module]
+    try:
+        import hunter  # noqa: F401
+
+        _enable_tracing(sorted(set(effective_modules)))
+    except ImportError:
+        logger.warning("Package `hunter` not installed")
+
+
+def _enable_tracing(modules: t.List[str] = None):
+    from hunter import Q, trace
+
+    if not modules:
+        return
+
+    logger.info(f"Tracing modules {modules}")
+    constraint = Q(module_startswith=modules[0])
+    for module in modules[1:]:
+        constraint = constraint | Q(module_startswith=module)
+    trace(constraint)

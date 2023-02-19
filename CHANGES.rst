@@ -22,6 +22,7 @@ in progress
 - Add support for Google Sheets and Parquet input formats
 - Improve sampling large files
 - Support reading data from HTTP
+- Performance: Use the Hunter code tracing toolkit to trace execution path
 
 
 2023-01-xx 0.0.0

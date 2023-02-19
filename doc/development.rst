@@ -2,6 +2,11 @@
 Development
 ###########
 
+
+*******
+Sandbox
+*******
+
 Acquire sources, create Python virtualenv, install package and dependencies,
 and run software tests::
 
@@ -12,3 +17,24 @@ and run software tests::
     pip install --editable=.[test,develop,release]
     poe test
 
+
+************
+Code tracing
+************
+
+Eskema uses `Hunter`_ for code tracing, in order to make it easy to identify
+hot spots visually. `Hunter`_ is a flexible code tracing toolkit, for
+debugging, logging, inspection and other nefarious purposes.
+
+For tracing function invocations through ``eskema`` and important 3rd-party
+modules, use the ``--trace-modules=`` option. Examples:
+
+- ``--trace-modules=frictionless`` will trace code execution for the
+  ``frictionless`` module.
+- ``--trace-modules=eskema,frictionless, pandas`` will trace code execution for
+  the ``eskema``, ``frictionless``, and ``pandas`` modules.
+- ``--trace-modules=machinery`` has a special meaning, and will resolve to the
+  module list ``["eskema", "fastparquet", "frictionless", "fsspec", "pandas"]``.
+
+
+.. _Hunter: https://pypi.org/project/hunter/
