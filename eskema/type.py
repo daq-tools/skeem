@@ -20,6 +20,10 @@ def init():
             ".jsonl": "application/x-ndjson",
             ".ldjson": "application/x-ldjson",
             ".ldj": "application/x-ldjson",
+            # https://issues.apache.org/jira/browse/PARQUET-1889?focusedCommentId=17468854#comment-17468854
+            ".parquet": "application/vnd.apache.parquet",
+            ".parq": "application/vnd.apache.parquet",
+            ".pq": "application/vnd.apache.parquet",
         }
     )
 
@@ -35,6 +39,7 @@ class ContentType(Enum):
     NDJSON = "application/x-ndjson"
     XLSX = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
     ODS = "application/vnd.oasis.opendocument.spreadsheet"
+    PARQUET = "application/vnd.apache.parquet"
 
     # Secondary aliases.
     LDJSON = "application/x-ldjson"
@@ -101,6 +106,8 @@ class ContentType(Enum):
             return ".xlsx"
         elif type_ is ContentType.ODS:
             return ".ods"
+        elif type_ is ContentType.PARQUET:
+            return ".parquet"
         else:
             raise ValueError(f"Unable to compute suffix for content type '{type_}'")
 
@@ -116,6 +123,7 @@ class ContentTypeShort(Enum):
     LDJSON = "ldjson"
     NDJSON = "ndjson"
     ODS = "ods"
+    PARQUET = "parquet"
     XLSX = "xlsx"
 
     @classmethod
@@ -128,6 +136,7 @@ class ContentTypeShort(Enum):
             cls.LDJSON: "application/x-ldjson",
             cls.NDJSON: "application/x-ndjson",
             cls.ODS: ContentType.ODS.value,
+            cls.PARQUET: ContentType.PARQUET.value,
             cls.XLSX: ContentType.XLSX.value,
         }
         v2 = mapping[v1]

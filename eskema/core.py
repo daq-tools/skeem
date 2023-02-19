@@ -8,6 +8,7 @@ import pandas as pd
 from eskema.autopk import infer_pk
 from eskema.exception import UnknownContentType
 from eskema.model import Resource, SqlResult, SqlTarget
+from eskema.settings import FRICTIONLESS_CONTENT_TYPES
 from eskema.sources import SourcePlus
 from eskema.type import ContentType
 from eskema.util import to_bytes
@@ -56,10 +57,15 @@ class SchemaGenerator:
             self.resource.peek()
         except UnknownContentType:
             fallback = True
-        if self.backend == "ddlgen" and not fallback:
-            return self._ddl_ddlgen()
-        elif self.backend == "frictionless" or self.backend == "fl" or fallback:
+
+        choose_frictionless = (
+            fallback or self.backend in ["frictionless", "fl"] or self.resource.type in FRICTIONLESS_CONTENT_TYPES
+        )
+
+        if choose_frictionless:
             return self._ddl_frictionless()
+        elif self.backend == "ddlgen":
+            return self._ddl_ddlgen()
         else:
             raise NotImplementedError(f"Backend '{self.backend}' not implemented")
 
@@ -94,6 +100,7 @@ class SchemaGenerator:
         else:
             raise ValueError("Unable to read any data")
 
+        # Define resource controls.
         control = None
         if self.resource.type is ContentType.ODS:
             control = OdsControl(sheet=self.resource.address or 1)

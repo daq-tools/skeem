@@ -189,6 +189,8 @@ extend-ignore = [
 
 [tool.ruff.per-file-ignores]
 "eskema/core.py" = ["E402"]
+"eskema/fastparquet/*" = ["E722"]
+"eskema/pandas/*" = ["S101"]
 "tests/*" = ["S101"]
 
 [tool.setuptools.packages.find]
