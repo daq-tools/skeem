@@ -100,13 +100,14 @@ class SchemaGenerator:
         elif self.resource.type is ContentType.XLSX:
             control = ExcelControl(sheet=self.resource.address or 1)
 
+        # Open resource.
+        logger.info(f"Opening resource {frictionless_args} with {control}")
+        resource = frictionless.Resource(**frictionless_args, control=control)
+
         # When primary key is not given, try to infer it from the data.
         # TODO: Make `infer_pk` obtain a `Resource` instance, and/or refactor as method.
         # TODO: Optimize runtime by not needing to open the resource twice.
         if self.target.primary_key is None:
-
-            logger.info(f"Opening resource {frictionless_args} with {control}")
-            resource = frictionless.Resource(**frictionless_args, control=control)
 
             logger.info("Converging resource to pandas DataFrame")
             df: pd.DataFrame = resource.to_pandas()
@@ -121,8 +122,17 @@ class SchemaGenerator:
         # FIXME: `resource.to_pandas()` will apparently, close the input byte stream.
         #        To work around it, we have to supply a new `BytesIO` instance.
         if "data" in frictionless_args:
+            logger.info("WARNING: Hitting a speed bump by needing to read resource as a whole")
             frictionless_args["data"] = to_bytes(payload)
-        schema = frictionless.Schema.describe(**frictionless_args, control=control)
+        descriptor = resource.to_descriptor()
+
+        # Either `schema` is already present, or it needs to be established by invoking `describe` first.
+        if "schema" in descriptor:
+            schema = frictionless.Schema.from_descriptor(descriptor["schema"])
+        else:
+            schema = frictionless.Schema.describe(**frictionless_args, control=control)
+
+        logger.debug(f"Inferred schema: {schema}")
 
         # Amend schema with primary key information.
         if self.target.primary_key is not None:

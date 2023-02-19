@@ -23,6 +23,7 @@ in progress
 - Improve sampling large files
 - Support reading data from HTTP
 - Performance: Use the Hunter code tracing toolkit to trace execution path
+- Performance: Don't open resource twice when using ``frictionless`` backend
 
 
 2023-01-xx 0.0.0
