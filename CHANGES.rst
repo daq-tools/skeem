@@ -25,6 +25,7 @@ in progress
 - Performance: Use the Hunter code tracing toolkit to trace execution path
 - Performance: Don't open resource twice when using ``frictionless`` backend
 - Performance: Improve peeking into Parquet files
+- Performance: Configure ``PEEK_LINES = 100`` instead of 1000
 
 
 2023-01-xx 0.0.0
