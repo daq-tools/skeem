@@ -7,11 +7,11 @@ import pandas as pd
 
 from eskema.autopk import infer_pk
 from eskema.exception import UnknownContentType
+from eskema.io import to_bytes
 from eskema.model import Resource, SqlResult, SqlTarget
 from eskema.settings import FRICTIONLESS_CONTENT_TYPES
 from eskema.sources import SourcePlus
 from eskema.type import ContentType
-from eskema.util import to_bytes
 
 logger = logging.getLogger(__name__)
 
@@ -54,7 +54,7 @@ class SchemaGenerator:
         """
         fallback = False
         try:
-            self.resource.peek()
+            self.resource.detect_type()
         except UnknownContentType:
             fallback = True
 
@@ -171,7 +171,7 @@ class SchemaGenerator:
 
         # Only peek at the first bytes of data.
         logger.info(f"Opening resource {self.resource}")
-        indata = self.resource.read_data()
+        indata = self.resource.peek()
 
         # When primary key is not given, try to infer it from the data.
         # TODO: Make `infer_pk` obtain a `Resource` instance, and/or refactor as method.

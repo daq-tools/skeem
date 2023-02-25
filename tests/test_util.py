@@ -7,7 +7,8 @@ from unittest import mock
 
 import pytest
 
-from eskema.util import boot_click, get_firstline, jd, json_get_first_records, sql_pretty
+from eskema.io import json_get_first_records
+from eskema.util import boot_click, get_firstline, jd, sql_pretty
 
 
 def test_jd():

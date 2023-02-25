@@ -1,13 +1,11 @@
 import dataclasses
-import io
 import logging
 import typing as t
 from pathlib import Path
 
 import fsspec
-from fsspec.spec import AbstractBufferedFile
 
-from eskema.io import fsspec_peek
+from eskema.io import peek
 from eskema.settings import PEEK_BYTES, PEEK_LINES
 from eskema.type import ContentType
 from eskema.util import sql_canonicalize, sql_pretty
@@ -27,7 +25,7 @@ class Resource:
     content_type: t.Optional[t.Union[ContentType, str]] = None
     type: t.Optional[ContentType] = None  # noqa: A003
 
-    def peek(self):
+    def detect_type(self):
         """
         Introspect input data and derive content type.
         Currently, it only detects the content type from the filename extension.
@@ -53,14 +51,12 @@ class Resource:
             self.type = ContentType.from_name(self.content_type)
             logger.info(f"Using specified type: {self.type}")
 
-    def read_data(self) -> t.IO:
+    def peek(self) -> t.IO:
         """
         Only peek at the first bytes of data.
-
-        TODO: Refactor to `loader` module?
         """
-        binary_files = [ContentType.XLSX, ContentType.ODS]
 
+        # Access a plethora of resources using `fsspec`.
         if self.data is None and self.path is not None:
             self.data = fsspec.open(self.path, mode="rb").open()
 
@@ -68,33 +64,8 @@ class Resource:
         if self.data is None:
             raise ValueError("Unable to open resource")
 
-        # Only optionally seek to the file's beginning.
-        # if hasattr(self.data, "seekable") and self.data.seekable():  # noqa: ERA001
-        #     self.data.seek(0)  # noqa: ERA001
-
-        if self.type in binary_files:
-            logger.info(f"WARNING: Hitting a speed bump by needing to read file of type {binary_files} as a whole")
-            return io.BytesIO(self.data.read())
-        else:
-            if self.type is ContentType.JSON:
-                logger.info("WARNING: Hitting a speed bump by needing to read JSON document as a whole")
-                payload = self.data.read()
-            else:
-                empty = ""
-                if isinstance(self.data, io.BytesIO) or (hasattr(self.data, "mode") and "b" in self.data.mode):
-                    empty = b""  # type: ignore[assignment]
-
-                # Optimize peek path for `fsspec`-based file systems.
-                # TODO: Evaluate using the `smart-open` package.
-                if isinstance(self.data, AbstractBufferedFile):
-                    payload = fsspec_peek(data=self.data, empty=empty, peek_bytes=PEEK_BYTES, peek_lines=PEEK_LINES)
-                else:
-                    payload = empty.join(self.data.readlines(PEEK_LINES))  # type: ignore[arg-type]
-
-            if isinstance(payload, str):
-                payload = payload.encode()
-
-            return io.BytesIO(payload)
+        # Peek into the first bytes/lines of data.
+        return peek(data=self.data, content_type=self.type, peek_bytes=PEEK_BYTES, peek_lines=PEEK_LINES)
 
 
 @dataclasses.dataclass

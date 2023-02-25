@@ -3,12 +3,9 @@ import json
 import logging
 import sys
 import typing as t
-from collections import OrderedDict
 from pathlib import Path
 
 import click
-import json_stream
-from json_stream.base import StreamingJSONList, StreamingJSONObject
 from sqlformatter.sqlformatter import SQLFormatter
 
 logger = logging.getLogger(__name__)
@@ -113,46 +110,6 @@ def str_get_firstline(data: str, nrows: int = 1) -> t.IO:
         buffer.write(line)
     buffer.seek(0)
     return buffer
-
-
-def json_get_first_records(data: io.TextIOBase, nrecords: int = 5) -> t.List[t.OrderedDict[t.AnyStr, t.Any]]:
-    """
-    Read JSON data lazily, without loading the whole document into memory.
-
-    - From a "list of objects" JSON document, get only the first N records.
-    - From a "single object" JSON document, get only the first record.
-    """
-    try:
-        stream = json_stream.load(data)
-    except StopIteration as ex:
-        raise ValueError("Unable to parse JSON document in streaming mode. Reason: Document is empty") from ex
-    except Exception as ex:
-        raise ValueError(f"Unable to parse JSON document in streaming mode. Reason: {ex}") from ex
-
-    if isinstance(stream, StreamingJSONList):
-        records = []
-        for index in range(nrecords):
-            try:
-                record = OrderedDict(stream[index].items())
-                records.append(record)
-            except IndexError:
-                break
-        return records
-
-    elif isinstance(stream, StreamingJSONObject):
-        record = OrderedDict(stream.items())
-        records = [record]
-        return records
-
-    return []  # pragma: no cover
-
-
-def to_bytes(payload: t.Union[str, bytes], name: t.Optional[str] = None) -> io.BytesIO:
-    if isinstance(payload, str):
-        payload = payload.encode()
-    data = io.BytesIO(payload)
-    data.name = name or "UNKNOWN"
-    return data
 
 
 def split_list(value: str, delimiter: str = ",") -> t.List[str]:
