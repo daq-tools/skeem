@@ -52,26 +52,29 @@ class SchemaGenerator:
         """
         Infer field/column schema from input data and generate SQL DDL statement.
         """
+        logger.info(f"Selected backend: {self.backend}")
         fallback = False
         try:
             self.resource.detect_type()
         except UnknownContentType:
+            logger.info("WARNING: Unable to detect content type")
             fallback = True
 
         choose_frictionless = (
             fallback or self.backend in ["frictionless", "fl"] or self.resource.type in FRICTIONLESS_CONTENT_TYPES
         )
-
         if choose_frictionless:
-            return self._ddl_frictionless()
-        elif self.backend == "ddlgen":
+            self.backend = "frictionless"
+        logger.info(f"Effective backend: {self.backend}")
+
+        if self.backend == "ddlgen":
             return self._ddl_ddlgen()
+        elif self.backend == "frictionless":
+            return self._ddl_frictionless()
         else:
             raise NotImplementedError(f"Backend '{self.backend}' not implemented")
 
     def _ddl_frictionless(self) -> SqlResult:
-
-        logger.info("Using 'frictionless' backend")
 
         # Suppress warnings of BeautifulSoup
         from bs4 import GuessedAtParserWarning
@@ -160,8 +163,6 @@ class SchemaGenerator:
         return SqlResult(sql)
 
     def _ddl_ddlgen(self) -> SqlResult:
-
-        logger.info("Using 'ddlgen' backend")
 
         from eskema.ddlgen.ddlgenerator import TablePlus
 
