@@ -3,11 +3,9 @@ import logging
 import typing as t
 from collections import OrderedDict
 
-import json_stream
 import pandas as pd
 from fsspec.implementations.local import LocalFileOpener
 from fsspec.spec import AbstractBufferedFile
-from json_stream.base import StreamingJSONList, StreamingJSONObject
 
 from eskema.type import ContentType
 
@@ -104,6 +102,9 @@ def json_get_first_records(data: io.TextIOBase, nrecords: int = 5) -> t.List[t.O
     - From a "list of objects" JSON document, get only the first N records.
     - From a "single object" JSON document, get only the first record.
     """
+    import json_stream
+    from json_stream.base import StreamingJSONList, StreamingJSONObject
+
     try:
         stream = json_stream.load(data)
     except StopIteration as ex:
@@ -127,14 +128,6 @@ def json_get_first_records(data: io.TextIOBase, nrecords: int = 5) -> t.List[t.O
         return records
 
     return []  # pragma: no cover
-
-
-def to_bytes(payload: t.Union[str, bytes], name: t.Optional[str] = None) -> io.BytesIO:
-    if isinstance(payload, str):
-        payload = payload.encode()
-    data = io.BytesIO(payload)
-    data.name = name or "UNKNOWN"
-    return data
 
 
 def read_lineprotocol(data: t.IO[t.Any]):

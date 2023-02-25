@@ -6,12 +6,11 @@ from pathlib import Path
 import pandas as pd
 
 from eskema.autopk import infer_pk
-from eskema.ddlgen.sources import SourcePlus
 from eskema.exception import UnknownContentType
-from eskema.io import to_bytes
 from eskema.model import Resource, SqlResult, SqlTarget
 from eskema.settings import FRICTIONLESS_CONTENT_TYPES
 from eskema.type import ContentType
+from eskema.util import to_bytes
 
 logger = logging.getLogger(__name__)
 
@@ -52,6 +51,7 @@ class SchemaGenerator:
         """
         Infer field/column schema from input data and generate SQL DDL statement.
         """
+
         logger.info(f"Selected backend: {self.backend}")
         fallback = False
         try:
@@ -165,6 +165,7 @@ class SchemaGenerator:
     def _ddl_ddlgen(self) -> SqlResult:
 
         from eskema.ddlgen.ddlgenerator import TablePlus
+        from eskema.ddlgen.sources import SourcePlus
 
         # Sanity checks.
         if self.resource.type is None:

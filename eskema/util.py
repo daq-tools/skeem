@@ -164,3 +164,11 @@ def _enable_tracing(modules: t.List[str] = None):
 
 def unwrap(value: str):
     return textwrap.dedent(value).strip()
+
+
+def to_bytes(payload: t.Union[str, bytes], name: t.Optional[str] = None) -> io.BytesIO:
+    if isinstance(payload, str):
+        payload = payload.encode()
+    data = io.BytesIO(payload)
+    data.name = name or "UNKNOWN"
+    return data
