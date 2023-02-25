@@ -6,11 +6,11 @@ from pathlib import Path
 import pandas as pd
 
 from eskema.autopk import infer_pk
+from eskema.ddlgen.sources import SourcePlus
 from eskema.exception import UnknownContentType
 from eskema.io import to_bytes
 from eskema.model import Resource, SqlResult, SqlTarget
 from eskema.settings import FRICTIONLESS_CONTENT_TYPES
-from eskema.sources import SourcePlus
 from eskema.type import ContentType
 
 logger = logging.getLogger(__name__)
