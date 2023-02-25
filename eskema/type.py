@@ -8,19 +8,23 @@ from eskema.exception import UnknownContentType
 
 def init():
     """
-    Add NDJSON variants to MIME types map.
+    Expand Python's MIME types map.
 
     Table comparing NDJSON (ex. LDJSON) and JSON Lines side-by-side:
     https://github.com/ndjson/ndjson.github.io/issues/1#issuecomment-109935996
+
+    The listed MIME types are not officially registered, for some of them,
+    there are a few hints, for others, the MIME type has been completely made up.
+
+    - Parquet: https://issues.apache.org/jira/browse/PARQUET-1889?focusedCommentId=17468854#comment-17468854
     """
     mimetypes.init()
     mimetypes.types_map.update(
         {
-            ".ndjson": "application/x-ndjson",
             ".jsonl": "application/x-ndjson",
             ".ldjson": "application/x-ldjson",
             ".ldj": "application/x-ldjson",
-            # https://issues.apache.org/jira/browse/PARQUET-1889?focusedCommentId=17468854#comment-17468854
+            ".ndjson": "application/x-ndjson",
             ".parquet": "application/vnd.apache.parquet",
             ".parq": "application/vnd.apache.parquet",
             ".pq": "application/vnd.apache.parquet",
@@ -37,13 +41,13 @@ class ContentType(Enum):
     CSV = "text/csv"
     JSON = "application/json"
     NDJSON = "application/x-ndjson"
-    XLSX = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
     ODS = "application/vnd.oasis.opendocument.spreadsheet"
     PARQUET = "application/vnd.apache.parquet"
+    XLSX = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
 
     # Secondary aliases.
-    LDJSON = "application/x-ldjson"
     JSONL = "application/x-ndjson"
+    LDJSON = "application/x-ldjson"
 
     @classmethod
     def from_filename(cls, filename: t.Union[Path, str]) -> "ContentType":
@@ -96,18 +100,19 @@ class ContentType(Enum):
         """
         Derive filename extension from content type.
         """
-        if cls.is_ndjson(type_):
-            return ".ndjson"
-        elif type_ is ContentType.CSV:
+
+        if type_ is ContentType.CSV:
             return ".csv"
         elif type_ is ContentType.JSON:
             return ".json"
-        elif type_ is ContentType.XLSX:
-            return ".xlsx"
+        elif cls.is_ndjson(type_):
+            return ".ndjson"
         elif type_ is ContentType.ODS:
             return ".ods"
         elif type_ is ContentType.PARQUET:
             return ".parquet"
+        elif type_ is ContentType.XLSX:
+            return ".xlsx"
         else:
             raise ValueError(f"Unable to compute suffix for content type '{type_}'")
 
@@ -130,11 +135,11 @@ class ContentTypeShort(Enum):
     def resolve(cls, label: str) -> str:
         v1 = cls(label)
         mapping = {
-            cls.CSV: "text/csv",
-            cls.JSON: "application/json",
-            cls.JSONL: "application/x-ndjson",
+            cls.CSV: ContentType.CSV.value,
+            cls.JSON: ContentType.JSON.value,
+            cls.JSONL: ContentType.NDJSON.value,
             cls.LDJSON: "application/x-ldjson",
-            cls.NDJSON: "application/x-ndjson",
+            cls.NDJSON: ContentType.NDJSON.value,
             cls.ODS: ContentType.ODS.value,
             cls.PARQUET: ContentType.PARQUET.value,
             cls.XLSX: ContentType.XLSX.value,
