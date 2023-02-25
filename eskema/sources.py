@@ -6,6 +6,7 @@ import pandas as pd
 import sqlalchemy
 from data_dispenser import Source
 
+from eskema.io import dataframe_from_lineprotocol
 from eskema.settings import PEEK_LINES
 
 logger = logging.getLogger(__name__)
@@ -124,6 +125,7 @@ class SourcePlus(Source):
         Register improved content type handler functions for certain data formats.
         """
         self.eval_funcs_by_ext[".csv"] = [_eval_csv]
+        self.eval_funcs_by_ext[".lp"] = [_eval_lineprotocol]
         self.eval_funcs_by_ext[".ndjson"] = [_eval_ndjson]
 
         # TODO: Use the generic interface if deserializer can be created with `sheet_name` option.
@@ -134,7 +136,10 @@ class SourcePlus(Source):
         """
         if hasattr(src, "name"):
             self.table_name = src.name
-        self.deserializers = self.eval_funcs_by_ext.get(ext or "*")
+        deserializers = self.eval_funcs_by_ext.get(ext or "*")
+        if deserializers is None:
+            raise NotImplementedError(f"Backend 'ddlgen' has no deserializer for extension '{ext}'")
+        self.deserializers = deserializers
         self._deserialize(src)
 
     def _source_is_excel(self, spreadsheet, sheet=None):
@@ -147,6 +152,14 @@ def _eval_csv(target, fieldnames: t.List[str] = None, *args, **kwargs):
     Generate records from a CSV string, using pandas' `pd.read_csv`.
     """
     df = pd.read_csv(target, parse_dates=False, keep_default_na=False, nrows=PEEK_LINES)
+    return _generate_records(df)
+
+
+def _eval_lineprotocol(target, fieldnames: t.List[str] = None, *args, **kwargs):
+    """
+    Generate records from an InfluxData lineprotocol string.
+    """
+    df = dataframe_from_lineprotocol(data=target)
     return _generate_records(df)
 
 

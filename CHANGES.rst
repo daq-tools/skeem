@@ -28,6 +28,7 @@ in progress
 - Performance: Configure ``PEEK_LINES = 100`` instead of 1000
 - Performance: Optimize reading from remote NDJSON files
 - Refactoring: I/O related code goes into ``eskema.io``
+- Add support for InfluxDB line protocol input format
 
 
 2023-01-xx 0.0.0

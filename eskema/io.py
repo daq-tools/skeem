@@ -4,6 +4,8 @@ import typing as t
 from collections import OrderedDict
 
 import json_stream
+import pandas as pd
+from fsspec.implementations.local import LocalFileOpener
 from fsspec.spec import AbstractBufferedFile
 from json_stream.base import StreamingJSONList, StreamingJSONObject
 
@@ -40,7 +42,7 @@ def peek(data: t.IO[t.Any], content_type: t.Optional[ContentType], peek_bytes: i
 
             # Optimize peek path for `fsspec`-based file systems.
             # TODO: Evaluate using the `smart-open` package.
-            if isinstance(data, AbstractBufferedFile):
+            if isinstance(data, (AbstractBufferedFile, LocalFileOpener)):
                 payload = fsspec_peek(data=data, empty=empty, peek_bytes=peek_bytes, peek_lines=peek_lines)
             else:
                 payload = empty.join(data.readlines(peek_lines))  # type: ignore[arg-type]
@@ -59,7 +61,7 @@ def fsspec_peek(
     the line generator, because it turned out that `readlines()` interacting
     with `fsspec` still reads the whole file/stream.
     """
-    logger.info(f"Reading {peek_bytes} bytes")
+    logger.info(f"Reading max. {peek_bytes} bytes")
 
     # Read by amount of bytes, and split lines.
     payload = data.read(peek_bytes)
@@ -133,3 +135,40 @@ def to_bytes(payload: t.Union[str, bytes], name: t.Optional[str] = None) -> io.B
     data = io.BytesIO(payload)
     data.name = name or "UNKNOWN"
     return data
+
+
+def read_lineprotocol(data: t.IO[t.Any]):
+    """
+    Read stream of InfluxDB line protocol and decode raw data.
+
+    https://docs.influxdata.com/influxdb/latest/reference/syntax/line-protocol/
+    """
+    from line_protocol_parser import LineFormatError, parse_line
+
+    for line in data.readlines():
+        try:
+            yield parse_line(line)
+        except LineFormatError as ex:
+            logger.info(f"WARNING: Line protocol item {line} invalid. Reason: {ex}")
+
+
+def records_from_lineprotocol(data: t.IO[t.Any]):
+    """
+    Read stream of InfluxDB line protocol and generate `OrderedDict` records.
+    """
+    for lp in read_lineprotocol(data=data):
+        record = OrderedDict()
+        record["time"] = lp["time"]
+        for tag, value in lp["tags"].items():
+            record[tag] = value
+        for field, value in lp["fields"].items():
+            record[field] = value
+        yield record
+
+
+def dataframe_from_lineprotocol(data: t.IO[t.Any]):
+    """
+    Read stream of InfluxDB line protocol into pandas DataFrame.
+    """
+    records = records_from_lineprotocol(data)
+    return pd.DataFrame(records)

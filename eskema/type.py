@@ -24,6 +24,8 @@ def init():
             ".jsonl": "application/x-ndjson",
             ".ldjson": "application/x-ldjson",
             ".ldj": "application/x-ldjson",
+            ".lineprotocol": "application/vnd.influxdata.lineprotocol",
+            ".lp": "application/vnd.influxdata.lineprotocol",
             ".ndjson": "application/x-ndjson",
             ".parquet": "application/vnd.apache.parquet",
             ".parq": "application/vnd.apache.parquet",
@@ -41,6 +43,7 @@ class ContentType(Enum):
     CSV = "text/csv"
     JSON = "application/json"
     NDJSON = "application/x-ndjson"
+    LINEPROTOCOL = "application/vnd.influxdata.lineprotocol"
     ODS = "application/vnd.oasis.opendocument.spreadsheet"
     PARQUET = "application/vnd.apache.parquet"
     XLSX = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
@@ -105,6 +108,8 @@ class ContentType(Enum):
             return ".csv"
         elif type_ is ContentType.JSON:
             return ".json"
+        elif type_ is ContentType.LINEPROTOCOL:
+            return ".lp"
         elif cls.is_ndjson(type_):
             return ".ndjson"
         elif type_ is ContentType.ODS:
@@ -126,6 +131,7 @@ class ContentTypeShort(Enum):
     JSON = "json"
     JSONL = "jsonl"
     LDJSON = "ldjson"
+    LINEPROTOCOL = "lineprotocol"
     NDJSON = "ndjson"
     ODS = "ods"
     PARQUET = "parquet"
@@ -139,6 +145,7 @@ class ContentTypeShort(Enum):
             cls.JSON: ContentType.JSON.value,
             cls.JSONL: ContentType.NDJSON.value,
             cls.LDJSON: "application/x-ldjson",
+            cls.LINEPROTOCOL: ContentType.LINEPROTOCOL.value,
             cls.NDJSON: ContentType.NDJSON.value,
             cls.ODS: ContentType.ODS.value,
             cls.PARQUET: ContentType.PARQUET.value,

@@ -42,8 +42,9 @@ Features
 - [x] Support reading data from HTTP
 - [x] Bug: Why is resource being read twice?
 - [o] Refactor more code to ``eskema.io``
-- [o] Add support for "InfluxDB line protocol" input format
 - [o] Support reading large files from HTTP efficiently
+- [x] Add support for "InfluxDB line protocol" input format
+  https://github.com/influxdata/influxdb2-sample-data/blob/master/air-sensor-data/air-sensor-data.lp
 - [o] Support reading data from HTTP, without file suffix, and/or query parameters
 - [o] Support reading data from S3
 - [o] Enable ``frictionless`` backend using environment variable ``ESKEMA_BACKEND=frictionless``

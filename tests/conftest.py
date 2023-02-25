@@ -56,6 +56,21 @@ def json_nested_url_basic():
 
 
 @pytest.fixture
+def line_protocol_file_basic():
+    return Path("tests/testdata/basic.lp")
+
+
+@pytest.fixture
+def line_protocol_url_basic():
+    return "https://raw.githubusercontent.com/daq-tools/eskema/main/tests/testdata/basic.lp"
+
+
+@pytest.fixture
+def line_protocol_file_irregular():
+    return Path("tests/testdata/air-sensor-data-irregular.lp")
+
+
+@pytest.fixture
 def xlsx_file_basic():
     return Path("tests/testdata/basic.xlsx")
 

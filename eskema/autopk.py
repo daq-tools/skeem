@@ -4,7 +4,7 @@ import typing as t
 
 import pandas as pd
 
-from eskema.io import json_get_first_records
+from eskema.io import dataframe_from_lineprotocol, json_get_first_records
 from eskema.settings import PEEK_LINES
 from eskema.type import ContentType
 
@@ -87,6 +87,8 @@ def to_dataframe(data: t.Any, content_type: ContentType, address: t.Optional[Add
         df = pd.read_json(data, lines=True, nrows=PEEK_LINES)
     elif content_type is ContentType.CSV:
         df = pd.read_csv(data, nrows=PEEK_LINES)
+    elif content_type is ContentType.LINEPROTOCOL:
+        df = dataframe_from_lineprotocol(data=data)
     elif content_type in [ContentType.XLSX, ContentType.ODS]:
         sheet_name = address or 0
         df = pd.read_excel(data, sheet_name=sheet_name, nrows=PEEK_LINES)

@@ -131,3 +131,28 @@ The ``basic.parquet`` file can be explored using the ``parquet-tools`` program l
     parquet-tools schema tests/testdata/basic.parquet
     parquet-tools dump tests/testdata/basic.parquet
 
+
+InfluxDB line protocol
+======================
+- https://docs.influxdata.com/influxdb/cloud/reference/syntax/line-protocol/
+- https://github.com/influxdata/line-protocol
+- https://github.com/influxdata/line-protocol/blob/v2/lineprotocol/testdata/corpus.json
+- https://github.com/influxdata/line-protocol-corpus
+
+
+ILP example data
+================
+- https://github.com/influxdata/influxdb2-sample-data
+
+Small files:
+- https://github.com/Anaisdg/GettingStarted_WritingPoints/blob/master/Data/chronograf.txt
+
+Large files:
+- https://github.com/Anaisdg/GettingStarted_WritingPoints/blob/master/Data/import.txt
+
+
+InfluxDB docs at Alibaba
+========================
+- https://www.alibabacloud.com/help/en/time-series-database/latest/line-protocol-reference
+- https://www.alibabacloud.com/help/en/time-series-database/latest/line-protocol-tutorial
+- https://www.alibabacloud.com/help/en/time-series-database/latest/tsdb-for-influxdb-faq

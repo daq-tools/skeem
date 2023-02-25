@@ -2,6 +2,7 @@ import io
 import json
 import logging
 import sys
+import textwrap
 import typing as t
 from pathlib import Path
 
@@ -159,3 +160,7 @@ def _enable_tracing(modules: t.List[str] = None):
     for module in modules[1:]:
         constraint = constraint | Q(module_startswith=module)
     trace(constraint)
+
+
+def unwrap(value: str):
+    return textwrap.dedent(value).strip()

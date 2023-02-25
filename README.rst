@@ -21,6 +21,7 @@ Supported input data:
 - `Apache Parquet`_
 - `CSV`_
 - `Google Sheets`_
+- `InfluxDB line protocol`_
 - `JSON`_
 - `NDJSON`_ (formerly LDJSON) aka. `JSON Lines`_, see also `JSON streaming`_
 - `Office Open XML Workbook`_ (`Microsoft Excel`_)
@@ -65,9 +66,10 @@ Command line use
 
 Read data from given file::
 
-    # NDJSON and Parquet formats.
+    # NDJSON, Parquet, and InfluxDB line protocol (ILP) formats.
     eskema infer-ddl --dialect=postgresql data.ndjson
     eskema infer-ddl --dialect=postgresql data.parquet
+    eskema infer-ddl --dialect=postgresql data.lp
 
     # CSV, JSON, ODS, and XLSX formats.
     eskema infer-ddl --dialect=postgresql data.csv
@@ -86,6 +88,9 @@ Read data from URL::
     # Google Sheets: Address first sheet, and specific sheet of workbook.
     eskema infer-ddl --dialect=postgresql --table-name=foo https://docs.google.com/spreadsheets/d/1ExyrawjlyksbC6DOM6nLolJDbU8qiRrrhxSuxf5ScB0/view
     eskema infer-ddl --dialect=postgresql --table-name=foo https://docs.google.com/spreadsheets/d/1ExyrawjlyksbC6DOM6nLolJDbU8qiRrrhxSuxf5ScB0/view#gid=883324548
+
+    # InfluxDB line protocol (ILP)
+    eskema infer-ddl --dialect=postgresql https://github.com/influxdata/influxdb2-sample-data/raw/master/air-sensor-data/air-sensor-data.lp
 
 Use a different backend (default: ``ddlgen``)::
 
@@ -170,6 +175,7 @@ Credits and prior art
 .. _frictionless: https://github.com/frictionlessdata/framework
 .. _fsspec: https://pypi.org/project/fsspec/
 .. _Google Sheets: https://en.wikipedia.org/wiki/Google_Sheets
+.. _InfluxDB line protocol: https://docs.influxdata.com/influxdb/latest/reference/syntax/line-protocol/
 .. _JSON: https://www.json.org/
 .. _JSON streaming: https://en.wikipedia.org/wiki/JSON_streaming
 .. _JSON Lines: https://jsonlines.org/
