@@ -118,6 +118,7 @@ class SchemaGenerator:
 
             logger.info("Converging resource to pandas DataFrame")
             df: pd.DataFrame = resource.to_pandas()
+            logger.info(f"pandas DataFrame size={len(df)}")
 
             logger.info("Inferring primary key")
             self.target.primary_key = infer_pk(df, self.resource.type, address=self.resource.address)

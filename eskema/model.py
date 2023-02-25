@@ -5,8 +5,10 @@ import typing as t
 from pathlib import Path
 
 import fsspec
+from fsspec.spec import AbstractBufferedFile
 
-from eskema.settings import PEEK_LINES
+from eskema.io import fsspec_peek
+from eskema.settings import PEEK_BYTES, PEEK_LINES
 from eskema.type import ContentType
 from eskema.util import sql_canonicalize, sql_pretty
 
@@ -71,6 +73,7 @@ class Resource:
             self.data.seek(0)
 
         if self.type in binary_files:
+            logger.info(f"WARNING: Hitting a speed bump by needing to read file of type {binary_files} as a whole")
             return io.BytesIO(self.data.read())
         else:
             if self.type is ContentType.JSON:
@@ -80,9 +83,17 @@ class Resource:
                 empty = ""
                 if isinstance(self.data, io.BytesIO) or (hasattr(self.data, "mode") and "b" in self.data.mode):
                     empty = b""  # type: ignore[assignment]
-                payload = empty.join(self.data.readlines(PEEK_LINES))  # type: ignore[arg-type]
+
+                # Optimize peek path for `fsspec`-based file systems.
+                # TODO: Evaluate using the `smart-open` package.
+                if isinstance(self.data, AbstractBufferedFile):
+                    payload = fsspec_peek(data=self.data, empty=empty, peek_bytes=PEEK_BYTES, peek_lines=PEEK_LINES)
+                else:
+                    payload = empty.join(self.data.readlines(PEEK_LINES))  # type: ignore[arg-type]
+
             if isinstance(payload, str):
                 payload = payload.encode()
+
             return io.BytesIO(payload)
 
 

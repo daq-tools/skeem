@@ -75,7 +75,7 @@ def _infer_pk(
 
     # If the values of the first column are unique, use that as primary key.
     column1_series = df[df.columns[0]]
-    if column1_series.dtype not in ["float64"] and column1_series.is_unique:
+    if column1_series.dtype not in ["datetime64[ns]", "float64"] and column1_series.is_unique:
         return df.columns[0]
 
     return None

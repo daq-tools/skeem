@@ -60,7 +60,26 @@ JSON::
     wget "https://data.cityofnewyork.us/resource/biws-g3hs.json"
 
 
+Ecommerce events
+================
+
+The `Tinybird » Ecommerce 100k rows NDJSON dataset`_ is used in their
+`Tinybird » How to ingest NDJSON data`_ guide, it contains events from an
+ecommerce website with different properties.
+
+Reading NDJSON from remote resources is supported by both backends,
+``ddlgen``, and ``frictionless``::
+
+    eskema --verbose infer-ddl --dialect=postgresql --backend=ddlgen \
+        https://storage.googleapis.com/tinybird-assets/datasets/guides/how-to-ingest-ndjson-data/events_100k.ndjson
+
+    eskema --verbose infer-ddl --dialect=postgresql --backend=frictionless \
+        https://storage.googleapis.com/tinybird-assets/datasets/guides/how-to-ingest-ndjson-data/events_100k.ndjson
+
+
 .. _2017 Yellow Taxi Trip Data: https://data.cityofnewyork.us/Transportation/2017-Yellow-Taxi-Trip-Data/biws-g3hs
 .. _New York City Taxi and Limousine Commission (TLC) Trip Record Data: https://registry.opendata.aws/nyc-tlc-trip-records-pds/
 .. _NYC OpenData: https://opendata.cityofnewyork.us/
 .. _Open Data on AWS: https://registry.opendata.aws/
+.. _Tinybird » Ecommerce 100k rows NDJSON dataset: https://storage.googleapis.com/tinybird-assets/datasets/guides/how-to-ingest-ndjson-data/events_100k.ndjson
+.. _Tinybird » How to ingest NDJSON data: https://www.tinybird.co/docs/guides/ingest-ndjson-data.html
