@@ -24,6 +24,8 @@ See also the impressive frictionless framework and toolkit by OKFN and friends.
 - https://github.com/frictionlessdata/tabulator-py
 - https://github.com/frictionlessdata/framework
 
+And of course, last but not least, the venerable `pandas.DataFrame.to_sql`_.
+
 
 Miscellaneous
 =============
@@ -52,3 +54,4 @@ gems like handlers for different input data formats.
 
 .. _Catherine Devlin: https://github.com/catherinedevlin
 .. _Iuliia Volkova: https://github.com/xnuinside
+.. _pandas.DataFrame.to_sql: https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.to_sql.html

@@ -7,13 +7,21 @@ Working with large files
 Introduction
 ************
 
-Eskema tries to be efficient by only sampling the first few thousand records of
-the obtained data source. The default values are currently:
+It is always advised to acquire data files from remote locations to your
+workstation. It will be so much easier and faster to work with, and will not
+waste resources on subsequent redundant downloads.
 
-- ``eskema.autopk.PEEK_LINES = 1000``
-- ``eskema.sources.PEEK_LINES = 1000``
-- ``eskema.model.PEEK_BYTES = 10000``
-- ``frictionless.Detector.sample_size = 1000``
+However, there are situations where data files need to be accessed directly on
+remote locations.
+
+Eskema supports a variety of remote sources and data formats using the
+excellent `fsspec`_ package, and tries to be efficient by only sampling the
+first one hundred records of the obtained data source. The corresponding
+default settings are currently:
+
+- ``eskema.settings.PEEK_LINES = 100``
+- ``eskema.settings.PEEK_BYTES = 13000``
+- ``frictionless.Detector.sample_size = 100``
 
 
 ********
@@ -39,6 +47,9 @@ Parquet::
     wget https://d37ci6vzurychx.cloudfront.net/trip-data/yellow_tripdata_2022-01.parquet
     eskema --verbose infer-ddl --dialect=postgresql yellow_tripdata_2022-01.parquet
 
+    eskema --verbose infer-ddl --dialect=postgresql \
+        https://d37ci6vzurychx.cloudfront.net/trip-data/yellow_tripdata_2022-01.parquet
+
 NDJSON::
 
     wget https://s3.amazonaws.com/crate.sampledata/nyc.yellowcab/yc.2019.07.gz
@@ -55,9 +66,20 @@ CSV::
     wget https://data.cityofnewyork.us/resource/biws-g3hs.csv
     eskema --verbose infer-ddl --dialect=postgresql biws-g3hs.csv
 
+    # Try out both backends.
+    eskema --verbose infer-ddl --dialect=postgresql --backend=ddlgen \
+        https://data.cityofnewyork.us/resource/biws-g3hs.csv
+
+    eskema --verbose infer-ddl --dialect=postgresql --backend=frictionless \
+        https://data.cityofnewyork.us/resource/biws-g3hs.csv
+
 JSON::
 
-    wget "https://data.cityofnewyork.us/resource/biws-g3hs.json"
+    wget https://data.cityofnewyork.us/resource/biws-g3hs.json
+    eskema --verbose infer-ddl --dialect=postgresql biws-g3hs.json
+
+    eskema --verbose infer-ddl --dialect=postgresql \
+        https://data.cityofnewyork.us/resource/biws-g3hs.json
 
 
 Ecommerce events
@@ -78,6 +100,7 @@ Reading NDJSON from remote resources is supported by both backends,
 
 
 .. _2017 Yellow Taxi Trip Data: https://data.cityofnewyork.us/Transportation/2017-Yellow-Taxi-Trip-Data/biws-g3hs
+.. _fsspec: https://filesystem-spec.readthedocs.io/
 .. _New York City Taxi and Limousine Commission (TLC) Trip Record Data: https://registry.opendata.aws/nyc-tlc-trip-records-pds/
 .. _NYC OpenData: https://opendata.cityofnewyork.us/
 .. _Open Data on AWS: https://registry.opendata.aws/

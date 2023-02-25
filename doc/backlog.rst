@@ -40,14 +40,19 @@ Features
 - [x] Add support for Parquet input format
 - [x] Support reading large files efficiently
 - [x] Support reading data from HTTP
-- [o] Support reading data from HTTP, without file suffix
+- [x] Bug: Why is resource being read twice?
+- [o] Refactor more code to ``eskema.io``
+- [o] Add support for "InfluxDB line protocol" input format
 - [o] Support reading large files from HTTP efficiently
+- [o] Support reading data from HTTP, without file suffix, and/or query parameters
 - [o] Support reading data from S3
 - [o] Enable ``frictionless`` backend using environment variable ``ESKEMA_BACKEND=frictionless``
 - [o] Add help texts to CLI options
 - [o] eskema infer-ddl --list-input-formats
 - [o] Add "examples" to test suite
-- [o] Control sample size
+- [o] Provide options to control sample size
+- [o] Is table- and field-name quoting properly applied for both backends?
+- [o] API/Docs: Derive schema directly from pandas DataFrame
 
 Documentation
 =============
@@ -58,6 +63,11 @@ Documentation
 - [x] Add example program
 - [/] File headers
 - [o] Improve "library use" docs re. ``ContentType``
+- [o] Read data from Sensor.Community archive
+- [o] Read data from IP to Country database
+
+  - https://db-ip.com/db/format/ip-to-city-lite/csv.html
+  - http://download.db-ip.com/free/dbip-city-lite-2023-02.csv.gz
 
 Infrastructure
 ==============
@@ -67,16 +77,23 @@ Infrastructure
 - [o] Docs: RTD
 - [o] Release 0.1.0
 - [o] Issue: Hello world
-- [o] Issue: Collection of bogus input data
+
+Quality
+=======
+- [o] QA: Use reference input test data from other repositories
 
   - https://github.com/okfn/messytables/tree/master/horror
   - https://github.com/frictionlessdata/tabulator-py/tree/main/data/special
+  - https://github.com/apache/arrow-testing/tree/master/data
+  - https://github.com/pandas-dev/pandas/tree/main/doc/data
 
 
 ***********
 Iteration 3
 ***********
 
+- [o] Use ``smart_open``
+  https://github.com/RaRe-Technologies/smart_open
 - [o] Support reading archive files directly. Examples:
 
   - https://s3.amazonaws.com/crate.sampledata/nyc.yellowcab/yc.2019.07.gz
@@ -85,10 +102,20 @@ Iteration 3
 - [o] Unlock more input data formats from ``data_dispenser.sources``, like Excel, XML, HTML, MongoDB
 - [o] Handle "empty" input
 - [o] Process multiple items
-- [o] Handle JSON and NDJSON with nested objects: ``OBJECT`` and ``ARRAY``
-- [o] Support more data types, like ``BOOLEAN``, ``GEO_*``, ``BIT``, ``IP``
+- [o] CrateDB: Handle JSON and NDJSON with nested objects: ``OBJECT`` and ``ARRAY``
+- [o] CrateDB: Support more data types, like ``BOOLEAN``, ``GEO_*``, ``BIT``, ``IP``
 - [o] Improve type inference.
   See https://github.com/frictionlessdata/tableschema-py#working-with-table
+- [o] Optimize ``fastparquet.core.read_col``: ``infile.read(cmd.total_compressed_size)``
+- [o] Can Parquet header (and types) be inquired without needing to read actual data?
+- [o] Add ``pandas`` backend
+
+
+Bugs
+====
+- [o] ``HTTP/1.1 403 Forbidden`` gets masked badly
+- [o] Fix ``cat foo | --backend=fl -``
+- [o] ``logger.warning`` will emit to STDOUT when running per tests
 
 
 ***********
@@ -98,7 +125,6 @@ Iteration 4
 - [o] HTTP API endpoint
 - [o] Add more input formats and sources
 
-  - InfluxDB line protocol
   - Parquet and friends
   - Fixed-width, using ``pd.read_fwf()``
   - pandas Dataframes
@@ -131,6 +157,14 @@ Iteration 4
   https://github.com/h2oai/datatable
 
 - [o] Make option ``--address="Sheet2"`` work for Google Sheets
+- [o] Inquire schema data from out-of-band channel. For example,
+  https://data.cityofnewyork.us/resource/biws-g3hs.csv::
+
+    X-SODA2-Data-Out-Of-Date: false
+    X-SODA2-Fields: ["vendorid","tpep_pickup_datetime","tpep_dropoff_datetime","passenger_count","trip_distance","ratecodeid","store_and_fwd_flag","pulocationid","dolocationid","payment_type","fare_amount","extra","mta_tax","tip_amount","tolls_amount","improvement_surcharge","total_amount"]
+    X-SODA2-Secondary-Last-Modified: Thu, 13 Sep 2018 21:32:08 GMT
+    X-SODA2-Truth-Last-Modified: Thu, 13 Sep 2018 21:32:08 GMT
+    X-SODA2-Types: ["number","floating_timestamp","floating_timestamp","number","number","number","text","number","number","number","number","number","number","number","number","number","number"]
 
 
 .. _frictionless: https://github.com/frictionlessdata/framework
