@@ -69,8 +69,8 @@ class Resource:
             raise ValueError("Unable to open resource")
 
         # Only optionally seek to the file's beginning.
-        if hasattr(self.data, "seekable") and self.data.seekable():
-            self.data.seek(0)
+        # if hasattr(self.data, "seekable") and self.data.seekable():  # noqa: ERA001
+        #     self.data.seek(0)  # noqa: ERA001
 
         if self.type in binary_files:
             logger.info(f"WARNING: Hitting a speed bump by needing to read file of type {binary_files} as a whole")
