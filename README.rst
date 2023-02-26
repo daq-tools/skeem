@@ -29,8 +29,8 @@ Supported input data:
 
 Supported input sources:
 
-- Local files
-- HTTP resources
+- `File system`_
+- `HTTP`_
 
 
 ********
@@ -172,9 +172,11 @@ Credits and prior art
 .. _ddlgenerator: https://pypi.org/project/ddlgenerator/
 .. _development: doc/development.rst
 .. _Evgeny Karev: https://github.com/roll
+.. _file system: https://en.wikipedia.org/wiki/File_system
 .. _frictionless: https://github.com/frictionlessdata/framework
 .. _fsspec: https://pypi.org/project/fsspec/
 .. _Google Sheets: https://en.wikipedia.org/wiki/Google_Sheets
+.. _HTTP: https://en.wikipedia.org/wiki/HTTP
 .. _InfluxDB line protocol: https://docs.influxdata.com/influxdb/latest/reference/syntax/line-protocol/
 .. _JSON: https://www.json.org/
 .. _JSON streaming: https://en.wikipedia.org/wiki/JSON_streaming

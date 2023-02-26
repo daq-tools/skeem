@@ -78,7 +78,7 @@ def _get_filepath_or_buffer(
     if "t" not in fsspec_mode and "b" not in fsspec_mode:
         fsspec_mode += "b"
 
-    # PATCH for Eskema
+    # PATCH for Eskema: Let HTTP requests also be handled by `fsspec`.
     """
     if isinstance(filepath_or_buffer, str) and is_url(filepath_or_buffer):
         # TODO: fsspec can also handle HTTP via requests, but leaving this
@@ -192,6 +192,6 @@ def is_fsspec_url(url: FilePath | BaseBuffer) -> bool:
     return (
         isinstance(url, str)
         and bool(_RFC_3986_PATTERN.match(url))
-        # PATCH for Eskema
+        # PATCH for Eskema: Let HTTP requests also be handled by `fsspec`.
         # and not url.startswith(("http://", "https://"))
     )

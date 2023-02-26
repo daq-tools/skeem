@@ -169,6 +169,6 @@ def read_col(column, schema_helper, infile, use_cat=False, selfmade=False, assig
 
         num += len(defi) if defi is not None else len(val)
 
-        # PATCH for Eskema
+        # PATCH for Eskema: Terminate `read_col` early, in order to not load the whole file.
         if num >= PEEK_LINES:
             break
