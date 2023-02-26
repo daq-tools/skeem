@@ -178,7 +178,6 @@ class SchemaGenerator:
         # When primary key is not given, try to infer it from the data.
         # TODO: Make `infer_pk` obtain a `Resource` instance, and/or refactor as method.
         if self.target.primary_key is None:
-            logger.info("Inferring primary key")
             self.target.primary_key = infer_pk(indata, self.resource.type, address=self.resource.address)
 
         # Wrap data into data-dispenser's `Source` instance.

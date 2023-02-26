@@ -34,20 +34,23 @@ def infer_pk(
 
     [1] https://en.wikipedia.org/wiki/DWIM
     """
+    # No PK detection for certain content types.
+    if content_type in ContentTypeGroup.NO_AUTOPK:
+        logger.info(f"Not inferring primary key for {content_type}")
+        return None
+
+    logger.info("Inferring primary key")
     pk = _infer_pk(data, content_type, address)
     logger.info(f"Inferred primary key: {pk}")
     if hasattr(data, "seek"):
         data.seek(0)
+
     return pk
 
 
 def _infer_pk(
     data: t.Any, content_type: t.Optional[ContentType] = None, address: t.Optional[AddressType] = None
 ) -> t.Optional[str]:
-
-    # No PK detection for certain content types.
-    if content_type in ContentTypeGroup.NO_AUTOPK:
-        return None
 
     if isinstance(data, pd.DataFrame):
         df = data

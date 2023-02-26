@@ -17,10 +17,12 @@ def init():
     there are a few hints, for others, the MIME type has been completely made up.
 
     - Parquet: https://issues.apache.org/jira/browse/PARQUET-1889?focusedCommentId=17468854#comment-17468854
+    - GRIB: https://github.com/wmo-im/GRIB2/issues/175#issuecomment-1359209980
     """
     mimetypes.init()
     mimetypes.types_map.update(
         {
+            ".grib2": "application/x-grib2",
             ".jsonl": "application/x-ndjson",
             ".ldjson": "application/x-ldjson",
             ".ldj": "application/x-ldjson",
@@ -41,6 +43,7 @@ class ContentType(Enum):
 
     # Primary definitions.
     CSV = "text/csv"
+    GRIB2 = "application/x-grib2"
     JSON = "application/json"
     NETCDF = "application/x-netcdf"
     NDJSON = "application/x-ndjson"
@@ -107,6 +110,8 @@ class ContentType(Enum):
 
         if type_ is ContentType.CSV:
             return ".csv"
+        elif type_ is ContentType.GRIB2:
+            return ".grib2"
         elif type_ is ContentType.JSON:
             return ".json"
         elif type_ is ContentType.LINEPROTOCOL:
@@ -131,6 +136,7 @@ class ContentTypeShort(Enum):
     """
 
     CSV = "csv"
+    GRIB2 = "grib2"
     JSON = "json"
     JSONL = "jsonl"
     LDJSON = "ldjson"
@@ -146,6 +152,7 @@ class ContentTypeShort(Enum):
         v1 = cls(label)
         mapping = {
             cls.CSV: ContentType.CSV.value,
+            cls.GRIB2: ContentType.GRIB2.value,
             cls.JSON: ContentType.JSON.value,
             cls.JSONL: ContentType.NDJSON.value,
             cls.LDJSON: "application/x-ldjson",
@@ -167,11 +174,13 @@ class ContentTypeGroup:
 
     # For those content types, primary key detection will not be invoked.
     NO_AUTOPK = [
+        ContentType.GRIB2,
         ContentType.NETCDF,
     ]
 
     # All "binary" files must not be partially read, but as a whole instead.
     NO_PARTIAL = [
+        ContentType.GRIB2,
         ContentType.NETCDF,
         ContentType.ODS,
         ContentType.XLSX,

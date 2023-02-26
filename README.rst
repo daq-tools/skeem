@@ -21,6 +21,7 @@ Supported input data:
 - `Apache Parquet`_
 - `CSV`_
 - `Google Sheets`_
+- `GRIB`_
 - `InfluxDB line protocol`_
 - `JSON`_
 - `NetCDF`_
@@ -94,7 +95,8 @@ Read data from given file::
     eskema infer-ddl --dialect=postgresql data.xlsx
     eskema infer-ddl --dialect=postgresql data.xlsx --address="Sheet2"
 
-    # NetCDF
+    # GRIB2, NetCDF
+    eskema infer-ddl --dialect=postgresql https://dd.weather.gc.ca/ensemble/geps/grib2/products/12/003/CMC_geps-prob_TEMP_TGL_2m_latlon0p5x0p5_2023022512_P003_all-products.grib2
     eskema infer-ddl --dialect=postgresql https://www.unidata.ucar.edu/software/netcdf/examples/sresa1b_ncar_ccsm3-example.nc
     eskema infer-ddl --dialect=postgresql https://www.unidata.ucar.edu/software/netcdf/examples/WMI_Lear.nc
 
@@ -209,6 +211,7 @@ Credits and prior art
 .. _GitHub: https://github.com/
 .. _Google Cloud Storage: https://en.wikipedia.org/wiki/Google_Cloud_Storage
 .. _Google Sheets: https://en.wikipedia.org/wiki/Google_Sheets
+.. _GRIB: https://en.wikipedia.org/wiki/GRIB
 .. _HTTP: https://en.wikipedia.org/wiki/HTTP
 .. _InfluxDB line protocol: https://docs.influxdata.com/influxdb/latest/reference/syntax/line-protocol/
 .. _JSON: https://www.json.org/

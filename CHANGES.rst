@@ -36,6 +36,7 @@ in progress
   will only check for successful invocation, and not verify the generated SQL.
 - Format: Add NetCDF input format
 - AutoPK: Fix heuristics where the first column is a dictionary
+- Format: Add GRIB2 input format
 
 
 2023-01-xx 0.0.0

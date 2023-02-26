@@ -19,12 +19,16 @@ URL_LIST_FAST = [
 URL_LIST_MEDIUM = [
     "gs://tinybird-assets/datasets/guides/how-to-ingest-ndjson-data/events_100k.ndjson",
     "https://data.cityofnewyork.us/resource/biws-g3hs.csv",
+    "https://dd.weather.gc.ca/ensemble/geps/grib2/products/12/003/CMC_geps-prob_TEMP_TGL_2m_latlon0p5x0p5_2023022512_P003_all-products.grib2",
     "https://docs.google.com/spreadsheets/d/1ExyrawjlyksbC6DOM6nLolJDbU8qiRrrhxSuxf5ScB0/view",
     "https://docs.google.com/spreadsheets/d/1ExyrawjlyksbC6DOM6nLolJDbU8qiRrrhxSuxf5ScB0/view#gid=883324548",
 ]
 
 URL_LIST_SLOW = [
     "github://daq-tools:eskema@/tests/testdata/basic.csv",
+    "https://dd.weather.gc.ca/ensemble/geps/grib2/products/12/003/CMC_geps-prob_TEMP_TGL_2m_latlon0p5x0p5_2023022512_P003_all-products.grib2",
+    "https://dd.weather.gc.ca/ensemble/geps/grib2/products/12/003/CMC_geps-prob_WIND_TGL_10m_latlon0p5x0p5_2023022512_P003_all-products.grib2",
+    "https://dd.weather.gc.ca/analysis/precip/hrdpa/grib2/polar_stereographic/06/CMC_HRDPA_APCP-006-0100cutoff_SFC_0_ps2.5km_2023012606_000.grib2",
     "gs://tinybird-assets/datasets/nations.csv",
     "https://d37ci6vzurychx.cloudfront.net/trip-data/yellow_tripdata_2022-01.parquet",
     "https://data.cityofnewyork.us/resource/biws-g3hs.json",

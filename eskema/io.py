@@ -1,9 +1,11 @@
 import io
 import logging
+import tempfile
 import typing as t
 from collections import OrderedDict
 
 import pandas as pd
+import xarray as xr
 from fsspec.implementations.local import LocalFileOpener
 from fsspec.spec import AbstractBufferedFile
 
@@ -79,6 +81,16 @@ def fsspec_peek(
     # Return payload.
     payload = empty.join(lines)
     return payload
+
+
+def dataset_to_dataframe(ds: xr.Dataset, peek_lines: int) -> pd.DataFrame:
+    logger.info(f"Dataset:\n{ds}")
+    df = ds.to_dataframe().dropna()
+    logger.debug(f"DataFrame:\n{df}")
+    logger.info(f"Reading {peek_lines} records of `xarray.Dataset`")
+    df = df[:peek_lines]
+    df = df.reset_index()
+    return df
 
 
 def strip_incomplete_line(lines: BytesStringList) -> BytesStringList:
@@ -164,3 +176,13 @@ def dataframe_from_lineprotocol(data: t.IO[t.Any]):
     """
     records = records_from_lineprotocol(data)
     return pd.DataFrame(records)
+
+
+def to_tempfile(data: t.IO[t.Any], suffix: t.Optional[str] = None) -> t.IO:
+    """
+    Write a buffer to a temporary file.
+    """
+    tmp = tempfile.NamedTemporaryFile(suffix=suffix)
+    tmp.write(data.read())
+    tmp.seek(0)
+    return tmp

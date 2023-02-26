@@ -8,7 +8,7 @@ import sqlalchemy
 from cachetools.func import lru_cache
 from data_dispenser import Source
 
-from eskema.io import dataframe_from_lineprotocol
+from eskema.io import dataframe_from_lineprotocol, dataset_to_dataframe, to_tempfile
 from eskema.settings import PEEK_LINES
 
 logger = logging.getLogger(__name__)
@@ -127,6 +127,7 @@ class SourcePlus(Source):
         Register improved content type handler functions for certain data formats.
         """
         self.eval_funcs_by_ext[".csv"] = [_eval_csv]
+        self.eval_funcs_by_ext[".grib2"] = [_eval_grib2]
         self.eval_funcs_by_ext[".lp"] = [_eval_lineprotocol]
         self.eval_funcs_by_ext[".nc"] = [_eval_netcdf]
         self.eval_funcs_by_ext[".ndjson"] = [_eval_ndjson]
@@ -169,6 +170,48 @@ def _eval_lineprotocol(target, fieldnames: t.List[str] = None, *args, **kwargs):
 # Work around being called twice.
 # TODO: Find the root cause why those functions are called twice.
 @lru_cache  # type: ignore[arg-type]
+def _eval_grib2(target, fieldnames: t.List[str] = None, *args, **kwargs):
+    """
+    Generate records from an NDJSON string, using pandas' `pd.read_json`.
+    """
+    import cfgrib
+    import xarray as xr
+
+    tmp = to_tempfile(target)
+    gribfile = tmp.name
+
+    """
+    # WARNING: Falling back to 'lalala'. Reason: multiple values for unique key,
+    # try re-open the file with one of ...
+
+    # CMC_geps-raw_SPFH_TGL_40_latlon0p5x0p5_2023022512_P000_allmbrs.grib2
+    #     filter_by_keys={'dataType': 'cf'}
+    #     filter_by_keys={'dataType': 'pf'}
+
+    # CMC_HRDPA_APCP-006-0100cutoff_SFC_0_ps2.5km_2023012606_000.grib2
+    #     filter_by_keys={'stepType': 'accum'}
+    #     filter_by_keys={'stepType': 'avg'}
+    """
+    logger.info("Opening dataset")
+    try:
+        ds = xr.open_dataset(gribfile, engine="cfgrib")
+    except cfgrib.dataset.DatasetBuildError as ex:
+        msg = str(ex)
+        if "multiple values for unique key" in msg:
+            candidates = msg.splitlines()[1:]
+            candidate = candidates[0].strip()
+            logger.info(f"WARNING: Falling back to '{candidate}'. Reason: {ex}")
+            kwargs = eval(f"dict({candidate})")
+            ds = xr.open_dataset(gribfile, engine="cfgrib", **kwargs, decode_times=False)
+        else:
+            raise
+    df = dataset_to_dataframe(ds, peek_lines=PEEK_LINES)
+    return _generate_records(df)
+
+
+# Work around being called twice.
+# TODO: Find the root cause why those functions are called twice.
+@lru_cache  # type: ignore[arg-type]
 def _eval_netcdf(target, fieldnames: t.List[str] = None, *args, **kwargs):
     """
     Generate records from an NDJSON string, using pandas' `pd.read_json`.
@@ -179,13 +222,9 @@ def _eval_netcdf(target, fieldnames: t.List[str] = None, *args, **kwargs):
     #        buffer, because `xr.open_dataset` will apparently close it.
     target = deepcopy(target)
 
+    logger.info("Opening dataset")
     ds = xr.open_dataset(target, engine="scipy")
-    logger.info(f"Reading dataset:\n{ds}")
-    df = ds.to_dataframe().dropna()
-    logger.debug(f"pandas DataFrame:\n{df}")
-    logger.info(f"Reading {PEEK_LINES} records of NetCDF file")
-    df = df[:PEEK_LINES]
-    df = df.reset_index()
+    df = dataset_to_dataframe(ds, peek_lines=PEEK_LINES)
     return _generate_records(df)
 
 

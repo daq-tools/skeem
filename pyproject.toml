@@ -102,6 +102,8 @@ release = [
   "twine<5",
 ]
 scientific = [
+  "cfgrib<1",
+  "cftime<2",
   "scipy<2",
   "xarray<2024",
 ]
