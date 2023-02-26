@@ -9,9 +9,9 @@ from tests.util import BACKENDS, get_basic_sql_reference, getcmd
 
 
 @pytest.mark.parametrize("backend", BACKENDS)
-def test_ndjson_infer_library_success(ndjson_stream_basic, backend: str):
+def test_ndjson_infer_library_stream(ndjson_stream_basic, backend: str):
     """
-    Verify basic library use.
+    Verify library use with an input stream.
     """
     table_name = "foo"
     sg = SchemaGenerator(
@@ -23,6 +23,28 @@ def test_ndjson_infer_library_success(ndjson_stream_basic, backend: str):
             dialect="crate",
             table_name=table_name,
             primary_key="id",
+        ),
+        backend=backend,
+    )
+
+    computed = sg.to_sql_ddl().canonical
+    reference = get_basic_sql_reference(table_name=table_name, backend=backend)
+    assert computed == reference
+
+
+def test_ndjson_infer_library_url_github(ndjson_github_url_basic):
+    """
+    Verify library use with an input URL.
+    """
+    table_name = "foo"
+    backend = "ddlgen"
+    sg = SchemaGenerator(
+        resource=Resource(
+            path=ndjson_github_url_basic,
+        ),
+        target=SqlTarget(
+            dialect="crate",
+            table_name=table_name,
         ),
         backend=backend,
     )

@@ -31,6 +31,7 @@ Supported input sources:
 
 - `Amazon S3`_
 - `File system`_
+- `GitHub`_
 - `Google Cloud Storage`_
 - `HTTP`_
 
@@ -83,9 +84,9 @@ Read data from given file::
 Read data from URL::
 
     # CSV, NDJSON, XLSX
-    eskema infer-ddl --dialect=postgresql https://raw.githubusercontent.com/daq-tools/eskema/main/tests/testdata/basic.csv
-    eskema infer-ddl --dialect=postgresql https://raw.githubusercontent.com/daq-tools/eskema/main/tests/testdata/basic.ndjson
-    eskema infer-ddl --dialect=postgresql https://raw.githubusercontent.com/daq-tools/eskema/main/tests/testdata/basic.xlsx --address="Sheet2"
+    eskema infer-ddl --dialect=postgresql https://github.com/daq-tools/eskema/raw/main/tests/testdata/basic.csv
+    eskema infer-ddl --dialect=postgresql https://github.com/daq-tools/eskema/raw/main/tests/testdata/basic.ndjson
+    eskema infer-ddl --dialect=postgresql https://github.com/daq-tools/eskema/raw/main/tests/testdata/basic.xlsx --address="Sheet2"
 
     # Google Sheets: Address first sheet, and specific sheet of workbook.
     eskema infer-ddl --dialect=postgresql --table-name=foo https://docs.google.com/spreadsheets/d/1ExyrawjlyksbC6DOM6nLolJDbU8qiRrrhxSuxf5ScB0/view
@@ -100,6 +101,9 @@ Read data from URL::
     # CSV on Google Cloud Storage
     eskema --verbose infer-ddl --dialect=postgresql gs://tinybird-assets/datasets/nations.csv
     eskema --verbose infer-ddl --dialect=postgresql gs://tinybird-assets/datasets/medals1.csv
+
+    # CSV on GitHub
+    eskema --verbose infer-ddl --dialect=postgresql github://daq-tools:eskema@/tests/testdata/basic.csv
 
 Use a different backend (default: ``ddlgen``)::
 
@@ -185,6 +189,7 @@ Credits and prior art
 .. _file system: https://en.wikipedia.org/wiki/File_system
 .. _frictionless: https://github.com/frictionlessdata/framework
 .. _fsspec: https://pypi.org/project/fsspec/
+.. _GitHub: https://github.com/
 .. _Google Cloud Storage: https://en.wikipedia.org/wiki/Google_Cloud_Storage
 .. _Google Sheets: https://en.wikipedia.org/wiki/Google_Sheets
 .. _HTTP: https://en.wikipedia.org/wiki/HTTP

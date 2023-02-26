@@ -16,6 +16,11 @@ def ndjson_url_basic():
 
 
 @pytest.fixture
+def ndjson_github_url_basic():
+    return "github://daq-tools:eskema@/tests/testdata/basic.ndjson"
+
+
+@pytest.fixture
 def csv_file_basic():
     return Path("tests/testdata/basic.csv")
 

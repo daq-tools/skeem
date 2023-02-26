@@ -29,8 +29,9 @@ in progress
 - Performance: Optimize reading from remote NDJSON files
 - Refactoring: I/O related code goes into ``eskema.io``
 - Add support for InfluxDB line protocol input format
-- S3: Unlock reading from public buckets anonymously (``--no-sign-request``)
-- GCS: Unlock reading from public Google Cloud Storage buckets
+- Source: Unlock reading from public S3 buckets anonymously (``--no-sign-request``)
+- Source: Unlock and document reading from public Google Cloud Storage (GCS) buckets,
+  and files on GitHub.
 
 
 2023-01-xx 0.0.0
