@@ -35,6 +35,7 @@ in progress
 - Tests: Add "roadrunner" tests, using a bunch of external resources. The tests
   will only check for successful invocation, and not verify the generated SQL.
 - Format: Add NetCDF input format
+- AutoPK: Fix heuristics where the first column is a dictionary
 
 
 2023-01-xx 0.0.0
