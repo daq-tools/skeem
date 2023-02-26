@@ -1,7 +1,7 @@
 from .pandas_plugin import create_parser
 from .parser_jsonl import read_cell_stream_create
 from .resource import ResourcePlus
-from .stream_loader import read_byte_stream_create
+from .loader_stream import read_byte_stream_create
 
 
 def activate():
