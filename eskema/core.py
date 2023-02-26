@@ -130,11 +130,6 @@ class SchemaGenerator:
         logger.info("Inferring schema")
         engine = sa.create_mock_engine(f"{self.target.dialect}://", executor=_dump)
         mapper = frictionless.formats.sql.SqlMapper(engine)
-        # FIXME: `resource.to_pandas()` will apparently, close the input byte stream.
-        #        To work around it, we have to supply a new `BytesIO` instance.
-        if "data" in frictionless_args:
-            logger.info("WARNING: Hitting a speed bump by needing to read resource as a whole")
-            frictionless_args["data"] = to_bytes(payload)
         descriptor = resource.to_descriptor()
 
         # Either `schema` is already present, or it needs to be established by invoking `describe` first.
