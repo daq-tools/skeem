@@ -126,10 +126,16 @@ Reading NDJSON from remote resources is supported by both backends,
     eskema --verbose infer-ddl --dialect=postgresql --backend=frictionless \
         https://storage.googleapis.com/tinybird-assets/datasets/guides/how-to-ingest-ndjson-data/events_100k.ndjson
 
+You can also address public buckets in Google Cloud Storage, using the
+``gs://`` scheme, like::
+
+    eskema --verbose infer-ddl --dialect=postgresql \
+        gs://tinybird-assets/datasets/guides/how-to-ingest-ndjson-data/events_100k.ndjson
 
 .. _2017 Yellow Taxi Trip Data: https://data.cityofnewyork.us/Transportation/2017-Yellow-Taxi-Trip-Data/biws-g3hs
 .. _fsspec: https://filesystem-spec.readthedocs.io/
 .. _Global Historical Climatology Network (GHCN): https://en.wikipedia.org/wiki/Global_Historical_Climatology_Network
+.. _Google Cloud Storage public datasets: https://cloud.google.com/storage/docs/public-datasets
 .. _New York City Taxi and Limousine Commission (TLC) Trip Record Data: https://registry.opendata.aws/nyc-tlc-trip-records-pds/
 .. _noaa-ghcn-pds: https://github.com/awslabs/open-data-registry/blob/main/datasets/noaa-ghcn.yaml#L4
 .. _NYC OpenData: https://opendata.cityofnewyork.us/

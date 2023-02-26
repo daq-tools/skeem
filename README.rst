@@ -31,6 +31,7 @@ Supported input sources:
 
 - `Amazon S3`_
 - `File system`_
+- `Google Cloud Storage`_
 - `HTTP`_
 
 
@@ -95,6 +96,10 @@ Read data from URL::
 
     # CSV on S3
     eskema --verbose infer-ddl --dialect=postgresql s3://noaa-ghcn-pds/csv/by_year/2022.csv
+
+    # CSV on Google Cloud Storage
+    eskema --verbose infer-ddl --dialect=postgresql gs://tinybird-assets/datasets/nations.csv
+    eskema --verbose infer-ddl --dialect=postgresql gs://tinybird-assets/datasets/medals1.csv
 
 Use a different backend (default: ``ddlgen``)::
 
@@ -180,6 +185,7 @@ Credits and prior art
 .. _file system: https://en.wikipedia.org/wiki/File_system
 .. _frictionless: https://github.com/frictionlessdata/framework
 .. _fsspec: https://pypi.org/project/fsspec/
+.. _Google Cloud Storage: https://en.wikipedia.org/wiki/Google_Cloud_Storage
 .. _Google Sheets: https://en.wikipedia.org/wiki/Google_Sheets
 .. _HTTP: https://en.wikipedia.org/wiki/HTTP
 .. _InfluxDB line protocol: https://docs.influxdata.com/influxdb/latest/reference/syntax/line-protocol/

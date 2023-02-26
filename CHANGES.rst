@@ -30,6 +30,7 @@ in progress
 - Refactoring: I/O related code goes into ``eskema.io``
 - Add support for InfluxDB line protocol input format
 - S3: Unlock reading from public buckets anonymously (``--no-sign-request``)
+- GCS: Unlock reading from public Google Cloud Storage buckets
 
 
 2023-01-xx 0.0.0
