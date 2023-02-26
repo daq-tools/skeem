@@ -95,7 +95,7 @@ class SchemaGenerator:
             # Sanity checks.
             if self.resource.type is None:
                 raise ValueError("Unable to infer schema without resource type")
-            frictionless_args["format"] = ContentType.to_suffix(self.resource.type).lstrip(".")
+            frictionless_args["format"] = self.resource.type.suffix.lstrip(".")
 
             payload = self.resource.data.read()
             data = to_bytes(payload)
@@ -182,8 +182,7 @@ class SchemaGenerator:
 
         # Wrap data into data-dispenser's `Source` instance.
         logger.info("Converging resource to ddlgen source object")
-        suffix = ContentType.to_suffix(self.resource.type)
-        data = SourcePlus(indata, ext=suffix, table=self.resource.address)
+        data = SourcePlus(indata, ext=self.resource.type.suffix, table=self.resource.address)
 
         # Infer schema from data.
         logger.info("Inferring schema")

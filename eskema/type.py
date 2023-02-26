@@ -29,6 +29,7 @@ def init():
             ".lineprotocol": "application/vnd.influxdata.lineprotocol",
             ".lp": "application/vnd.influxdata.lineprotocol",
             ".ndjson": "application/x-ndjson",
+            ".netcdf": "application/x-netcdf",
             ".parquet": "application/vnd.apache.parquet",
             ".parq": "application/vnd.apache.parquet",
             ".pq": "application/vnd.apache.parquet",
@@ -38,7 +39,87 @@ def init():
 
 class ContentType(Enum):
     """
-    Enumerate all supported content types and derive content type from input data.
+    Manage supported content types and provide support methods.
+    """
+
+    # Primary definitions.
+    CSV = "CSV"
+    GRIB2 = "GRIB2"
+    JSON = "JSON"
+    NETCDF = "NETCDF"
+    NDJSON = "NDJSON"
+    LINEPROTOCOL = "LINEPROTOCOL"
+    ODS = "ODS"
+    PARQUET = "PARQUET"
+    XLSX = "XLSX"
+
+    # Secondary aliases.
+    JSONL = "JSONL"
+    LDJSON = "LDJSON"
+
+    @classmethod
+    def from_name(cls, name: str) -> "ContentType":
+        """
+        Derive content type from name or mime type.
+
+        >>> ContentType.from_name("csv")
+        <ContentType.CSV: 'CSV'>
+
+        >>> ContentType.from_name("CSV")
+        <ContentType.CSV: 'CSV'>
+
+        >>> ContentType.from_name("text/csv")
+        <ContentType.CSV: 'CSV'>
+        """
+
+        try:
+            return ContentType(name.upper())
+        except ValueError:
+            pass
+
+        try:
+            return ContentTypeMime(name).content_type
+        except ValueError:
+            pass
+
+        raise ValueError(f"'{name}' is not a valid ContentType or ContentTypeMime")
+
+    @classmethod
+    def from_filename(cls, filename: t.Union[Path, str]) -> "ContentType":
+        """
+        Derive content type from filename extension.
+
+        >>> ContentType.from_filename("foo.csv")
+        <ContentType.CSV: 'CSV'>
+        """
+        mimetype, _ = mimetypes.guess_type(filename)
+        if mimetype is None:
+            raise UnknownContentType(f"Unable to guess content type from '{filename}'")
+        return ContentTypeMime(mimetype).content_type
+
+    @property
+    def suffix(self) -> str:
+        """
+        Derive filename extension from content type.
+        """
+        type_ = self
+
+        if type_.is_ndjson():
+            type_ = ContentType.NDJSON
+
+        suffix: ContentTypeSuffix = ContentTypeSuffix[type_.name]
+        return suffix.label
+
+    def is_ndjson(self) -> bool:
+        """
+        Whether the content type is NDJSON or alike.
+        """
+        return self in ContentTypeGroup.NDJSON_ALIASES
+
+
+class ContentTypeMime(Enum):
+    """
+    Manage content type -> mime type mapping.
     """
 
     # Primary definitions.
@@ -56,132 +137,78 @@ class ContentType(Enum):
     JSONL = "application/x-ndjson"
     LDJSON = "application/x-ldjson"
 
-    @classmethod
-    def from_filename(cls, filename: t.Union[Path, str]) -> "ContentType":
+    @property
+    def content_type(self) -> ContentType:
         """
-        Derive content type from filename extension.
-
-        >>> ContentType.from_filename("foo.csv")
-        <ContentType.CSV: 'text/csv'>
+        Return corresponding `ContentType`.
         """
-        mimetype, _ = mimetypes.guess_type(filename)
-        if mimetype is None:
-            raise UnknownContentType(f"Unable to guess content type from '{filename}'")
-        return cls(mimetype)
-
-    @classmethod
-    def from_name(cls, name: str) -> "ContentType":
-        """
-        Derive content type from long and short name.
-
-        >>> ContentType.from_name("csv")
-        <ContentType.CSV: 'text/csv'>
-
-        >>> ContentType.from_name("text/csv")
-        <ContentType.CSV: 'text/csv'>
-        """
-        try:
-            return ContentType(name)
-        except ValueError:
-            pass
-
-        try:
-            return ContentType(ContentTypeShort.resolve(name))
-        except ValueError:
-            pass
-
-        raise ValueError(f"'{name}' is not a valid ContentType or ContentTypeShort")
-
-    @classmethod
-    def is_ndjson(cls, type_: "ContentType") -> bool:
-        """
-        Is content type any variant of NDJSON?
-        """
-        if type_ in [ContentType.NDJSON, ContentType.JSONL, ContentType.LDJSON]:
-            return True
-        else:
-            return False
-
-    @classmethod
-    def to_suffix(cls, type_: "ContentType") -> str:
-        """
-        Derive filename extension from content type.
-        """
-
-        if type_ is ContentType.CSV:
-            return ".csv"
-        elif type_ is ContentType.GRIB2:
-            return ".grib2"
-        elif type_ is ContentType.JSON:
-            return ".json"
-        elif type_ is ContentType.LINEPROTOCOL:
-            return ".lp"
-        elif type_ is ContentType.NETCDF:
-            return ".nc"
-        elif cls.is_ndjson(type_):
-            return ".ndjson"
-        elif type_ is ContentType.ODS:
-            return ".ods"
-        elif type_ is ContentType.PARQUET:
-            return ".parquet"
-        elif type_ is ContentType.XLSX:
-            return ".xlsx"
-        else:
-            raise ValueError(f"Unable to compute suffix for content type '{type_}'")
+        return ContentType.from_name(self.name)
 
 
-class ContentTypeShort(Enum):
+class ContentTypeSuffix(Enum):
     """
-    Manage short names of content types, mapping them to their corresponding mimetype counterparts.
+    Manage content type -> file extension suffix mapping.
     """
 
-    CSV = "csv"
-    GRIB2 = "grib2"
-    JSON = "json"
-    JSONL = "jsonl"
-    LDJSON = "ldjson"
-    LINEPROTOCOL = "lineprotocol"
-    NETCDF = "nc"
-    NDJSON = "ndjson"
-    ODS = "ods"
-    PARQUET = "parquet"
-    XLSX = "xlsx"
+    CSV = [".csv"]
+    GRIB2 = [".grib2"]
+    JSON = [".json"]
+    JSONL = [".jsonl"]
+    LDJSON = [".ldjson"]
+    LINEPROTOCOL = [".lp", ".lineprotocol"]
+    NETCDF = [".nc", ".netcdf"]
+    NDJSON = [".ndjson"]
+    ODS = [".ods"]
+    PARQUET = [".parquet"]
+    XLSX = [".xlsx"]
 
     @classmethod
-    def resolve(cls, label: str) -> str:
-        v1 = cls(label)
-        mapping = {
-            cls.CSV: ContentType.CSV.value,
-            cls.GRIB2: ContentType.GRIB2.value,
-            cls.JSON: ContentType.JSON.value,
-            cls.JSONL: ContentType.NDJSON.value,
-            cls.LDJSON: "application/x-ldjson",
-            cls.LINEPROTOCOL: ContentType.LINEPROTOCOL.value,
-            cls.NETCDF: ContentType.NETCDF.value,
-            cls.NDJSON: ContentType.NDJSON.value,
-            cls.ODS: ContentType.ODS.value,
-            cls.PARQUET: ContentType.PARQUET.value,
-            cls.XLSX: ContentType.XLSX.value,
-        }
-        v2 = mapping[v1]
-        return v2
+    def from_label(cls, label: str) -> "ContentTypeSuffix":
+        """
+        Derive `ContentTypeSuffix` from file extension suffix string.
+        """
+        for item in cls:
+            if label in item.value:
+                return item
+        raise ValueError(f"'{label}' is not a valid ContentTypeSuffix")
+
+    @property
+    def content_type(self) -> ContentType:
+        """
+        Return corresponding `ContentType`.
+        """
+        return ContentType.from_name(self.name)
+
+    @property
+    def label(self) -> str:
+        """
+        The first slot of the enum value is the canonical file extension suffix.
+        """
+        return self.value[0]
 
 
 class ContentTypeGroup:
     """
-    Group content types for different purposes.
+    Groups of content types for different purposes.
     """
 
-    # For those content types, primary key detection will not be invoked.
+    # Primary key detection will not be invoked for those content types.
     NO_AUTOPK = [
         ContentType.GRIB2,
         ContentType.NETCDF,
     ]
 
-    # All "binary" files must not be partially read, but as a whole instead.
+    # All "binary" files must not be read partially, but as a whole instead.
     NO_PARTIAL = [
         ContentType.GRIB2,
         ContentType.NETCDF,
         ContentType.ODS,
         ContentType.XLSX,
+    ]
+
+    # All types which should be treated equally to NDJSON.
+    NDJSON_ALIASES = [
+        ContentType.JSONL,
+        ContentType.LDJSON,
+        ContentType.NDJSON,
     ]

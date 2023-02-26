@@ -34,7 +34,7 @@ def test_schema_generator_invalid_content_type():
             target=SqlTarget(dialect="postgresql"),
         )
         sg.to_sql_ddl()
-    assert ex.match("'foo' is not a valid ContentType or ContentTypeShort")
+    assert ex.match("'foo' is not a valid ContentType or ContentTypeMime")
 
 
 @pytest.mark.xfail

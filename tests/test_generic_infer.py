@@ -45,7 +45,7 @@ def test_generic_infer_library_unknown_content_type():
             SqlTarget(dialect="crate", table_name="foo1", primary_key="id"),
         )
         sg.to_sql_ddl()
-    assert ex.match("'unknown' is not a valid ContentType or ContentTypeShort")
+    assert ex.match("'unknown' is not a valid ContentType or ContentTypeMime")
 
 
 def test_generic_infer_cli_stdin_without_content_type():
