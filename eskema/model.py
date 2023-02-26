@@ -57,8 +57,12 @@ class Resource:
         """
 
         # Access a plethora of resources using `fsspec`.
+        # TODO: Refactor to `eskema.io`.
         if self.data is None and self.path is not None:
-            self.data = fsspec.open(self.path, mode="rb").open()
+            kwargs = {}
+            if str(self.path).startswith("s3"):
+                kwargs["anon"] = True
+            self.data = fsspec.open(self.path, mode="rb", **kwargs).open()
 
         # Sanity checks
         if self.data is None:

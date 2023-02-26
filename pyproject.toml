@@ -34,7 +34,7 @@ dependencies = [
   "crate[sqlalchemy]",
   "ddlgenerator<0.2",
   "frictionless[excel,json,ods,parquet,sql]<5.6",
-  "fsspec[http]==2023.1",
+  "fsspec[http,s3]==2023.1",
   "json_stream<3",
   "line-protocol-parser<2",
   "odfpy<2",

@@ -29,6 +29,7 @@ in progress
 - Performance: Optimize reading from remote NDJSON files
 - Refactoring: I/O related code goes into ``eskema.io``
 - Add support for InfluxDB line protocol input format
+- S3: Unlock reading from public buckets anonymously (``--no-sign-request``)
 
 
 2023-01-xx 0.0.0

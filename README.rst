@@ -29,6 +29,7 @@ Supported input data:
 
 Supported input sources:
 
+- `Amazon S3`_
 - `File system`_
 - `HTTP`_
 
@@ -91,6 +92,9 @@ Read data from URL::
 
     # InfluxDB line protocol (ILP)
     eskema infer-ddl --dialect=postgresql https://github.com/influxdata/influxdb2-sample-data/raw/master/air-sensor-data/air-sensor-data.lp
+
+    # CSV on S3
+    eskema --verbose infer-ddl --dialect=postgresql s3://noaa-ghcn-pds/csv/by_year/2022.csv
 
 Use a different backend (default: ``ddlgen``)::
 
@@ -165,6 +169,7 @@ Credits and prior art
   or similar goals like Eskema.
 
 
+.. _Amazon S3: https://en.wikipedia.org/wiki/Amazon_S3
 .. _Apache Parquet: https://en.wikipedia.org/wiki/Apache_Parquet
 .. _Catherine Devlin: https://github.com/catherinedevlin
 .. _CSV: https://en.wikipedia.org/wiki/Comma-separated_values

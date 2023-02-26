@@ -28,6 +28,34 @@ default settings are currently:
 Examples
 ********
 
+
+OpenAQ
+======
+
+`OpenAQ`_ collects minutely global air quality data fetched from public data
+sources all over the world, and harmonizes it into a free open-source data
+platform.
+
+This NDJSON file (115 MB) is from the `openaq-fetches`_ bucket on AWS S3::
+
+    eskema --verbose infer-ddl --dialect=postgresql \
+        s3://openaq-fetches/realtime/2023-02-25/1677351953_eea_2aa299a7-b688-4200-864a-8df7bac3af5b.ndjson
+
+
+NOAA GHCN
+=========
+
+The `Global Historical Climatology Network (GHCN)`_, worth 200 years of global
+climate data, is a data set of temperature, precipitation and pressure records
+managed by the National Climatic Data Center (NDCC), Arizona State University
+and the Carbon Dioxide Information Analysis Center.
+
+This CSV file (1.2 GB) is from the `noaa-ghcn-pds`_ bucket on AWS S3::
+
+    eskema --verbose infer-ddl --dialect=postgresql \
+        s3://noaa-ghcn-pds/csv/by_year/2022.csv
+
+
 NYC TLC
 =======
 
@@ -101,8 +129,12 @@ Reading NDJSON from remote resources is supported by both backends,
 
 .. _2017 Yellow Taxi Trip Data: https://data.cityofnewyork.us/Transportation/2017-Yellow-Taxi-Trip-Data/biws-g3hs
 .. _fsspec: https://filesystem-spec.readthedocs.io/
+.. _Global Historical Climatology Network (GHCN): https://en.wikipedia.org/wiki/Global_Historical_Climatology_Network
 .. _New York City Taxi and Limousine Commission (TLC) Trip Record Data: https://registry.opendata.aws/nyc-tlc-trip-records-pds/
+.. _noaa-ghcn-pds: https://github.com/awslabs/open-data-registry/blob/main/datasets/noaa-ghcn.yaml#L4
 .. _NYC OpenData: https://opendata.cityofnewyork.us/
 .. _Open Data on AWS: https://registry.opendata.aws/
+.. _OpenAQ: https://openaq.org/
+.. _openaq-fetches: https://github.com/awslabs/open-data-registry/blob/main/datasets/openaq.yaml
 .. _Tinybird » Ecommerce 100k rows NDJSON dataset: https://storage.googleapis.com/tinybird-assets/datasets/guides/how-to-ingest-ndjson-data/events_100k.ndjson
 .. _Tinybird » How to ingest NDJSON data: https://www.tinybird.co/docs/guides/ingest-ndjson-data.html
