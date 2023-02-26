@@ -29,35 +29,6 @@ Examples
 ********
 
 
-Finnish Meteorological Institute » Daily observations
-=====================================================
-
-Daily observations in 1km*1km grid » Interpolation.
-
-Daily weather station observations have been interpolated into 1km*1km grid using
-external predictors (e.g., elevation) as covariates (kriging with external drift KED).
-
-Daily data is in annual netcdf files. The files are produced by R:s Raster package.
-
-::
-
-    aws s3 cp --no-sign-request s3://fmi-gridded-obs-daily-1km/Netcdf/Tday/tday_2023.nc .
-    eskema --verbose infer-ddl --dialect=postgresql tday_2023.nc
-
-
-OpenAQ
-======
-
-`OpenAQ`_ collects minutely global air quality data fetched from public data
-sources all over the world, and harmonizes it into a free open-source data
-platform.
-
-This NDJSON file (115 MB) is from the `openaq-fetches`_ bucket on AWS S3::
-
-    eskema --verbose infer-ddl --dialect=postgresql \
-        s3://openaq-fetches/realtime/2023-02-25/1677351953_eea_2aa299a7-b688-4200-864a-8df7bac3af5b.ndjson
-
-
 NOAA GHCN
 =========
 
@@ -156,7 +127,5 @@ You can also address public buckets in Google Cloud Storage, using the
 .. _noaa-ghcn-pds: https://github.com/awslabs/open-data-registry/blob/main/datasets/noaa-ghcn.yaml#L4
 .. _NYC OpenData: https://opendata.cityofnewyork.us/
 .. _Open Data on AWS: https://registry.opendata.aws/
-.. _OpenAQ: https://openaq.org/
-.. _openaq-fetches: https://github.com/awslabs/open-data-registry/blob/main/datasets/openaq.yaml
 .. _Tinybird » Ecommerce 100k rows NDJSON dataset: https://storage.googleapis.com/tinybird-assets/datasets/guides/how-to-ingest-ndjson-data/events_100k.ndjson
 .. _Tinybird » How to ingest NDJSON data: https://www.tinybird.co/docs/guides/ingest-ndjson-data.html

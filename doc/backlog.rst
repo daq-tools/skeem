@@ -30,30 +30,53 @@ Iteration 2
 Features
 ========
 
-- [x] Handle CSV
-- [x] Handle basic JSON: records + single document
-- [x] Handle spreadsheet formats: XLSX and ODF
+- [x] Format: Handle CSV
+- [x] Format: Handle basic JSON: records + single document
+- [x] Format: Handle spreadsheet formats: XLSX and ODF
 - [x] Add more type annotations, and `mypy`_
-- [x] Add `frictionless`_ backend
-- [x] Add software tests for `frictionless`_ backend
-- [x] Add support for Google Sheets input format
-- [x] Add support for Parquet input format
-- [x] Support reading large files efficiently
-- [x] Support reading data from HTTP
-- [x] Bug: Why is resource being read twice?
-- [o] Refactor more code to ``eskema.io``
-- [o] Support reading large files from HTTP efficiently
-- [x] Add support for "InfluxDB line protocol" input format
-  https://github.com/influxdata/influxdb2-sample-data/blob/master/air-sensor-data/air-sensor-data.lp
-- [o] Support reading data from HTTP, without file suffix, and/or query parameters
-- [o] Support reading data from S3
-- [o] Enable ``frictionless`` backend using environment variable ``ESKEMA_BACKEND=frictionless``
-- [o] Add help texts to CLI options
-- [o] eskema infer-ddl --list-input-formats
-- [o] Add "examples" to test suite
-- [o] Provide options to control sample size
-- [o] Is table- and field-name quoting properly applied for both backends?
-- [o] API/Docs: Derive schema directly from pandas DataFrame
+- [x] Backend: Add `frictionless`_ backend
+- [x] Tests: Add software tests for `frictionless`_ backend
+- [x] Format: Add support for Google Sheets input format
+- [x] Format: Add support for Parquet input format
+- [x] Performance: Support reading large files efficiently
+- [x] Source: Support reading data from HTTP
+- [x] Performance: Support reading large files from HTTP more efficiently
+- [x] Refactoring: A bit of code to ``eskema.io``
+- [x] Format: Add support for "InfluxDB line protocol" input format
+- [x] Refactoring: ``eskema.sources`` to ``eskema.ddlgen``?
+- [x] Source: Support reading data from S3
+- [x] Source: Load data from Google Cloud Storage
+- [o] Format: Add NetCDF and HDF5 input formats
+- [o] Format: Zarr
+- [o] Format: dBase and friends
+- [o] Performance: Optimize loading from CSV
+- [o] Performance: Access large data: https://commonscreens.com/?page_id=1492
+- [o] Source: Support reading data from HTTP, without file suffix, and/or query parameters
+- [o] UX: Add help texts to CLI options
+- [o] UX: eskema infer-ddl --list-input-formats
+- [o] Library: Derive schema directly from pandas DataFrame
+- [o] IO: Export to descriptor and/or schema
+
+Bugs
+====
+- [x] Why is "frictionless" resource being read twice?
+- [o] Why is "ddlgen" resource being read twice? See ``_eval_lineprotocol``.
+  => Workaround: Add ``@cachetools.func.lru_cache``
+- [o] Can get hogged on resources like. Resolve: Automatically download before working on it.
+
+  - https://www.unidata.ucar.edu/software/netcdf/examples/sresa1b_ncar_ccsm3-example.nc
+  - s3://fmi-gridded-obs-daily-1km/Netcdf/Tday/tday_2022.nc
+- [o] WMI_Lear.nc has "time" as "TIMESTAMP", but "sresa1b_ncar_ccsm3-example.nc" uses "TEXT"
+- [o] Does not detect semicolon as field delimiter
+
+  - https://archive.sensor.community/2015-10-01/2015-10-01_ppd42ns_sensor_27.csv
+- [o] FrictionlessException: [source-error] The data source has not supported or has inconsistent contents: The HTTP server doesn't appear to support range requests. Only reading this file from the beginning is supported. Open with block_size=0 for a streaming file interface.
+
+  - https://archive.sensor.community/parquet/2015-10/ppd42ns/part-00000-77c393f3-34ff-4e92-ad94-2c9839d70cd0-c000.snappy.parquet
+- [o] RuntimeError: OrderedDict mutated during iteration
+
+  - s3://openaq-fetches/realtime/2023-02-25/1677351953_eea_2aa299a7-b688-4200-864a-8df7bac3af5b.ndjson
+
 
 Documentation
 =============
@@ -63,16 +86,16 @@ Documentation
 - [x] Document library use
 - [x] Add example program
 - [/] File headers
+- [x] Replace https://raw.githubusercontent.com/ with https://github.com/foo/bar/raw/....
 - [o] Improve "library use" docs re. ``ContentType``
 - [o] Read data from Sensor.Community archive
 - [o] Read data from IP to Country database
 
-  - https://db-ip.com/db/format/ip-to-city-lite/csv.html
-  - http://download.db-ip.com/free/dbip-city-lite-2023-02.csv.gz
 
 Infrastructure
 ==============
 
+- [o] Add "examples" to test suite
 - [o] CI/GHA
 - [o] Docker build & publish
 - [o] Docs: RTD
@@ -81,18 +104,29 @@ Infrastructure
 
 Quality
 =======
+- [o] Is table- and field-name quoting properly applied for both backends?
 - [o] QA: Use reference input test data from other repositories
 
   - https://github.com/okfn/messytables/tree/master/horror
   - https://github.com/frictionlessdata/tabulator-py/tree/main/data/special
   - https://github.com/apache/arrow-testing/tree/master/data
   - https://github.com/pandas-dev/pandas/tree/main/doc/data
+  - https://github.com/influxdata/influxdb2-sample-data
+  - https://github.com/konklone/json/tree/gh-pages/tests
+  - https://docs.databricks.com/dbfs/databricks-datasets.html
+  - https://github.com/databricks/tech-talks/blob/master/datasets/README.md
+  - Kaggle?
+
+- [o] Add "roadrunner" tests
+- [o] Use custom user agent
 
 
 ***********
 Iteration 3
 ***********
 
+- [o] Weird error: ``logger.warning("Unable to detect content type")`` will cause
+  ``WARNING: Unable TO detect content TYPE`` to be written to STDOUT!?
 - [o] Use ``smart_open``
   https://github.com/RaRe-Technologies/smart_open
 - [o] Support reading archive files directly. Examples:
@@ -110,6 +144,25 @@ Iteration 3
 - [o] Optimize ``fastparquet.core.read_col``: ``infile.read(cmd.total_compressed_size)``
 - [o] Can Parquet header (and types) be inquired without needing to read actual data?
 - [o] Add ``pandas`` backend
+- [o] Add decoder for C/C++ structs
+  - https://getkotori.org/docs/gallery/lst.html
+  - https://github.com/daq-tools/kotori/tree/main/kotori/vendor/lst
+- [o] InfluxDB line protocol refinements
+
+  - [o] Honor the ``measurement`` field, and map to table name
+  - [o] Read irregular files, where field and tag names deviate between individual lines
+  - [o] Use ``TIMESTAMP`` for ``time`` column?
+- [o] Add support for other metrics formats. Prometheus, Graphite, collectd?
+- [o] Enable ``frictionless`` backend using environment variable ``ESKEMA_BACKEND=frictionless``
+- [o] Provide options to control sample size
+- [o] Startup time is currently one second. Can this be improved?
+- [o] Add support for "InfluxDB annotated CSV" input format
+- [o] Load Parquet files efficiently from S3
+- [o] Unlock more fsspec sources
+
+  - https://github.com/fsspec/filesystem_spec/blob/2023.1.0/setup.py#L41-L63
+  - https://github.com/fsspec/filesystem_spec/blob/master/docs/source/api.rst#other-known-implementations
+  - https://github.com/fsspec/dropboxdrivefs
 
 
 Bugs
@@ -132,7 +185,9 @@ Iteration 4
   - Avro
   - JSON Schema
   - XML, RDF, RSS
-    https://data.cityofnewyork.us/Transportation/2017-Yellow-Taxi-Trip-Data/biws-g3hs
+
+    - https://data.cityofnewyork.us/Transportation/2017-Yellow-Taxi-Trip-Data/biws-g3hs
+    - https://catalog.data.gov/dataset/meteorite-landings
   - Spreadsheet formats: Microsoft pendant to Google Sheets, and friends
   - Tables from PDF and others
   - DuckDB can currently directly run queries on Parquet files, CSV files,

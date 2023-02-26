@@ -11,24 +11,24 @@ in progress
 - Add logging
 - Add SQL pretty printing
 - Improve software tests
-- Unlock reading from stdin
+- Source: Unlock reading from stdin
 - Derive table name from input file name
 - Primary key detection
-- Content type detection using file extension or ``--content-type`` option
-- Add support for CSV input format
-- Add support for XLSX and ODS input formats
-- Add test case for basic nested JSON document
-- Add ``frictionless`` backend
-- Add support for Google Sheets and Parquet input formats
-- Improve sampling large files
-- Support reading data from HTTP
+- Format: Content type detection using file extension or ``--content-type`` option
+- Format: Add support for CSV input format
+- Format: Add support for XLSX and ODS input formats
+- Tests: Add test case for basic nested JSON document
+- Backend: Add ``frictionless`` backend
+- Format: Add support for Google Sheets and Parquet input formats
+- Performance: Improve sampling large files
+- Source: Support reading data from HTTP
 - Performance: Use the Hunter code tracing toolkit to trace execution path
 - Performance: Don't open resource twice when using ``frictionless`` backend
 - Performance: Improve peeking into Parquet files
 - Performance: Configure ``PEEK_LINES = 100`` instead of 1000
 - Performance: Optimize reading from remote NDJSON files
 - Refactoring: I/O related code goes into ``eskema.io``
-- Add support for InfluxDB line protocol input format
+- Format: Add support for InfluxDB line protocol input format
 - Source: Unlock reading from public S3 buckets anonymously (``--no-sign-request``)
 - Source: Unlock and document reading from public Google Cloud Storage (GCS) buckets,
   and files on GitHub.
