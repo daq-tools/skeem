@@ -32,6 +32,8 @@ in progress
 - Source: Unlock reading from public S3 buckets anonymously (``--no-sign-request``)
 - Source: Unlock and document reading from public Google Cloud Storage (GCS) buckets,
   and files on GitHub.
+- Tests: Add "roadrunner" tests, using a bunch of external resources. The tests
+  will only check for successful invocation, and not verify the generated SQL.
 
 
 2023-01-xx 0.0.0

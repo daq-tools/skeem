@@ -104,6 +104,7 @@ release = [
 test = [
   "pytest<8",
   "pytest-cov<5",
+  "pytest-timeout<3",
 ]
 
 [project.urls]
@@ -141,6 +142,7 @@ testpaths = [
 ]
 xfail_strict = true
 markers = [
+  "roadrunner",
   "slow",
 ]
 
@@ -203,8 +205,6 @@ namespaces = false
 
 [tool.poe.tasks]
 
-test = { cmd = "pytest" }
-
 format = [
   { cmd = "black ." },
   # Configure Ruff not to auto-fix (remove!) unused variables (F841) and `print` statements (T201).
@@ -223,3 +223,6 @@ release = [
   { cmd = "python -m build" },
   { cmd = "twine upload dist/*" },
 ]
+
+test = { cmd = "pytest -m 'not roadrunner'" }
+test-roadrunner = { cmd = "pytest -m 'roadrunner'" }
