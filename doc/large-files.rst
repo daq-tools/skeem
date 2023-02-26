@@ -29,6 +29,22 @@ Examples
 ********
 
 
+Finnish Meteorological Institute » Daily observations
+=====================================================
+
+Daily observations in 1km*1km grid » Interpolation.
+
+Daily weather station observations have been interpolated into 1km*1km grid using
+external predictors (e.g., elevation) as covariates (kriging with external drift KED).
+
+Daily data is in annual netcdf files. The files are produced by R:s Raster package.
+
+::
+
+    aws s3 cp --no-sign-request s3://fmi-gridded-obs-daily-1km/Netcdf/Tday/tday_2023.nc .
+    eskema --verbose infer-ddl --dialect=postgresql tday_2023.nc
+
+
 OpenAQ
 ======
 

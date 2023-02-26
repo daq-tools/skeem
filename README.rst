@@ -13,8 +13,8 @@ About
 You can use Eskema to infer SQL DDL statements from tabular data.
 
 Eskema is based on the excellent `ddlgenerator`_, `frictionless`_, `fsspec`_,
-`pandas`_, and `SQLAlchemy`_ packages, and can be used both as a standalone
-program, and as a library.
+`pandas`_, `SQLAlchemy`_, `xarray`_ packages and friends, and can be used both
+as a standalone program, and as a library.
 
 Supported input data:
 
@@ -23,6 +23,7 @@ Supported input data:
 - `Google Sheets`_
 - `InfluxDB line protocol`_
 - `JSON`_
+- `NetCDF`_
 - `NDJSON`_ (formerly LDJSON) aka. `JSON Lines`_, see also `JSON streaming`_
 - `Office Open XML Workbook`_ (`Microsoft Excel`_)
 - `OpenDocument Spreadsheet`_ (`LibreOffice`_)
@@ -57,6 +58,18 @@ Synopsis
 
 
 *****
+Setup
+*****
+
+.. code-block:: sh
+
+    pip install eskema
+
+    # Additional formats: NetCDF
+    pip install 'eskema[scientific]'
+
+
+*****
 Usage
 *****
 
@@ -80,6 +93,10 @@ Read data from given file::
     eskema infer-ddl --dialect=postgresql data.ods
     eskema infer-ddl --dialect=postgresql data.xlsx
     eskema infer-ddl --dialect=postgresql data.xlsx --address="Sheet2"
+
+    # NetCDF
+    eskema infer-ddl --dialect=postgresql https://www.unidata.ucar.edu/software/netcdf/examples/sresa1b_ncar_ccsm3-example.nc
+    eskema infer-ddl --dialect=postgresql https://www.unidata.ucar.edu/software/netcdf/examples/WMI_Lear.nc
 
 Read data from URL::
 
@@ -202,9 +219,11 @@ Credits and prior art
 .. _Microsoft Excel: https://en.wikipedia.org/wiki/Microsoft_Excel
 .. _Mike Bayer: https://github.com/zzzeek
 .. _NDJSON: http://ndjson.org/
+.. _NetCDF: https://en.wikipedia.org/wiki/NetCDF
 .. _Office Open XML Workbook: https://en.wikipedia.org/wiki/Office_Open_XML
 .. _OpenDocument Spreadsheet: https://en.wikipedia.org/wiki/OpenDocument
 .. _pandas: https://pypi.org/project/pandas/
 .. _Paul Walsh: https://github.com/pwalsh
 .. _SQLAlchemy: https://pypi.org/project/SQLAlchemy/
 .. _testdata: https://github.com/daq-tools/eskema/tree/main/tests/testdata
+.. _xarray: https://xarray.dev/

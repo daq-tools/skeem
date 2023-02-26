@@ -1,9 +1,11 @@
 import io
 import logging
 import typing as t
+from copy import deepcopy
 
 import pandas as pd
 import sqlalchemy
+from cachetools.func import lru_cache
 from data_dispenser import Source
 
 from eskema.io import dataframe_from_lineprotocol
@@ -126,6 +128,7 @@ class SourcePlus(Source):
         """
         self.eval_funcs_by_ext[".csv"] = [_eval_csv]
         self.eval_funcs_by_ext[".lp"] = [_eval_lineprotocol]
+        self.eval_funcs_by_ext[".nc"] = [_eval_netcdf]
         self.eval_funcs_by_ext[".ndjson"] = [_eval_ndjson]
 
         # TODO: Use the generic interface if deserializer can be created with `sheet_name` option.
@@ -160,6 +163,29 @@ def _eval_lineprotocol(target, fieldnames: t.List[str] = None, *args, **kwargs):
     Generate records from an InfluxData lineprotocol string.
     """
     df = dataframe_from_lineprotocol(data=target)
+    return _generate_records(df)
+
+
+# Work around being called twice.
+# TODO: Find the root cause why those functions are called twice.
+@lru_cache  # type: ignore[arg-type]
+def _eval_netcdf(target, fieldnames: t.List[str] = None, *args, **kwargs):
+    """
+    Generate records from an NDJSON string, using pandas' `pd.read_json`.
+    """
+    import xarray as xr
+
+    # FIXME: Because this function is called two times, we need to copy the
+    #        buffer, because `xr.open_dataset` will apparently close it.
+    target = deepcopy(target)
+
+    ds = xr.open_dataset(target, engine="scipy")
+    logger.info(f"Reading dataset:\n{ds}")
+    df = ds.to_dataframe().dropna()
+    logger.debug(f"pandas DataFrame:\n{df}")
+    logger.info(f"Reading {PEEK_LINES} records of NetCDF file")
+    df = df[:PEEK_LINES]
+    df = df.reset_index()
     return _generate_records(df)
 
 

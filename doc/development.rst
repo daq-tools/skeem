@@ -14,7 +14,7 @@ and run software tests::
     cd eskema
     python3 -m venv .venv
     source .venv/bin/activate
-    pip install --editable=.[test,develop,release]
+    pip install --editable=.[test,develop,release,scientific]
 
     # Run regular test suite.
     poe test

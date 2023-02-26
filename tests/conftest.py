@@ -76,6 +76,17 @@ def line_protocol_file_irregular():
 
 
 @pytest.fixture
+def netcdf_file_aircraft():
+    return Path("tests/testdata/aircraft-track-lear.nc")
+
+
+@pytest.fixture
+def netcdf_url_aircraft():
+    return Path("tests/testdata/aircraft-track-lear.nc")
+    # return "https://raw.githubusercontent.com/daq-tools/eskema/main/tests/testdata/aircraft-track-lear.nc" # noqa: ERA001, E501
+
+
+@pytest.fixture
 def xlsx_file_basic():
     return Path("tests/testdata/basic.xlsx")
 

@@ -7,7 +7,7 @@ import pandas as pd
 from fsspec.implementations.local import LocalFileOpener
 from fsspec.spec import AbstractBufferedFile
 
-from eskema.type import ContentType
+from eskema.type import ContentType, ContentTypeGroup
 
 logger = logging.getLogger(__name__)
 
@@ -16,18 +16,17 @@ BytesString = t.Union[bytes, str]
 BytesStringList = t.List[BytesString]
 
 
-def peek(data: t.IO[t.Any], content_type: t.Optional[ContentType], peek_bytes: int, peek_lines: int) -> t.BinaryIO:
+def peek(data: t.IO[t.Any], content_type: t.Optional[ContentType], peek_bytes: int, peek_lines: int) -> t.IO[t.Any]:
     """
     Only peek at the first bytes/lines of data.
     """
-    binary_files = [ContentType.XLSX, ContentType.ODS]
 
     # Only optionally seek to the file's beginning.
     # if hasattr(data, "seekable") and data.seekable():  # noqa: ERA001
     #     data.seek(0)  # noqa: ERA001
 
-    if content_type in binary_files:
-        logger.info(f"WARNING: Hitting a speed bump by needing to read file of type {binary_files} as a whole")
+    if content_type in ContentTypeGroup.NO_PARTIAL:
+        logger.info(f"WARNING: Hitting a speed bump by needing to read file of type {content_type} as a whole")
         return io.BytesIO(data.read())
     else:
         if content_type is ContentType.JSON:

@@ -6,7 +6,7 @@ import pandas as pd
 
 from eskema.io import dataframe_from_lineprotocol, json_get_first_records
 from eskema.settings import PEEK_LINES
-from eskema.type import ContentType
+from eskema.type import ContentType, ContentTypeGroup
 
 IntOrString = t.TypeVar("IntOrString", int, str)
 AddressType = t.Union[int, str, t.List[IntOrString]]
@@ -44,6 +44,10 @@ def infer_pk(
 def _infer_pk(
     data: t.Any, content_type: t.Optional[ContentType] = None, address: t.Optional[AddressType] = None
 ) -> t.Optional[str]:
+
+    # No PK detection for certain content types.
+    if content_type in ContentTypeGroup.NO_AUTOPK:
+        return None
 
     if isinstance(data, pd.DataFrame):
         df = data

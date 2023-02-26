@@ -42,6 +42,7 @@ class ContentType(Enum):
     # Primary definitions.
     CSV = "text/csv"
     JSON = "application/json"
+    NETCDF = "application/x-netcdf"
     NDJSON = "application/x-ndjson"
     LINEPROTOCOL = "application/vnd.influxdata.lineprotocol"
     ODS = "application/vnd.oasis.opendocument.spreadsheet"
@@ -110,6 +111,8 @@ class ContentType(Enum):
             return ".json"
         elif type_ is ContentType.LINEPROTOCOL:
             return ".lp"
+        elif type_ is ContentType.NETCDF:
+            return ".nc"
         elif cls.is_ndjson(type_):
             return ".ndjson"
         elif type_ is ContentType.ODS:
@@ -132,6 +135,7 @@ class ContentTypeShort(Enum):
     JSONL = "jsonl"
     LDJSON = "ldjson"
     LINEPROTOCOL = "lineprotocol"
+    NETCDF = "nc"
     NDJSON = "ndjson"
     ODS = "ods"
     PARQUET = "parquet"
@@ -146,6 +150,7 @@ class ContentTypeShort(Enum):
             cls.JSONL: ContentType.NDJSON.value,
             cls.LDJSON: "application/x-ldjson",
             cls.LINEPROTOCOL: ContentType.LINEPROTOCOL.value,
+            cls.NETCDF: ContentType.NETCDF.value,
             cls.NDJSON: ContentType.NDJSON.value,
             cls.ODS: ContentType.ODS.value,
             cls.PARQUET: ContentType.PARQUET.value,
@@ -153,3 +158,21 @@ class ContentTypeShort(Enum):
         }
         v2 = mapping[v1]
         return v2
+
+
+class ContentTypeGroup:
+    """
+    Group content types for different purposes.
+    """
+
+    # For those content types, primary key detection will not be invoked.
+    NO_AUTOPK = [
+        ContentType.NETCDF,
+    ]
+
+    # All "binary" files must not be partially read, but as a whole instead.
+    NO_PARTIAL = [
+        ContentType.NETCDF,
+        ContentType.ODS,
+        ContentType.XLSX,
+    ]
