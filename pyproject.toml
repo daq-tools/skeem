@@ -200,6 +200,7 @@ extend-ignore = [
 "eskema/fastparquet/*" = ["E722"]
 "eskema/pandas/*" = ["S101"]
 "tests/*" = ["S101"]  # Use of `assert` detected
+"tests/*roadrunner*" = ["ERA001"]  # Use of `assert` detected
 
 [tool.setuptools.packages.find]
 namespaces = false

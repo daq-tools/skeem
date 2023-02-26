@@ -18,8 +18,8 @@ URL_LIST_FAST = [
 ]
 
 URL_LIST_MEDIUM = [
+    "github://earthobservations:testdata@/opendata.dwd.de/weather/nwp/icon/grib/18/t/icon-global_regular-lat-lon_air-temperature_level-90.grib2",
     "https://data.cityofnewyork.us/resource/biws-g3hs.csv",
-    "https://dd.weather.gc.ca/ensemble/geps/grib2/products/12/003/CMC_geps-prob_TEMP_TGL_2m_latlon0p5x0p5_2023022512_P003_all-products.grib2",
     "https://docs.google.com/spreadsheets/d/1ExyrawjlyksbC6DOM6nLolJDbU8qiRrrhxSuxf5ScB0/view",
     "https://docs.google.com/spreadsheets/d/1ExyrawjlyksbC6DOM6nLolJDbU8qiRrrhxSuxf5ScB0/view#gid=883324548",
     "https://www.unidata.ucar.edu/software/netcdf/examples/WMI_Lear.nc",
@@ -27,9 +27,9 @@ URL_LIST_MEDIUM = [
 
 URL_LIST_SLOW = [
     "github://daq-tools:eskema@/tests/testdata/basic.csv",
-    "https://dd.weather.gc.ca/ensemble/geps/grib2/products/12/003/CMC_geps-prob_TEMP_TGL_2m_latlon0p5x0p5_2023022512_P003_all-products.grib2",
-    "https://dd.weather.gc.ca/ensemble/geps/grib2/products/12/003/CMC_geps-prob_WIND_TGL_10m_latlon0p5x0p5_2023022512_P003_all-products.grib2",
-    "https://dd.weather.gc.ca/analysis/precip/hrdpa/grib2/polar_stereographic/06/CMC_HRDPA_APCP-006-0100cutoff_SFC_0_ps2.5km_2023012606_000.grib2",
+    # "https://dd.weather.gc.ca/ensemble/geps/grib2/products/12/003/CMC_geps-prob_TEMP_TGL_2m_latlon0p5x0p5_2023022512_P003_all-products.grib2",
+    # "https://dd.weather.gc.ca/ensemble/geps/grib2/products/12/003/CMC_geps-prob_WIND_TGL_10m_latlon0p5x0p5_2023022512_P003_all-products.grib2",
+    # "https://dd.weather.gc.ca/analysis/precip/hrdpa/grib2/polar_stereographic/06/CMC_HRDPA_APCP-006-0100cutoff_SFC_0_ps2.5km_2023012606_000.grib2",
     "https://www.unidata.ucar.edu/software/netcdf/examples/sresa1b_ncar_ccsm3-example.nc",
 ]
 
