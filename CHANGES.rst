@@ -38,6 +38,7 @@ in progress
 - AutoPK: Fix heuristics where the first column is a dictionary
 - Format: Add GRIB2 input format
 - Refactoring: Rework ``eskema.type``
+- Refactoring: Add ``eskema.io.open`` as a wrapper around ``fsspec.open``
 
 
 2023-01-xx 0.0.0

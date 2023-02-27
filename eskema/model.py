@@ -3,9 +3,7 @@ import logging
 import typing as t
 from pathlib import Path
 
-import fsspec
-
-from eskema.io import peek
+import eskema.io
 from eskema.settings import PEEK_BYTES, PEEK_LINES
 from eskema.type import ContentType
 from eskema.util import sql_canonicalize, sql_pretty
@@ -17,6 +15,8 @@ logger = logging.getLogger(__name__)
 class Resource:
     """
     A wrapper around input data.
+
+    Data is either provided as `data`/`address`, or via `path`.
     """
 
     data: t.Optional[t.Union[t.IO[t.Any], None]] = None
@@ -28,9 +28,9 @@ class Resource:
     def detect_type(self):
         """
         Introspect input data and derive content type.
-        Currently, it only detects the content type from the filename extension.
+        Currently, the implementation only looks at the filename extension.
 
-        # TODO: Implement introspection-based content type detection.
+        # TODO: Implement introspection-based content type detection using "magic" and friends.
         """
 
         # Default values.
@@ -53,23 +53,19 @@ class Resource:
 
     def peek(self) -> t.IO:
         """
-        Only peek at the first bytes of data.
+        Open a resource and peek only at the first bytes of data.
         """
 
-        # Access a plethora of resources using `fsspec`.
-        # TODO: Refactor to `eskema.io`.
+        # Access a plethora of resources using `fsspec` and friends.
         if self.data is None and self.path is not None:
-            kwargs = {}
-            if str(self.path).startswith("s3"):
-                kwargs["anon"] = True
-            self.data = fsspec.open(self.path, mode="rb", **kwargs).open()
+            self.data = eskema.io.open(self.path)
 
         # Sanity checks
         if self.data is None:
-            raise ValueError("Unable to open resource")
+            raise ValueError(f"Unable to open resource: {self}")
 
         # Peek into the first bytes/lines of data.
-        return peek(data=self.data, content_type=self.type, peek_bytes=PEEK_BYTES, peek_lines=PEEK_LINES)
+        return eskema.io.peek(data=self.data, content_type=self.type, peek_bytes=PEEK_BYTES, peek_lines=PEEK_LINES)
 
 
 @dataclasses.dataclass

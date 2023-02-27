@@ -3,7 +3,9 @@ import logging
 import tempfile
 import typing as t
 from collections import OrderedDict
+from pathlib import Path
 
+import fsspec
 import pandas as pd
 import xarray as xr
 from fsspec.implementations.local import LocalFileOpener
@@ -14,11 +16,22 @@ from eskema.type import ContentType, ContentTypeGroup
 logger = logging.getLogger(__name__)
 
 
+# TODO: Can `typing.ByteString` be used here?
 BytesString = t.Union[bytes, str]
 BytesStringList = t.List[BytesString]
 
 
-def peek(data: t.IO[t.Any], content_type: t.Optional[ContentType], peek_bytes: int, peek_lines: int) -> t.IO[t.Any]:
+def open(path: t.Union[Path, str]):  # noqa: A001
+    """
+    Access a plethora of resources using `fsspec`.
+    """
+    kwargs = {}
+    if str(path).startswith("s3"):
+        kwargs["anon"] = True
+    return fsspec.open(path, mode="rb", **kwargs).open()
+
+
+def peek(data: t.IO[t.Any], content_type: t.Optional[ContentType], peek_bytes: int, peek_lines: int) -> t.IO:
     """
     Only peek at the first bytes/lines of data.
     """
@@ -43,8 +56,12 @@ def peek(data: t.IO[t.Any], content_type: t.Optional[ContentType], peek_bytes: i
             # TODO: Evaluate using the `smart-open` package.
             if isinstance(data, (AbstractBufferedFile, LocalFileOpener)):
                 payload = fsspec_peek(data=data, empty=empty, peek_bytes=peek_bytes, peek_lines=peek_lines)
-            else:
+            elif isinstance(data, (bytes, str)):
+                payload = data
+            elif hasattr(data, "readlines"):
                 payload = empty.join(data.readlines(peek_lines))  # type: ignore[arg-type]
+            else:
+                raise TypeError(f"Peeking at data failed, type={type(data).__name__}")
 
         if isinstance(payload, str):
             payload = payload.encode()
