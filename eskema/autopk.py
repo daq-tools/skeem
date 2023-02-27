@@ -4,8 +4,7 @@ import typing as t
 
 import pandas as pd
 
-from eskema.io import dataframe_from_lineprotocol, json_get_first_records
-from eskema.settings import PEEK_LINES
+from eskema.io import to_dataframe
 from eskema.type import ContentType, ContentTypeGroup
 
 IntOrString = t.TypeVar("IntOrString", int, str)
@@ -53,6 +52,7 @@ def _infer_pk(
     data: t.Any, content_type: t.Optional[ContentType] = None, address: t.Optional[AddressType] = None
 ) -> t.Optional[str]:
 
+    # Try to converge data into pandas DataFrame.
     if isinstance(data, pd.DataFrame):
         df = data
     else:
@@ -60,7 +60,10 @@ def _infer_pk(
             raise ValueError("Unable to infer primary key without content type")
         if isinstance(data, str):
             data = io.StringIO(data)
-        df = to_dataframe(data=data, content_type=content_type, address=address)
+        try:
+            df = to_dataframe(data=data, content_type=content_type, address=address)
+        except ValueError as ex:
+            raise NotImplementedError(f"Failed to infer primary key. Reason: {ex}") from ex
 
     # Decode list of column names.
     columns = list(df.columns)
@@ -94,42 +97,3 @@ def _infer_pk(
             )
 
     return None
-
-
-def to_dataframe(data: t.Any, content_type: ContentType, address: t.Optional[AddressType] = None) -> pd.DataFrame:
-    """
-    Converge data to pandas DataFrame, try to peek at the first lines of data only.
-
-    TODO: Refactor to `eskema.io`.
-    """
-
-    if not isinstance(content_type, ContentType):
-        raise TypeError(
-            f"Failed to infer primary key with invalid content type "
-            f"(value={content_type}, type={type(content_type).__name__}), "
-            f"expected `ContentType`"
-        )
-
-    if content_type is ContentType.CSV:
-        df = pd.read_csv(data, nrows=PEEK_LINES)
-
-    # Only load the first record(s) from a regular JSON document.
-    elif content_type is ContentType.JSON:
-        records = json_get_first_records(data, nrecords=PEEK_LINES)
-        df = pd.DataFrame.from_records(data=records)
-
-    elif content_type is ContentType.LINEPROTOCOL:
-        df = dataframe_from_lineprotocol(data=data)
-
-    elif content_type.is_ndjson():
-        df = pd.read_json(data, lines=True, nrows=PEEK_LINES)
-
-    elif content_type in [ContentType.ODS, ContentType.XLSX]:
-        sheet_name = address or 0
-        df = pd.read_excel(data, sheet_name=sheet_name, nrows=PEEK_LINES)
-
-    # Croak otherwise.
-    else:
-        raise NotImplementedError(f"Failed to infer primary key with unknown content type: {content_type}")
-
-    return df

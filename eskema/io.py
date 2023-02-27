@@ -11,12 +11,12 @@ import xarray as xr
 from fsspec.implementations.local import LocalFileOpener
 from fsspec.spec import AbstractBufferedFile
 
+from eskema.settings import PEEK_LINES
 from eskema.type import ContentType, ContentTypeGroup
 
 logger = logging.getLogger(__name__)
 
 
-# TODO: Can `typing.ByteString` be used here?
 BytesString = t.Union[bytes, str]
 BytesStringList = t.List[BytesString]
 
@@ -123,12 +123,16 @@ def strip_incomplete_line(lines: BytesStringList) -> BytesStringList:
     return lines
 
 
-def json_get_first_records(data: io.TextIOBase, nrecords: int = 5) -> t.List[t.OrderedDict[t.AnyStr, t.Any]]:
+def json_get_first_records(
+    data: t.Union[t.IO, t.Iterable], nrecords: int = 5
+) -> t.List[t.OrderedDict[t.AnyStr, t.Any]]:
     """
     Read JSON data lazily, without loading the whole document into memory.
 
     - From a "list of objects" JSON document, get only the first N records.
     - From a "single object" JSON document, get only the first record.
+
+    TODO: Raise from nrecords=5 to nrecords=100?
     """
     import json_stream
     from json_stream.base import StreamingJSONList, StreamingJSONObject
@@ -203,3 +207,46 @@ def to_tempfile(data: t.IO[t.Any], suffix: t.Optional[str] = None) -> t.IO:
     tmp.write(data.read())
     tmp.seek(0)
     return tmp
+
+
+def to_dataframe(data: t.Union[t.IO], content_type: ContentType, address: t.Any = None) -> pd.DataFrame:
+    """
+    Converge data to pandas DataFrame, trying to peek at the first lines/records of data only.
+
+    This machinery is currently used by `eskema.autopk`.
+    """
+
+    if data is None:
+        raise ValueError("Unable to operate on empty data")
+
+    # Sanity checks.
+    if not isinstance(content_type, ContentType):
+        raise TypeError(
+            f"Failed to infer primary key with invalid content type "
+            f"(value={content_type}, type={type(content_type).__name__}), "
+            f"expected `ContentType`"
+        )
+
+    if content_type is ContentType.CSV:
+        df = pd.read_csv(data, nrows=PEEK_LINES)
+
+    # Only load the first record(s) from a regular JSON document.
+    elif content_type is ContentType.JSON:
+        records = json_get_first_records(data, nrecords=PEEK_LINES)
+        df = pd.DataFrame.from_records(data=records)
+
+    elif content_type is ContentType.LINEPROTOCOL:
+        # TODO: Review: No `PEEK_LINES` is used here?
+        df = dataframe_from_lineprotocol(data=data)
+
+    elif content_type.is_ndjson():
+        df = pd.read_json(data, lines=True, nrows=PEEK_LINES)
+
+    elif content_type in [ContentType.ODS, ContentType.XLSX]:
+        sheet_name = address or 0
+        df = pd.read_excel(data, sheet_name=sheet_name, nrows=PEEK_LINES)
+
+    else:
+        raise ValueError(f"Unable to process content type: {content_type}")
+
+    return df

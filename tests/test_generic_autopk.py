@@ -39,4 +39,4 @@ def test_autopk_content_type_unknown():
     """
     with pytest.raises(NotImplementedError) as ex:
         infer_pk("", ContentType.PARQUET)
-    assert ex.match("Failed to infer primary key with unknown content type: ContentType.PARQUET")
+    assert ex.match("Failed to infer primary key. Reason: Unable to process content type: ContentType.PARQUET")

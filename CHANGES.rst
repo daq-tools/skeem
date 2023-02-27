@@ -39,6 +39,7 @@ in progress
 - Format: Add GRIB2 input format
 - Refactoring: Rework ``eskema.type``
 - Refactoring: Add ``eskema.io.open`` as a wrapper around ``fsspec.open``
+- Refactoring: Add ``eskema.io.to_dataframe`` from ``eskema.autopk``
 
 
 2023-01-xx 0.0.0
