@@ -29,7 +29,6 @@ Iteration 2
 
 Features
 ========
-
 - [x] Format: Handle CSV
 - [x] Format: Handle basic JSON: records + single document
 - [x] Format: Handle spreadsheet formats: XLSX and ODF
@@ -46,16 +45,18 @@ Features
 - [x] Refactoring: ``eskema.sources`` to ``eskema.ddlgen``?
 - [x] Source: Support reading data from S3
 - [x] Source: Load data from Google Cloud Storage
-- [o] Format: Add NetCDF and HDF5 input formats
-- [o] Format: Zarr
-- [o] Format: dBase and friends
+- [x] Format: Add NetCDF (.nc, .netcdf) input format
+- [x] Format: Add GRIB2 (.grib2) input format
+- [o] Model/Type/Enum classes for backend and dataframe
 - [o] Performance: Optimize loading from CSV
 - [o] Performance: Access large data: https://commonscreens.com/?page_id=1492
 - [o] Source: Support reading data from HTTP, without file suffix, and/or query parameters
+- [o] Source: Azure Blob Filesystem (ABFS), for accessing Planetary Computer
 - [o] UX: Add help texts to CLI options
 - [o] UX: eskema infer-ddl --list-input-formats
 - [o] Library: Derive schema directly from pandas DataFrame
 - [o] IO: Export to descriptor and/or schema
+- [o] Resource caching with fsspec? -- https://github.com/blaylockbk/Herbie/pull/153/files
 
 Bugs
 ====
@@ -77,10 +78,13 @@ Bugs
 
   - s3://openaq-fetches/realtime/2023-02-25/1677351953_eea_2aa299a7-b688-4200-864a-8df7bac3af5b.ndjson
 
+- [o] Compute Engine Metadata server unavailable on attempt 1 of 3. Reason: timed out
+- [o] Failed to decode variable 'valid_time': unable to decode time units 'seconds since 1970-01-01T00:00:00' with "calendar 'proleptic_gregorian'". Try opening your dataset with decode_times=False or installing cftime if it is not installed.
+
+  - https://dd.weather.gc.ca/analysis/precip/hrdpa/grib2/polar_stereographic/06/CMC_HRDPA_APCP-006-0100cutoff_SFC_0_ps2.5km_2023012606_000.grib2
 
 Documentation
 =============
-
 - [x] Inline code comments
 - [x] Add "other projects" section
 - [x] Document library use
@@ -88,13 +92,9 @@ Documentation
 - [/] File headers
 - [x] Replace https://raw.githubusercontent.com/ with https://github.com/foo/bar/raw/....
 - [o] Improve "library use" docs re. ``ContentType``
-- [o] Read data from Sensor.Community archive
-- [o] Read data from IP to Country database
-
 
 Infrastructure
 ==============
-
 - [o] Add "examples" to test suite
 - [o] CI/GHA
 - [o] Docker build & publish
@@ -104,26 +104,57 @@ Infrastructure
 
 Quality
 =======
+- [x] Add "roadrunner" tests
 - [o] Is table- and field-name quoting properly applied for both backends?
 - [o] QA: Use reference input test data from other repositories
-
-  - https://github.com/okfn/messytables/tree/master/horror
-  - https://github.com/frictionlessdata/tabulator-py/tree/main/data/special
-  - https://github.com/apache/arrow-testing/tree/master/data
-  - https://github.com/pandas-dev/pandas/tree/main/doc/data
-  - https://github.com/influxdata/influxdb2-sample-data
-  - https://github.com/konklone/json/tree/gh-pages/tests
-  - https://docs.databricks.com/dbfs/databricks-datasets.html
-  - https://github.com/databricks/tech-talks/blob/master/datasets/README.md
-  - Kaggle?
-
-- [o] Add "roadrunner" tests
+- [o] QA: Use real-world data
 - [o] Use custom user agent
+
+
+Test data
+=========
+
+Development
+-----------
+- https://github.com/okfn/messytables/tree/master/horror
+- https://github.com/frictionlessdata/tabulator-py/tree/main/data/special
+- https://github.com/apache/arrow-testing/tree/master/data
+- https://github.com/pandas-dev/pandas/tree/main/doc/data
+- https://github.com/influxdata/influxdb2-sample-data
+- https://github.com/konklone/json/tree/gh-pages/tests
+- https://docs.databricks.com/dbfs/databricks-datasets.html
+- https://github.com/databricks/tech-talks/blob/master/datasets/README.md
+- Kaggle?
+- https://github.com/earthobservations/testdata
+- https://dd.weather.gc.ca/climate/observations/daily/csv/YT/
+
+Production
+----------
+- https://www.govdata.de/
+- https://www.destatis.de/EN/Service/OpenData/_node.html
+- https://registry.opendata.aws/noaa-oar-hourly-gdp/
+- https://www.freecodecamp.org/news/https-medium-freecodecamp-org-best-free-open-data-sources-anyone-can-use-a65b514b0f2d/
+- https://learn.microsoft.com/en-us/azure/databricks/external-data/csv
+
+Formats
+=======
+- [x] Format: Modernize ``eskema.type``
+- [x] Format: Also recognize .netcdf, see https://en.ilmatieteenlaitos.fi/silam-opendata-on-aws-s3
+- [o] Format: Add Zarr (.zarr) input format
+- [o] Format: Add JSON5, YAML, TOML input formats
+- [o] Format: Partitioned Geoparquet
+  https://github.com/gadomski/chalkboard/blob/main/notebooks/isd-demo.ipynb
+- [o] Format: dBase and friends
+- [o] Format: Lance and ORC. -- https://github.com/eto-ai/lance
 
 
 ***********
 Iteration 3
 ***********
+
+
+General
+=======
 
 - [o] Weird error: ``logger.warning("Unable to detect content type")`` will cause
   ``WARNING: Unable TO detect content TYPE`` to be written to STDOUT!?
@@ -163,6 +194,10 @@ Iteration 3
   - https://github.com/fsspec/filesystem_spec/blob/2023.1.0/setup.py#L41-L63
   - https://github.com/fsspec/filesystem_spec/blob/master/docs/source/api.rst#other-known-implementations
   - https://github.com/fsspec/dropboxdrivefs
+
+- [o] Read data from Sensor.Community archive
+- [o] Read data from IP to Country database
+- [o] Format: Add HDF5 (.h5, .hdf) input format
 
 
 Bugs

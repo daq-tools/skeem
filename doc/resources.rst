@@ -3,6 +3,20 @@ Eskema resource collection
 ##########################
 
 
+Azure Blob Filesystem (ABFS)
+============================
+Also: Planetary Computer
+
+- planetarycomputer://stac/v1/era5-pds/era5-pds-1980-01-fc?datetime=1980-01
+- planetarycomputer://stac/v1/era5-pds/era5-pds-1980-01-an?datetime=1980-01
+- https://planetarycomputer.microsoft.com/api/stac/v1/collections/era5-pds
+- https://planetarycomputer.microsoft.com/api/stac/v1/collections/era5-pds/items/era5-pds-2020-12-fc
+- abfs://era5/ERA5/2020/12/air_temperature_at_2_metres_1hour_Maximum.zarr
+- abfs://era5/ERA5/2020/12/precipitation_amount_1hour_Accumulation.zarr
+- pandas.read_csv('abfs[s]://
+https://learn.microsoft.com/en-us/azure/synapse-analytics/spark/tutorial-use-pandas-spark-pool
+
+
 Archive files
 =============
 
@@ -13,6 +27,7 @@ Archive files
   - http://download.db-ip.com/free/dbip-city-lite-2023-02.csv.gz
 
 - https://archive.sensor.community/csv_per_month/2015-10/2015-10_ppd42ns.zip
+- https://opendata.dwd.de/weather/nwp/icon-d2/grib/00/t_2m/icon-d2_germany_icosahedral_single-level_2023022600_000_2d_t_2m.grib2.bz2
 
 
 CSV
@@ -57,6 +72,11 @@ NetCDF and HDF
 - https://en.ilmatieteenlaitos.fi/gridded-observations-on-aws-s3
 - s3://fmi-gridded-obs-daily-1km/Netcdf/Tday/tday_2022.nc
 - https://www.unidata.ucar.edu/software/netcdf/examples/files.html
+- https://stackoverflow.com/questions/54629358/loading-hdf5-files-into-python-xarrays
+- https://docs.h5py.org/en/stable/high/dataset.html
+- https://extremeweatherdataset.github.io/
+- http://s3-eu-west-1.amazonaws.com/fmi-opendata-radar-volume-hdf5/2007/01/01/fianj/200701010825_fianj_PVOL.h5
+
 
 
 Online spreadsheets
@@ -128,3 +148,4 @@ Zarr
 - https://cmip6-pds.s3.amazonaws.com/index.html#CMIP6/
 - https://cloud.google.com/storage/docs/public-datasets/era5
 - https://pangeo-data.github.io/pangeo-cmip6-cloud/overview.html
+- https://en.ilmatieteenlaitos.fi/silam-opendata-on-aws-s3
