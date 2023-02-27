@@ -10,7 +10,7 @@ from eskema.exception import UnknownContentType
 from eskema.model import Resource, SqlResult, SqlTarget
 from eskema.settings import FRICTIONLESS_CONTENT_TYPES
 from eskema.type import ContentType
-from eskema.util import to_bytes
+from eskema.util.data import to_bytes
 
 logger = logging.getLogger(__name__)
 

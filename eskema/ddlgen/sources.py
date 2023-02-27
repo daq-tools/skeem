@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 
 try:
     from pymongo.collection import Collection as MongoCollection
-except ImportError:
+except ImportError:  # pragma: no cover
     logger.info("Could not import Collection from pymongo; is it installed?")
 
     class MongoCollection:  # type: ignore[no-redef]

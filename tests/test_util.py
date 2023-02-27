@@ -8,7 +8,9 @@ from unittest import mock
 import pytest
 
 from eskema.io import json_get_first_records
-from eskema.util import boot_click, get_firstline, jd, sql_pretty
+from eskema.util.cli import boot_click
+from eskema.util.data import get_firstline, head, jd
+from eskema.util.sql import sql_pretty
 
 
 def test_jd():
@@ -34,19 +36,19 @@ SELECT *
 
 
 def test_boot_click_loglevel_default():
-    with mock.patch("eskema.util.setup_logging") as setup_logging_mock:
+    with mock.patch("eskema.util.cli.setup_logging") as setup_logging_mock:
         boot_click(None, verbose=False, debug=False)
     setup_logging_mock.assert_called_once_with(level=logging.WARNING)
 
 
 def test_boot_click_loglevel_verbose():
-    with mock.patch("eskema.util.setup_logging") as setup_logging_mock:
+    with mock.patch("eskema.util.cli.setup_logging") as setup_logging_mock:
         boot_click(None, verbose=True, debug=False)
     setup_logging_mock.assert_called_once_with(level=logging.INFO)
 
 
 def test_boot_click_loglevel_debug():
-    with mock.patch("eskema.util.setup_logging") as setup_logging_mock:
+    with mock.patch("eskema.util.cli.setup_logging") as setup_logging_mock:
         boot_click(None, verbose=False, debug=True)
     setup_logging_mock.assert_called_once_with(level=logging.DEBUG)
 
@@ -91,3 +93,27 @@ def test_json_get_first_records_invalid():
 def test_json_get_first_records_success():
     records = json_get_first_records(io.StringIO('[{"foo":"bar"}]'))
     assert dict(records[0]) == {"foo": "bar"}
+
+
+def test_head_full():
+    gen = head(io.StringIO("foo\nbar\nbaz"))
+    assert next(gen) == "foo\n"
+    assert next(gen) == "bar\n"
+    assert next(gen) == "baz"
+    with pytest.raises(StopIteration):
+        next(gen)
+
+
+def test_head_bytes():
+    gen = head(io.StringIO("foo\nbar\nbaz"), c=2)
+    assert next(gen) == "fo"
+    with pytest.raises(StopIteration):
+        next(gen)
+
+
+def test_head_lines():
+    gen = head(io.StringIO("foo\nbar\nbaz"), n=2)
+    assert next(gen) == "foo\n"
+    assert next(gen) == "bar\n"
+    with pytest.raises(StopIteration):
+        next(gen)

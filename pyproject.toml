@@ -127,8 +127,19 @@ eskema = "eskema.cli:cli"
 line-length = 120
 
 [tool.coverage.run]
-source = ["eskema"]
 branch = false
+omit = [
+  "eskema/ddlgen/ddlgenerator.py",
+  "eskema/ddlgen/sources.py",
+  "eskema/fastparquet/core.py",
+  "eskema/pandas/io_common.py",
+  "tests/*",
+]
+source = ["eskema"]
+
+[tool.coverage.report]
+fail_under = 0
+show_missing = true
 
 [tool.mypy]
 packages = ["eskema"]

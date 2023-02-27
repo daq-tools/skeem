@@ -1,6 +1,7 @@
 /.*_cache
 /.idea
 /.venv*
+/dist
 /tmp
 .DS_Store
 __pycache__

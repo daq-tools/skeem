@@ -8,7 +8,7 @@ from ddlgenerator.ddlgenerator import Table, _dump
 
 try:
     import ddlgenerator.typehelpers as th
-except ImportError:
+except ImportError:  # pragma: no cover
     import typehelpers as th  # TODO: can py2/3 split this
 
 

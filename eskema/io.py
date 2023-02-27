@@ -11,7 +11,7 @@ import xarray as xr
 from fsspec.implementations.local import LocalFileOpener
 from fsspec.spec import AbstractBufferedFile
 
-from eskema.settings import PEEK_LINES
+from eskema.settings import PEEK_BYTES, PEEK_LINES
 from eskema.type import ContentType, ContentTypeGroup
 
 logger = logging.getLogger(__name__)
@@ -31,7 +31,9 @@ def open(path: t.Union[Path, str]):  # noqa: A001
     return fsspec.open(path, mode="rb", **kwargs).open()
 
 
-def peek(data: t.IO[t.Any], content_type: t.Optional[ContentType], peek_bytes: int, peek_lines: int) -> t.IO:
+def peek(
+    data: t.IO[t.Any], content_type: t.Optional[ContentType] = None, peek_bytes: int = None, peek_lines: int = None
+) -> t.IO:
     """
     Only peek at the first bytes/lines of data.
     """
@@ -48,20 +50,23 @@ def peek(data: t.IO[t.Any], content_type: t.Optional[ContentType], peek_bytes: i
             logger.info("WARNING: Hitting a speed bump by needing to read JSON document as a whole")
             payload = data.read()
         else:
-            empty = ""
+            empty: t.Union[bytes, str]
             if isinstance(data, io.BytesIO) or (hasattr(data, "mode") and "b" in data.mode):
                 empty = b""  # type: ignore[assignment]
+            else:
+                empty = ""
 
-            # Optimize peek path for `fsspec`-based file systems.
+                # Optimize peek path for `fsspec`-based file systems.
             # TODO: Evaluate using the `smart-open` package.
             if isinstance(data, (AbstractBufferedFile, LocalFileOpener)):
                 payload = fsspec_peek(data=data, empty=empty, peek_bytes=peek_bytes, peek_lines=peek_lines)
             elif isinstance(data, (bytes, str)):
                 payload = data
             elif hasattr(data, "readlines"):
-                payload = empty.join(data.readlines(peek_lines))  # type: ignore[arg-type]
+                # https://lwn.net/Articles/816415/
+                payload = empty.join(data.readlines(peek_bytes))  # type: ignore[arg-type]
             else:
-                raise TypeError(f"Peeking at data failed, type={type(data).__name__}")
+                raise TypeError(f"No method for peeking at data, type={type(data).__name__}")
 
         if isinstance(payload, str):
             payload = payload.encode()
@@ -70,13 +75,19 @@ def peek(data: t.IO[t.Any], content_type: t.Optional[ContentType], peek_bytes: i
 
 
 def fsspec_peek(
-    data: t.Union[io.IOBase, t.IO[t.Any]], peek_bytes: int, peek_lines: int, empty: BytesString
+    data: t.Union[io.IOBase, t.IO[t.Any]], empty: BytesString, peek_bytes: int = None, peek_lines: int = None
 ) -> BytesString:
     """
     Read into the file-like using an amount of bytes, instead of interrupting
     the line generator, because it turned out that `readlines()` interacting
     with `fsspec` still reads the whole file/stream.
+
+    TODO: Refactor "partial-reading-with-line-coherence" into generic function.
     """
+
+    # Default values.
+    peek_bytes = peek_bytes or -1
+
     logger.info(f"Reading max. {peek_bytes} bytes")
 
     # Read by amount of bytes, and split lines.
@@ -170,7 +181,7 @@ def read_lineprotocol(data: t.IO[t.Any]):
     """
     from line_protocol_parser import LineFormatError, parse_line
 
-    for line in data.readlines():
+    for line in data.readlines(PEEK_BYTES):
         try:
             yield parse_line(line)
         except LineFormatError as ex:

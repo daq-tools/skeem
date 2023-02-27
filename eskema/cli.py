@@ -7,7 +7,7 @@ import click
 
 from eskema.core import SchemaGenerator
 from eskema.model import Resource, SqlTarget
-from eskema.util import boot_click, split_list
+from eskema.util.cli import boot_click, split_list
 
 logger = logging.getLogger(__name__)
 

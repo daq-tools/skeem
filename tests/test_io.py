@@ -4,8 +4,48 @@ import pandas as pd
 import pandas._testing as tm
 import pytest
 
-from eskema.io import to_dataframe
+from eskema.io import peek, to_dataframe
 from eskema.type import ContentType
+
+
+def test_peek_success():
+    assert peek(data="foo").read() == b"foo"
+
+
+def test_peek_empty():
+    assert peek(data="").read() == b""
+
+
+def test_peek_none():
+    with pytest.raises(TypeError) as ex:
+        peek(data=None)
+    assert ex.match("No method for peeking at data, type=NoneType")
+
+
+def test_peek_int():
+    with pytest.raises(TypeError) as ex:
+        peek(data=42)
+    assert ex.match("No method for peeking at data, type=int")
+
+
+def test_peek_stream_full(basic_stream_csv):
+    """
+    Peeking without limits is equivalent to reading the whole file.
+    """
+    assert (
+        peek(data=basic_stream_csv).read()
+        == b'id,name,date,fruits,price\n1,"foo","2014-10-31T09:22:56","apple,banana",0.42\n2,"bar",,"pear",0.84'
+    )
+
+
+def test_peek_stream_partial(basic_stream_csv):
+    """
+    Peeking into the head of a stream with a certain amount of bytes still honors the concept of lines.
+    """
+    assert (
+        peek(data=basic_stream_csv, peek_bytes=60).read()
+        == b'id,name,date,fruits,price\n1,"foo","2014-10-31T09:22:56","apple,banana",0.42\n'
+    )
 
 
 def test_to_dataframe_csv(csv_file_basic):

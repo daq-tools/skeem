@@ -1,3 +1,4 @@
+import io
 from io import BytesIO, StringIO
 from pathlib import Path
 
@@ -18,6 +19,20 @@ def ndjson_url_basic():
 @pytest.fixture
 def ndjson_github_url_basic():
     return "github://daq-tools:eskema@/tests/testdata/basic.ndjson"
+
+
+@pytest.fixture
+def basic_stream_csv():
+    """
+    A stream of input data. Here, in CSV format.
+    """
+    return io.StringIO(
+        """
+id,name,date,fruits,price
+1,"foo","2014-10-31T09:22:56","apple,banana",0.42
+2,"bar",,"pear",0.84
+    """.strip()
+    )
 
 
 @pytest.fixture

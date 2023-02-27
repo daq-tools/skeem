@@ -1,7 +1,7 @@
 from click.testing import CliRunner
 
 from eskema.cli import cli
-from eskema.util import sql_canonicalize
+from eskema.util.sql import sql_canonicalize
 from tests.util import get_basic_sql_reference, random_table_name
 
 

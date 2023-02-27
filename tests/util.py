@@ -5,7 +5,7 @@ from pathlib import Path
 
 from ddlgenerator.reshape import clean_key_name
 
-from eskema.util import sql_canonicalize
+from eskema.util.sql import sql_canonicalize
 
 BACKENDS = ["ddlgen", "frictionless"]
 

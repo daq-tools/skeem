@@ -6,7 +6,7 @@ from pathlib import Path
 import eskema.io
 from eskema.settings import PEEK_BYTES, PEEK_LINES
 from eskema.type import ContentType
-from eskema.util import sql_canonicalize, sql_pretty
+from eskema.util.sql import sql_canonicalize, sql_pretty
 
 logger = logging.getLogger(__name__)
 

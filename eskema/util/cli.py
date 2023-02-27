@@ -1,39 +1,10 @@
-import io
-import json
 import logging
 import sys
-import textwrap
 import typing as t
-from pathlib import Path
 
 import click
-from sqlformatter.sqlformatter import SQLFormatter
 
 logger = logging.getLogger(__name__)
-
-
-def jd(data: t.Any):
-    """
-    Pretty-print JSON with indentation.
-    """
-    print(json.dumps(data, indent=2))  # noqa: T201
-
-
-def sql_canonicalize(sql: str) -> str:
-    """
-    Compute canonical representation for SQL statement.
-    """
-    return sql_pretty(sql)
-
-
-def sql_pretty(sql: str, reindent: bool = False) -> str:
-    """
-    Prettify SQL statement.
-    """
-    sql = sql.strip().replace("\t", "    ")
-    return SQLFormatter(
-        reindent=reindent, indent_width=2, keyword_case="upper", identifier_case=None, comma_first=False
-    ).format_query(sql)
 
 
 def setup_logging(level=logging.INFO):
@@ -71,46 +42,7 @@ def boot_click(ctx: click.Context, verbose: bool = False, debug: bool = False, t
 
     # Optionally enable code tracing.
     if trace_modules:
-        enable_tracing(modules=trace_modules)
-
-
-def get_firstline(data: t.Union[io.TextIOBase, Path, str], nrows: int = 1) -> t.IO:
-    """
-    Get first N lines of input data.
-    """
-    if isinstance(data, io.TextIOBase):
-        return stream_get_firstline(data, nrows=nrows)
-    elif isinstance(data, str):
-        return str_get_firstline(data, nrows=nrows)
-    elif isinstance(data, Path):
-        data = Path(data)
-        with open(data, "r") as f:
-            return stream_get_firstline(f, nrows=nrows)
-    else:
-        raise TypeError(f"Unable to decode first {nrows} line(s) from data. type={type(data).__name__}")
-
-
-def stream_get_firstline(stream: t.Union[io.TextIOBase, t.IO], nrows: int = 1) -> t.IO:
-    """
-    Get first N lines of input data from stream.
-    """
-    buffer = io.StringIO()
-    for _ in range(nrows):
-        buffer.write(stream.readline())
-    buffer.seek(0)
-    return buffer
-
-
-def str_get_firstline(data: str, nrows: int = 1) -> t.IO:
-    """
-    Get first N lines of input data from str.
-    """
-    buffer = io.StringIO()
-    lines = data.splitlines()[:nrows]
-    for line in lines:
-        buffer.write(line)
-    buffer.seek(0)
-    return buffer
+        enable_tracing(modules=to_list(trace_modules))
 
 
 def split_list(value: str, delimiter: str = ",") -> t.List[str]:
@@ -132,9 +64,9 @@ def to_list(x: t.Any, default: t.List[t.Any] = None) -> t.List[t.Any]:
         return list(x)
 
 
-def enable_tracing(modules: t.List[str] = None):
+def enable_tracing(modules: t.List[str]):
     effective_modules = []
-    for module in to_list(modules):
+    for module in modules:
         if module == "machinery":
             effective_modules += ["eskema", "fastparquet", "frictionless", "fsspec", "pandas"]
         if module == "core":
@@ -160,15 +92,3 @@ def _enable_tracing(modules: t.List[str] = None):
     for module in modules[1:]:
         constraint = constraint | Q(module_startswith=module)
     trace(constraint)
-
-
-def unwrap(value: str):
-    return textwrap.dedent(value).strip()
-
-
-def to_bytes(payload: t.Union[str, bytes], name: t.Optional[str] = None) -> io.BytesIO:
-    if isinstance(payload, str):
-        payload = payload.encode()
-    data = io.BytesIO(payload)
-    data.name = name or "UNKNOWN"
-    return data
