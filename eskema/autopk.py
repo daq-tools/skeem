@@ -25,7 +25,6 @@ PK_CANDIDATES_SECONDARY_LIST = PK_CANDIDATES_SECONDARY_ENGLISH + PK_CANDIDATES_S
 logger = logging.getLogger(__name__)
 
 
-# TODO: Rename to `autopk.infer`.
 def infer_pk(
     data: t.Any, content_type: t.Optional[ContentType] = None, address: t.Optional[AddressType] = None
 ) -> t.Optional[str]:

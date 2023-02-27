@@ -9,6 +9,9 @@ from eskema.model import Resource, SqlTarget
 
 
 def test_schema_generator_without_dialect():
+    """
+    It is needed to specify an SQL dialect.
+    """
     with pytest.raises(ValueError) as ex:
         SchemaGenerator(
             resource=Resource(data=None),
@@ -18,6 +21,9 @@ def test_schema_generator_without_dialect():
 
 
 def test_schema_generator_without_content_type():
+    """
+    It is needed to specify a content type.
+    """
     with pytest.raises(NotImplementedError) as ex:
         sg = SchemaGenerator(
             resource=Resource(data=None),
@@ -28,13 +34,16 @@ def test_schema_generator_without_content_type():
 
 
 def test_schema_generator_invalid_content_type():
+    """
+    It is needed to specify a valid content type.
+    """
     with pytest.raises(ValueError) as ex:
         sg = SchemaGenerator(
-            resource=Resource(data="", content_type="foo"),
+            resource=Resource(data=None, content_type="unknown"),
             target=SqlTarget(dialect="postgresql"),
         )
         sg.to_sql_ddl()
-    assert ex.match("'foo' is not a valid ContentType or ContentTypeMime")
+    assert ex.match("'unknown' is not a valid ContentType or ContentTypeMime")
 
 
 @pytest.mark.xfail
