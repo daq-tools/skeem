@@ -215,8 +215,8 @@ Credits and prior art
 .. _HTTP: https://en.wikipedia.org/wiki/HTTP
 .. _InfluxDB line protocol: https://docs.influxdata.com/influxdb/latest/reference/syntax/line-protocol/
 .. _JSON: https://www.json.org/
-.. _JSON streaming: https://en.wikipedia.org/wiki/JSON_streaming
 .. _JSON Lines: https://jsonlines.org/
+.. _JSON streaming: https://en.wikipedia.org/wiki/JSON_streaming
 .. _LibreOffice: https://en.wikipedia.org/wiki/LibreOffice
 .. _list of other projects: doc/prior-art.rst
 .. _Microsoft Excel: https://en.wikipedia.org/wiki/Microsoft_Excel

@@ -112,3 +112,11 @@ InfluxDB annotated CSV
 ======================
 - https://docs.influxdata.com/influxdb/latest/reference/syntax/annotated-csv/
 - https://docs.influxdata.com/influxdb/latest/reference/syntax/annotated-csv/extended/
+
+
+Substrait
+=========
+- https://substrait.io/
+- https://github.com/substrait-io/substrait-java
+- https://github.com/apache/arrow-datafusion-python/pull/145
+- https://github.com/duckdblabs/duckdb-substrait-demo

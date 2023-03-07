@@ -47,20 +47,64 @@ Features
 - [x] Source: Load data from Google Cloud Storage
 - [x] Format: Add NetCDF (.nc, .netcdf) input format
 - [x] Format: Add GRIB2 (.grib2) input format
-- [o] Model/Type/Enum classes for backend and dataframe
-- [o] Performance: Optimize loading from CSV
-- [o] Performance: Access large data: https://commonscreens.com/?page_id=1492
-- [o] Source: Support reading data from HTTP, without file suffix, and/or query parameters
-- [o] Source: Azure Blob Filesystem (ABFS), for accessing Planetary Computer
-- [o] UX: Add help texts to CLI options
 - [o] UX: eskema infer-ddl --list-input-formats
-- [o] Library: Derive schema directly from pandas DataFrame
-- [o] IO: Export to descriptor and/or schema
-- [o] Resource caching with fsspec? -- https://github.com/blaylockbk/Herbie/pull/153/files
+- [o] UX: Add help texts to CLI options
+- [o] Support reading archive files directly. Examples:
+  https://s3.amazonaws.com/crate.sampledata/nyc.yellowcab/yc.2019.07.gz
+- [o] Performance: Access large data: https://commonscreens.com/?page_id=1492
 
 Bugs
 ====
 - [x] Why is "frictionless" resource being read twice?
+
+Documentation
+=============
+- [x] Inline code comments
+- [x] Add "other projects" section
+- [x] Document library use
+- [x] Add example program
+- [/] File headers
+- [x] Replace https://raw.githubusercontent.com/ with https://github.com/foo/bar/raw/....
+
+Infrastructure
+==============
+- [o] Add "examples" to test suite
+- [o] CI/GHA
+- [o] Docker build & publish
+- [o] Docs: RTD
+- [o] Release 0.1.0
+- [o] Issue: Hello world
+
+Quality
+=======
+- [x] QA: Use reference input test data from other repositories
+- [x] QA: Use real-world data
+- [x] Add "roadrunner" tests
+
+Formats
+=======
+- [x] Format: Modernize ``eskema.type``
+- [x] Format: Also recognize .netcdf, see https://en.ilmatieteenlaitos.fi/silam-opendata-on-aws-s3
+
+
+
+***********
+Iteration 3
+***********
+
+
+Formats
+=======
+- [o] Format: Add Zarr (.zarr) input format
+- [o] Format: Add JSON5, YAML, TOML input formats
+- [o] Format: Partitioned Geoparquet
+  https://github.com/gadomski/chalkboard/blob/main/notebooks/isd-demo.ipynb
+- [o] Format: dBase and friends
+- [o] Format: Lance and ORC. -- https://github.com/eto-ai/lance
+
+
+Bugs
+====
 - [o] Why is "ddlgen" resource being read twice? See ``_eval_lineprotocol``.
   => Workaround: Add ``@cachetools.func.lru_cache``
 - [o] Can get hogged on resources like. Resolve: Automatically download before working on it.
@@ -82,87 +126,30 @@ Bugs
 - [o] Failed to decode variable 'valid_time': unable to decode time units 'seconds since 1970-01-01T00:00:00' with "calendar 'proleptic_gregorian'". Try opening your dataset with decode_times=False or installing cftime if it is not installed.
 
   - https://dd.weather.gc.ca/analysis/precip/hrdpa/grib2/polar_stereographic/06/CMC_HRDPA_APCP-006-0100cutoff_SFC_0_ps2.5km_2023012606_000.grib2
+- [o] ``HTTP/1.1 403 Forbidden`` gets masked badly
+- [o] Fix ``cat foo | --backend=fl -``
+- [o] ``logger.warning`` will emit to STDOUT when running per tests
+
+Features
+========
+- [o] Model/Type/Enum classes for backend and dataframe
+- [o] Performance: Optimize loading from CSV
+- [o] Source: Support reading data from HTTP, without file suffix, and/or query parameters
+- [o] Source: Azure Blob Filesystem (ABFS), for accessing Planetary Computer
+- [o] Library: Derive schema directly from pandas DataFrame, or others
+- [o] IO: Export to descriptor and/or schema
+- [o] Resource caching with fsspec? -- https://github.com/blaylockbk/Herbie/pull/153/files
 
 Documentation
 =============
-- [x] Inline code comments
-- [x] Add "other projects" section
-- [x] Document library use
-- [x] Add example program
-- [/] File headers
-- [x] Replace https://raw.githubusercontent.com/ with https://github.com/foo/bar/raw/....
 - [o] Improve "library use" docs re. ``ContentType``
-
-Infrastructure
-==============
-- [o] Add "examples" to test suite
-- [o] CI/GHA
-- [o] Docker build & publish
-- [o] Docs: RTD
-- [o] Release 0.1.0
-- [o] Issue: Hello world
-
-Quality
-=======
-- [x] Add "roadrunner" tests
-- [o] Is table- and field-name quoting properly applied for both backends?
-- [o] QA: Use reference input test data from other repositories
-- [o] QA: Use real-world data
-- [o] Use custom user agent
-
-
-Test data
-=========
-
-Development
------------
-- https://github.com/okfn/messytables/tree/master/horror
-- https://github.com/frictionlessdata/tabulator-py/tree/main/data/special
-- https://github.com/apache/arrow-testing/tree/master/data
-- https://github.com/pandas-dev/pandas/tree/main/doc/data
-- https://github.com/influxdata/influxdb2-sample-data
-- https://github.com/konklone/json/tree/gh-pages/tests
-- https://docs.databricks.com/dbfs/databricks-datasets.html
-- https://github.com/databricks/tech-talks/blob/master/datasets/README.md
-- Kaggle?
-- https://github.com/earthobservations/testdata
-- https://dd.weather.gc.ca/climate/observations/daily/csv/YT/
-
-Production
-----------
-- https://www.govdata.de/
-- https://www.destatis.de/EN/Service/OpenData/_node.html
-- https://registry.opendata.aws/noaa-oar-hourly-gdp/
-- https://www.freecodecamp.org/news/https-medium-freecodecamp-org-best-free-open-data-sources-anyone-can-use-a65b514b0f2d/
-- https://learn.microsoft.com/en-us/azure/databricks/external-data/csv
-
-Formats
-=======
-- [x] Format: Modernize ``eskema.type``
-- [x] Format: Also recognize .netcdf, see https://en.ilmatieteenlaitos.fi/silam-opendata-on-aws-s3
-- [o] Format: Add Zarr (.zarr) input format
-- [o] Format: Add JSON5, YAML, TOML input formats
-- [o] Format: Partitioned Geoparquet
-  https://github.com/gadomski/chalkboard/blob/main/notebooks/isd-demo.ipynb
-- [o] Format: dBase and friends
-- [o] Format: Lance and ORC. -- https://github.com/eto-ai/lance
-
-
-***********
-Iteration 3
-***********
-
 
 General
 =======
-
 - [o] Weird error: ``logger.warning("Unable to detect content type")`` will cause
   ``WARNING: Unable TO detect content TYPE`` to be written to STDOUT!?
 - [o] Use ``smart_open``
   https://github.com/RaRe-Technologies/smart_open
-- [o] Support reading archive files directly. Examples:
-
-  - https://s3.amazonaws.com/crate.sampledata/nyc.yellowcab/yc.2019.07.gz
 - [o] Add support for Google Drive input source
   https://drive.google.com/file/d/1v7x-s79pQUV3ayVfTAeUG-xsXRHTQ9iz/view
 - [o] Unlock more input data formats from ``data_dispenser.sources``, like Excel, XML, HTML, MongoDB
@@ -198,13 +185,27 @@ General
 - [o] Read data from Sensor.Community archive
 - [o] Read data from IP to Country database
 - [o] Format: Add HDF5 (.h5, .hdf) input format
+- [o] Check ``fq``. -- https://github.com/wader/fq#supported-formats
+- [o] GNU Poke
 
+  - https://jemarch.net/poke
+  - https://news.ycombinator.com/item?id=34986042
+  - https://www.youtube.com/watch?v=KZ8meNZ_IhY
+  - https://www.youtube.com/watch?v=XiR0Jq-nGr4
+- [o] Check Hachoir
 
-Bugs
-====
-- [o] ``HTTP/1.1 403 Forbidden`` gets masked badly
-- [o] Fix ``cat foo | --backend=fl -``
-- [o] ``logger.warning`` will emit to STDOUT when running per tests
+  - https://github.com/vstinner/hachoir
+- quick and dirty script for generating avro ocf file with most data types
+  https://gist.github.com/xentripetal/c0f1645ee1abd4d25f71896c8d650543
+- [o] Use custom user agent
+
+  - https://github.com/pandas-dev/pandas/issues/10526
+  - https://github.com/pandas-dev/pandas/issues/36688
+  - https://github.com/pandas-dev/pandas/pull/37966
+
+Quality
+=======
+- [o] Is table- and field-name quoting properly applied for both backends?
 
 
 ***********
@@ -216,7 +217,15 @@ Iteration 4
 
   - Parquet and friends
   - Fixed-width, using ``pd.read_fwf()``
-  - pandas Dataframes
+  - Dataframes
+
+    - Pandas
+    - Arrow
+    - Dask
+    - Modin
+    - Polars
+    - Vaex: https://github.com/vaexio/vaex
+      https://vaex.io/blog/8-incredibly-powerful-Vaex-features-you-might-have-not-known-about
   - Avro
   - JSON Schema
   - XML, RDF, RSS
@@ -230,6 +239,8 @@ Iteration 4
     sources. This new extension adds the capability to directly query
     PostgreSQL tables from DuckDB.
     -- https://duckdb.org/2022/09/30/postgres-scanner.html
+  - Read deeply nested JSON with DuckDB
+    -- https://duckdb.org/2023/03/03/json.html
 
 - [o] Content type detection using ``python-magic`` and/or ``identify``
 - [o] Text-to-SQL
