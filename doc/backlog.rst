@@ -47,7 +47,7 @@ Features
 - [x] Source: Load data from Google Cloud Storage
 - [x] Format: Add NetCDF (.nc, .netcdf) input format
 - [x] Format: Add GRIB2 (.grib2) input format
-- [o] UX: eskema infer-ddl --list-input-formats
+- [x] UX: ``eskema info``
 - [o] UX: Add help texts to CLI options
 - [o] Support reading archive files directly. Examples:
   https://s3.amazonaws.com/crate.sampledata/nyc.yellowcab/yc.2019.07.gz

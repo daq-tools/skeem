@@ -30,6 +30,7 @@ authors = [
 requires-python = ">=3.6"
 dependencies = [
   "click<9",
+  "colorama<1",
   "crash",
   "crate[sqlalchemy]",
   "ddlgenerator<0.2",
@@ -210,6 +211,9 @@ extend-ignore = [
 "eskema/core.py" = ["E402"]
 "eskema/fastparquet/*" = ["E722"]
 "eskema/pandas/*" = ["S101"]
+"eskema/report.py" = ["T201"]
+"eskema/util/platform.py" = ["T201"]
+"eskema/util/report.py" = ["T201"]
 "tests/*" = ["S101"]  # Use of `assert` detected
 "tests/*roadrunner*" = ["ERA001"]  # Use of `assert` detected
 

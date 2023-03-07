@@ -12,6 +12,13 @@ def jd(data: t.Any):
     print(json.dumps(data, indent=2))  # noqa: T201
 
 
+def enum_values(enum):
+    items = []
+    for item in enum:
+        items.append(item.value)
+    return items
+
+
 def unwrap(value: str):
     return textwrap.dedent(value).strip()
 

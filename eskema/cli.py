@@ -7,6 +7,7 @@ import click
 
 from eskema.core import SchemaGenerator
 from eskema.model import Resource, SqlTarget
+from eskema.report import AboutReport
 from eskema.util.cli import boot_click, split_list
 
 logger = logging.getLogger(__name__)
@@ -28,6 +29,12 @@ logger = logging.getLogger(__name__)
 @click.pass_context
 def cli(ctx: click.Context, verbose: bool, debug: bool, trace_modules: t.List[str]):
     return boot_click(ctx, verbose, debug, trace_modules)
+
+
+@cli.command("info")
+def info():
+    AboutReport.types()
+    AboutReport.platform()
 
 
 @cli.command("infer-ddl")

@@ -1,9 +1,11 @@
 import mimetypes
 import typing as t
+from collections import OrderedDict
 from enum import Enum
 from pathlib import Path
 
 from eskema.exception import UnknownContentType
+from eskema.util.data import enum_values
 
 
 def init():
@@ -56,6 +58,10 @@ class ContentType(Enum):
     # Secondary aliases.
     JSONL = "JSONL"
     LDJSON = "LDJSON"
+
+    @classmethod
+    def values(cls):
+        return enum_values(cls)
 
     @classmethod
     def from_name(cls, name: str) -> "ContentType":
@@ -137,6 +143,10 @@ class ContentTypeMime(Enum):
     JSONL = "application/x-ndjson"
     LDJSON = "application/x-ldjson"
 
+    @classmethod
+    def values(cls):
+        return enum_values(cls)
+
     @property
     def content_type(self) -> ContentType:
         """
@@ -161,6 +171,10 @@ class ContentTypeSuffix(Enum):
     ODS = [".ods"]
     PARQUET = [".parquet"]
     XLSX = [".xlsx"]
+
+    @classmethod
+    def values(cls):
+        return enum_values(cls)
 
     @classmethod
     def from_label(cls, label: str) -> "ContentTypeSuffix":
@@ -212,3 +226,13 @@ class ContentTypeGroup:
         ContentType.LDJSON,
         ContentType.NDJSON,
     ]
+
+
+class TypeInfo:
+    @classmethod
+    def get(cls):
+        metadata = OrderedDict()
+        metadata["Content types"] = ContentType.values()
+        metadata["MIME types"] = ContentTypeMime.values()
+        metadata["File suffixes"] = ContentTypeSuffix.values()
+        return metadata

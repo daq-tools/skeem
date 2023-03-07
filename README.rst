@@ -44,6 +44,10 @@ Synopsis
 
 .. code-block:: sh
 
+    eskema info
+
+.. code-block:: sh
+
     eskema infer-ddl --dialect=postgresql data.ndjson
 
 .. code-block:: sql
