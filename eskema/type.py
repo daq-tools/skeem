@@ -25,6 +25,7 @@ def init():
     mimetypes.types_map.update(
         {
             ".grib2": "application/x-grib2",
+            ".gz": "application/gzip",
             ".jsonl": "application/x-ndjson",
             ".ldjson": "application/x-ldjson",
             ".ldj": "application/x-ldjson",
@@ -58,6 +59,9 @@ class ContentType(Enum):
     # Secondary aliases.
     JSONL = "JSONL"
     LDJSON = "LDJSON"
+
+    # Archive formats.
+    GZIP = "GZIP"
 
     @classmethod
     def values(cls):
@@ -98,7 +102,12 @@ class ContentType(Enum):
         >>> ContentType.from_filename("foo.csv")
         <ContentType.CSV: 'CSV'>
         """
-        mimetype, _ = mimetypes.guess_type(filename)
+        mimetype: t.Union[str, None]
+        filename = str(filename)
+        if filename.endswith(".gz"):
+            mimetype = "application/gzip"
+        else:
+            mimetype, _ = mimetypes.guess_type(filename, strict=False)
         if mimetype is None:
             raise UnknownContentType(f"Unable to guess content type from '{filename}'")
         return ContentTypeMime(mimetype).content_type
@@ -142,6 +151,9 @@ class ContentTypeMime(Enum):
     # Secondary aliases.
     JSONL = "application/x-ndjson"
     LDJSON = "application/x-ldjson"
+
+    # Archive formats.
+    GZIP = "application/gzip"
 
     @classmethod
     def values(cls):

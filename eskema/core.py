@@ -166,6 +166,9 @@ class SchemaGenerator:
         if self.resource.type is None:
             raise ValueError("Unable to infer schema without resource type")
 
+        if self.resource.type is ContentType.GZIP and self.resource.content_type is None:
+            raise ValueError("Resource content type is required when resource container type is Gzip")
+
         # Only peek at the first bytes of data.
         logger.info(f"Opening resource {self.resource}")
         indata = self.resource.peek()

@@ -58,6 +58,9 @@ def help_infer_ddl():
       # InfluxDB line protocol (ILP)
       eskema infer-ddl --dialect=postgresql https://github.com/influxdata/influxdb2-sample-data/raw/master/air-sensor-data/air-sensor-data.lp
 
+      # Compressed files in gzip format
+      eskema infer-ddl --content-type=ndjson --dialect=crate https://s3.amazonaws.com/crate.sampledata/nyc.yellowcab/yc.2019.07.gz
+
       ... and a lot more!
 
     Documentation

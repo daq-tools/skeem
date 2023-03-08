@@ -25,10 +25,16 @@ def open(path: t.Union[Path, str]):  # noqa: A001
     """
     Access a plethora of resources using `fsspec`.
     """
-    kwargs = {}
-    if str(path).startswith("s3"):
+    path = str(path)
+    kwargs: t.Dict[str, t.Any] = {}
+    if path.startswith("s3"):
         kwargs["anon"] = True
-    return fsspec.open(path, mode="rb", **kwargs).open()
+
+    # TODO: Why isn't compression selected transparently?
+    if path.endswith(".gz"):
+        kwargs["compression"] = "gzip"
+    fs = fsspec.open(path, mode="rb", **kwargs).open()
+    return fs
 
 
 def peek(
@@ -51,7 +57,15 @@ def peek(
             payload = data.read()
         else:
             empty: t.Union[bytes, str]
-            if isinstance(data, io.BytesIO) or (hasattr(data, "mode") and "b" in data.mode):
+            is_binary = False
+            if hasattr(data, "mode"):
+                if isinstance(data.mode, str):
+                    is_binary = "b" in data.mode
+                elif isinstance(data.mode, int):
+                    is_binary = data.mode == 1
+                else:
+                    raise ValueError(f"Unsupported type for data.mode={data.mode}, type={type(data.mode)}")
+            if isinstance(data, io.BytesIO) or is_binary:
                 empty = b""  # type: ignore[assignment]
             else:
                 empty = ""

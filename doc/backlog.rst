@@ -49,9 +49,10 @@ Features
 - [x] Format: Add GRIB2 (.grib2) input format
 - [x] UX: ``eskema info``
 - [x] UX: Add help texts to CLI options
-- [o] Support reading archive files directly. Examples:
-  https://s3.amazonaws.com/crate.sampledata/nyc.yellowcab/yc.2019.07.gz
-- [o] Performance: Access large data: https://commonscreens.com/?page_id=1492
+- [x] Support reading archive files directly.
+
+  - Example: https://s3.amazonaws.com/crate.sampledata/nyc.yellowcab/yc.2019.07.gz
+  - https://github.com/leenr/gzip-stream
 
 Bugs
 ====
@@ -101,6 +102,7 @@ Formats
   https://github.com/gadomski/chalkboard/blob/main/notebooks/isd-demo.ipynb
 - [o] Format: dBase and friends
 - [o] Format: Lance and ORC. -- https://github.com/eto-ai/lance
+- [o] Format: CSV without headers: https://commonscreens.com/?page_id=1492
 
 
 Bugs

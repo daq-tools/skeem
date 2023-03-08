@@ -139,6 +139,9 @@ Read from URLs
     eskema infer-ddl --dialect=postgresql https://www.unidata.ucar.edu/software/netcdf/examples/sresa1b_ncar_ccsm3-example.nc
     eskema infer-ddl --dialect=postgresql https://www.unidata.ucar.edu/software/netcdf/examples/WMI_Lear.nc
 
+    # Compressed files in gzip format
+    eskema --verbose infer-ddl --content-type=ndjson --dialect=crate https://s3.amazonaws.com/crate.sampledata/nyc.yellowcab/yc.2019.07.gz
+
 More
 ----
 

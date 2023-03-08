@@ -101,3 +101,20 @@ def test_roadrunner_slow(url):
 def test_roadrunner_abysmal(url):
     sql = to_sql(url)
     assert "CREATE TABLE" in sql
+
+
+@pytest.mark.roadrunner
+@pytest.mark.timeout(TIMEOUT_MEDIUM)
+def test_nyc_yellowcab_gz():
+    url = "https://s3.amazonaws.com/crate.sampledata/nyc.yellowcab/yc.2019.07.gz"
+    sg = SchemaGenerator(
+        resource=Resource(
+            path=url,
+            content_type="ndjson",
+        ),
+        target=SqlTarget(
+            dialect="postgresql",
+        ),
+    )
+    sql = sg.to_sql_ddl().canonical
+    assert "CREATE TABLE" in sql
