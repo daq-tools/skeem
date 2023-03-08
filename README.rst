@@ -12,8 +12,8 @@ About
 
 You can use Eskema to infer SQL DDL statements from tabular data.
 
-Eskema is based on the excellent `ddlgenerator`_, `frictionless`_, `fsspec`_,
-`pandas`_, `SQLAlchemy`_, `xarray`_ packages and friends, and can be used both
+Eskema is, amongst others, based on the excellent `ddlgenerator`_, `frictionless`_,
+`fsspec`_, `pandas`_, `SQLAlchemy`_, and `xarray`_ packages, and can be used both
 as a standalone program, and as a library.
 
 Supported input data:
@@ -41,10 +41,6 @@ Supported input sources:
 ********
 Synopsis
 ********
-
-.. code-block:: sh
-
-    eskema info
 
 .. code-block:: sh
 
@@ -85,7 +81,19 @@ testing data can be acquired from the repository's `testdata`_ folder.
 Command line use
 ================
 
-Read data from given file::
+Help
+----
+
+.. code-block:: sh
+
+    eskema info
+    eskema --help
+    eskema infer-ddl --help
+
+Read from files
+---------------
+
+.. code-block:: sh
 
     # NDJSON, Parquet, and InfluxDB line protocol (ILP) formats.
     eskema infer-ddl --dialect=postgresql data.ndjson
@@ -99,12 +107,10 @@ Read data from given file::
     eskema infer-ddl --dialect=postgresql data.xlsx
     eskema infer-ddl --dialect=postgresql data.xlsx --address="Sheet2"
 
-    # GRIB2, NetCDF
-    eskema infer-ddl --dialect=postgresql https://dd.weather.gc.ca/ensemble/geps/grib2/products/12/003/CMC_geps-prob_TEMP_TGL_2m_latlon0p5x0p5_2023022512_P003_all-products.grib2
-    eskema infer-ddl --dialect=postgresql https://www.unidata.ucar.edu/software/netcdf/examples/sresa1b_ncar_ccsm3-example.nc
-    eskema infer-ddl --dialect=postgresql https://www.unidata.ucar.edu/software/netcdf/examples/WMI_Lear.nc
+Read from URLs
+--------------
 
-Read data from URL::
+.. code-block:: sh
 
     # CSV, NDJSON, XLSX
     eskema infer-ddl --dialect=postgresql https://github.com/daq-tools/eskema/raw/main/tests/testdata/basic.csv
@@ -127,6 +133,14 @@ Read data from URL::
 
     # CSV on GitHub
     eskema --verbose infer-ddl --dialect=postgresql github://daq-tools:eskema@/tests/testdata/basic.csv
+
+    # GRIB2, NetCDF
+    eskema infer-ddl --dialect=postgresql https://dd.weather.gc.ca/ensemble/geps/grib2/products/12/003/CMC_geps-prob_TEMP_TGL_2m_latlon0p5x0p5_2023022512_P003_all-products.grib2
+    eskema infer-ddl --dialect=postgresql https://www.unidata.ucar.edu/software/netcdf/examples/sresa1b_ncar_ccsm3-example.nc
+    eskema infer-ddl --dialect=postgresql https://www.unidata.ucar.edu/software/netcdf/examples/WMI_Lear.nc
+
+More
+----
 
 Use a different backend (default: ``ddlgen``)::
 

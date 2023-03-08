@@ -42,6 +42,7 @@ in progress
 - Refactoring: Add ``eskema.io.to_dataframe`` from ``eskema.autopk``
 - Refactoring: Add ``eskema.util`` folder instead of single ``util.py``
 - UX: Add ``eskema info`` subcommand
+- UX: Improve CLI help
 
 
 2023-01-xx 0.0.0

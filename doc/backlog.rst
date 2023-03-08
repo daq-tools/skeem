@@ -48,7 +48,7 @@ Features
 - [x] Format: Add NetCDF (.nc, .netcdf) input format
 - [x] Format: Add GRIB2 (.grib2) input format
 - [x] UX: ``eskema info``
-- [o] UX: Add help texts to CLI options
+- [x] UX: Add help texts to CLI options
 - [o] Support reading archive files directly. Examples:
   https://s3.amazonaws.com/crate.sampledata/nyc.yellowcab/yc.2019.07.gz
 - [o] Performance: Access large data: https://commonscreens.com/?page_id=1492

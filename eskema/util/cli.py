@@ -1,5 +1,6 @@
 import logging
 import sys
+import textwrap
 import typing as t
 
 import click
@@ -92,3 +93,16 @@ def _enable_tracing(modules: t.List[str] = None):
     for module in modules[1:]:
         constraint = constraint | Q(module_startswith=module)
     trace(constraint)
+
+
+def docstring_format_verbatim(text: t.Optional[str]) -> str:
+    """
+    Format docstring to be displayed verbatim as a help text by Click.
+
+    - https://click.palletsprojects.com/en/8.1.x/documentation/#preventing-rewrapping
+    - https://github.com/pallets/click/issues/56
+    """
+    text = text or ""
+    text = textwrap.dedent(text)
+    lines = [line if line.strip() else "\b" for line in text.splitlines()]
+    return "\n".join(lines)
