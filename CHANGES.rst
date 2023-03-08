@@ -46,6 +46,7 @@ in progress
 - Format: Add support for reading compressed files in Gzip format
 - CI: Run software tests on GHA
 - CI: Use ``versioningit`` for automatic package versioning
+- CI: Add OCI image builder to provide images for Podman, Docker, etc.
 
 
 2023-01-xx 0.0.0
