@@ -58,6 +58,20 @@ Synopsis
     );
 
 
+**********
+Quickstart
+**********
+
+If you are in a hurry, and want to run Skeem without any installation, just run
+the OCI image on Podman or Docker.
+
+.. code-block:: sh
+
+    docker run --rm ghcr.io/daq-tools/skeem-standard \
+        skeem infer-ddl --dialect=postgresql \
+        https://github.com/daq-tools/skeem/raw/main/tests/testdata/basic.ndjson
+
+
 *****
 Setup
 *****
@@ -141,6 +155,26 @@ Read from URLs
 
     # Compressed files in gzip format
     skeem --verbose infer-ddl --content-type=ndjson --dialect=crate https://s3.amazonaws.com/crate.sampledata/nyc.yellowcab/yc.2019.07.gz
+
+OCI
+---
+
+OCI images are available on the GitHub Container Registry (GHCR). In order to
+run them on Podman or Docker, invoke:
+
+.. code-block:: sh
+
+    docker run --rm ghcr.io/daq-tools/skeem-standard \
+        skeem infer-ddl --dialect=postgresql \
+        https://github.com/daq-tools/skeem/raw/main/tests/testdata/basic.csv
+
+If you want to work with files on your filesystem, you will need to mount the
+working directory into the container when running it, like:
+
+.. code-block:: sh
+
+    docker run --rm --volume=$(pwd):/data ghcr.io/daq-tools/skeem-standard \
+        skeem infer-ddl --dialect=postgresql /data/basic.csv
 
 More
 ----

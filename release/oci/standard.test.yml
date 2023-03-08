@@ -1,0 +1,4 @@
+sut:
+  build: ../..
+  dockerfile: release/oci/standard.Dockerfile
+  command: selftest.sh standard

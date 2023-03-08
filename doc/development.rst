@@ -43,4 +43,25 @@ modules, use the ``--trace-modules=`` option. Examples:
   module list ``["skeem", "fastparquet", "frictionless", "fsspec", "pandas"]``.
 
 
+****************
+Build OCI images
+****************
+
+OCI images will be automatically published to the GitHub Container Registry
+(GHCR), see `Skeem packages on GHCR`_. If you want to build images on your
+machine, you can use those commands::
+
+    export DOCKER_BUILDKIT=1
+    export COMPOSE_DOCKER_CLI_BUILD=1
+    export BUILDKIT_PROGRESS=plain
+    docker build --tag local/skeem-standard --file release/oci/standard.Dockerfile .
+    docker build --tag local/skeem-full --file release/oci/full.Dockerfile .
+
+::
+
+    docker run --rm -it local/skeem-standard skeem --version
+    docker run --rm -it local/skeem-standard skeem info
+
+
 .. _Hunter: https://pypi.org/project/hunter/
+.. _Skeem packages on GHCR: https://github.com/orgs/daq-tools/packages?repo_name=skeem
