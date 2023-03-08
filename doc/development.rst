@@ -16,8 +16,8 @@ and run software tests::
     source .venv/bin/activate
     pip install --editable=.[test,develop,release,scientific]
 
-    # Run regular test suite.
-    poe test
+    # Run linter and regular test suite.
+    poe check
 
     # Run "roadrunner" tests, using a bunch of external resources. The tests will
     # only check for a successful invocation, and not verify the generated SQL.

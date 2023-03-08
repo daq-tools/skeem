@@ -44,6 +44,7 @@ in progress
 - UX: Add ``skeem info`` subcommand
 - UX: Improve CLI help
 - Format: Add support for reading compressed files in Gzip format
+- CI: Run software tests on GHA
 
 
 2023-01-xx 0.0.0
