@@ -27,7 +27,7 @@ authors = [
   { name = "Benjamin Gutzmann", email = "gutzemann@gmail.com" },
   { name = "Richard Pobering", email = "richard.pobering@panodata.org" },
 ]
-requires-python = ">=3.6"
+requires-python = ">=3.8"
 dependencies = [
   "click<9",
   "colorama<1",
@@ -65,8 +65,6 @@ classifiers = [
   "Operating System :: POSIX :: Linux",
   "Operating System :: Unix",
   "Programming Language :: Python",
-  "Programming Language :: Python :: 3.6",
-  "Programming Language :: Python :: 3.7",
   "Programming Language :: Python :: 3.8",
   "Programming Language :: Python :: 3.9",
   "Programming Language :: Python :: 3.10",
@@ -227,12 +225,18 @@ namespaces = false
 
 [tool.poe.tasks]
 
+check = [
+  "lint",
+  "test",
+]
+
 format = [
   { cmd = "black ." },
   # Configure Ruff not to auto-fix (remove!) unused variables (F841) and `print` statements (T201).
   { cmd = "ruff --fix --ignore=ERA --ignore=F401 --ignore=F841 --ignore=T20 ." },
   { cmd = "pyproject-fmt pyproject.toml" },
 ]
+
 lint = [
   { cmd = "ruff ." },
   { cmd = "black --check ." },
