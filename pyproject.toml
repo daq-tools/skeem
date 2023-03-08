@@ -1,6 +1,16 @@
+[build-system]
+build-backend = "setuptools.build_meta"
+requires = [
+  "setuptools>=42", # At least v42 of setuptools required.
+  "versioningit",
+]
+
+[tool.versioningit.vcs]
+method = "git"
+default-tag = "0.0.0"
+
 [project]
 name = "skeem"
-version = "0.0.0"
 description = "Infer SQL DDL statements from tabular data"
 readme = "README.rst"
 keywords = [
@@ -43,6 +53,9 @@ dependencies = [
   "requests<3",
   "sql-formatter<0.7",
   "sqlmakeuper<0.2",
+]
+dynamic = [
+  "version",
 ]
 classifiers = [
   "Development Status :: 3 - Alpha",
