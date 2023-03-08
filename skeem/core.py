@@ -128,7 +128,7 @@ class SchemaGenerator:
 
         # Infer schema.
         logger.info("Inferring schema")
-        engine = sa.create_mock_engine(f"{self.target.dialect}://", executor=_dump)
+        engine = sa.create_mock_engine(sa.engine.make_url(f"{self.target.dialect}://"), executor=_dump)
         mapper = frictionless.formats.sql.SqlMapper(engine)
         descriptor = resource.to_descriptor()
 

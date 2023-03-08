@@ -32,7 +32,7 @@ def clean_key_name(key: str) -> str:
     # if result.upper() in sql_reserved_words:
     result = result.lower()
     # Patch: Just to make sure?
-    result = sa.sql.quoted_name(result, quote='"')
+    result = sa.sql.quoted_name(result, quote=True)
     return result
 
 

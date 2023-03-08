@@ -1,6 +1,6 @@
 import mmap
+import typing as t
 import warnings
-from typing import Any
 
 from pandas._typing import BaseBuffer, CompressionOptions, FilePath, StorageOptions
 from pandas.compat._optional import import_optional_dependency
@@ -16,7 +16,7 @@ from pandas.util._exceptions import find_stack_level
 
 
 def _get_filepath_or_buffer(
-    filepath_or_buffer: FilePath | BaseBuffer,
+    filepath_or_buffer: t.Union[FilePath, BaseBuffer],
     encoding: str = "utf-8",
     compression: CompressionOptions = None,
     mode: str = "r",
@@ -120,9 +120,9 @@ def _get_filepath_or_buffer(
             filepath_or_buffer = filepath_or_buffer.replace("s3n://", "s3://")
         fsspec = import_optional_dependency("fsspec")
 
-        # If botocore is installed we fallback to reading with anon=True
+        # If botocore is installed we fall back to reading with anon=True
         # to allow reads from public buckets
-        err_types_to_retry_with_anon: list[Any] = []
+        err_types_to_retry_with_anon: t.List[t.Any] = []
         try:
             import_optional_dependency("botocore")
             from botocore.exceptions import (
@@ -184,7 +184,7 @@ def _get_filepath_or_buffer(
     )
 
 
-def is_fsspec_url(url: FilePath | BaseBuffer) -> bool:
+def is_fsspec_url(url: t.Union[FilePath, BaseBuffer]) -> bool:
     """
     Returns true if the given URL looks like
     something fsspec can handle
