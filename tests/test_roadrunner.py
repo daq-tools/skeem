@@ -38,7 +38,8 @@ URL_LIST_ABYSMAL = [
     "gs://tinybird-assets/datasets/nations.csv",
     "https://d37ci6vzurychx.cloudfront.net/trip-data/yellow_tripdata_2022-01.parquet",
     "https://data.cityofnewyork.us/resource/biws-g3hs.json",
-    "s3://openaq-fetches/realtime/2023-02-25/1677351953_eea_2aa299a7-b688-4200-864a-8df7bac3af5b.ndjson",
+    # TODO: Discover current resource?
+    # "s3://openaq-fetches/realtime/2023-02-25/1677351953_eea_2aa299a7-b688-4200-864a-8df7bac3af5b.ndjson",
     "s3://noaa-ghcn-pds/csv/by_year/2022.csv",
 ]
 
