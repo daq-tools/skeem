@@ -18,7 +18,7 @@ def read_byte_stream_create(self):
     control = AwsControl.from_dialect(self.resource.dialect)
     parts = urlparse(self.resource.normpath, allow_fragments=False)
 
-    # PATCH for Eskema: Allow anonymous access to public S3 buckets.
+    # PATCH for Skeem: Allow anonymous access to public S3 buckets.
     config = Config(signature_version=UNSIGNED)
     client = platform.boto3.resource("s3", endpoint_url=control.s3_endpoint_url, config=config)
 

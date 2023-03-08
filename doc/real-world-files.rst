@@ -7,7 +7,7 @@ Working with real-world files
 Introduction
 ************
 
-Evaluating Eskema with some files used the other day.
+Evaluating Skeem with some files used the other day.
 
 
 ********
@@ -28,7 +28,7 @@ Synopsis::
     URL=https://dd.weather.gc.ca/ensemble/geps/grib2/products/12/003/CMC_geps-prob_WIND_TGL_10m_latlon0p5x0p5_2023022512_P003_all-products.grib2
     URL=https://dd.weather.gc.ca/analysis/precip/hrdpa/grib2/polar_stereographic/06/CMC_HRDPA_APCP-006-0100cutoff_SFC_0_ps2.5km_2023012606_000.grib2
 
-    eskema --verbose infer-ddl --dialect=postgresql $URL
+    skeem --verbose infer-ddl --dialect=postgresql $URL
 
 
 OpenAQ
@@ -40,7 +40,7 @@ platform.
 
 This NDJSON file (115 MB) is from the `openaq-fetches`_ bucket on AWS S3::
 
-    eskema --verbose infer-ddl --dialect=postgresql \
+    skeem --verbose infer-ddl --dialect=postgresql \
         s3://openaq-fetches/realtime/2023-02-25/1677351953_eea_2aa299a7-b688-4200-864a-8df7bac3af5b.ndjson
 
 
@@ -57,7 +57,7 @@ Daily data is in annual netcdf files. The files are produced by R:s Raster packa
 This NDJSON file (94 MB) is from the `fmi-gridded-obs-daily-1km`_ bucket on AWS S3::
 
     aws s3 cp --no-sign-request s3://fmi-gridded-obs-daily-1km/Netcdf/Tday/tday_2023.nc .
-    eskema --verbose infer-ddl --dialect=postgresql tday_2023.nc
+    skeem --verbose infer-ddl --dialect=postgresql tday_2023.nc
 
 
 Sensor.Community

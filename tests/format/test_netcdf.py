@@ -1,10 +1,10 @@
 import pytest
 from click.testing import CliRunner
 
-from eskema.cli import cli
-from eskema.core import SchemaGenerator
-from eskema.model import Resource, SqlResult, SqlTarget
-from eskema.util.data import unwrap
+from skeem.cli import cli
+from skeem.core import SchemaGenerator
+from skeem.model import Resource, SqlResult, SqlTarget
+from skeem.util.data import unwrap
 from tests.util import getcmd
 
 reference = unwrap(

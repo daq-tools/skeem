@@ -7,10 +7,10 @@ from unittest import mock
 
 import pytest
 
-from eskema.io import json_get_first_records
-from eskema.util.cli import boot_click
-from eskema.util.data import get_firstline, head, jd
-from eskema.util.sql import sql_pretty
+from skeem.io import json_get_first_records
+from skeem.util.cli import boot_click
+from skeem.util.data import get_firstline, head, jd
+from skeem.util.sql import sql_pretty
 
 
 def test_jd():
@@ -36,19 +36,19 @@ SELECT *
 
 
 def test_boot_click_loglevel_default():
-    with mock.patch("eskema.util.cli.setup_logging") as setup_logging_mock:
+    with mock.patch("skeem.util.cli.setup_logging") as setup_logging_mock:
         boot_click(None, verbose=False, debug=False)
     setup_logging_mock.assert_called_once_with(level=logging.WARNING)
 
 
 def test_boot_click_loglevel_verbose():
-    with mock.patch("eskema.util.cli.setup_logging") as setup_logging_mock:
+    with mock.patch("skeem.util.cli.setup_logging") as setup_logging_mock:
         boot_click(None, verbose=True, debug=False)
     setup_logging_mock.assert_called_once_with(level=logging.INFO)
 
 
 def test_boot_click_loglevel_debug():
-    with mock.patch("eskema.util.cli.setup_logging") as setup_logging_mock:
+    with mock.patch("skeem.util.cli.setup_logging") as setup_logging_mock:
         boot_click(None, verbose=False, debug=True)
     setup_logging_mock.assert_called_once_with(level=logging.DEBUG)
 

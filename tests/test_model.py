@@ -4,7 +4,7 @@ import typing as t
 
 import pytest
 
-from eskema.model import Resource
+from skeem.model import Resource
 
 
 @pytest.mark.parametrize("indata", ["foo", b"foo", io.StringIO("foo"), io.BytesIO(b"foo")])

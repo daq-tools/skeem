@@ -5,10 +5,10 @@ from pathlib import Path
 
 import click
 
-from eskema.core import SchemaGenerator
-from eskema.model import Resource, SqlTarget
-from eskema.report import AboutReport
-from eskema.util.cli import boot_click, docstring_format_verbatim, split_list
+from skeem.core import SchemaGenerator
+from skeem.model import Resource, SqlTarget
+from skeem.report import AboutReport
+from skeem.util.cli import boot_click, docstring_format_verbatim, split_list
 
 logger = logging.getLogger(__name__)
 
@@ -24,7 +24,7 @@ def help_infer_ddl():
 
     Use data in NDJSON format:
 
-      eskema infer-ddl --dialect=postgresql data.ndjson
+      skeem infer-ddl --dialect=postgresql data.ndjson
 
     Generated SQL DDL:
 
@@ -41,39 +41,39 @@ def help_infer_ddl():
     --------
 
       # NDJSON, Parquet, and InfluxDB line protocol (ILP) formats
-      eskema infer-ddl --dialect=postgresql data.ndjson
-      eskema infer-ddl --dialect=postgresql data.parquet
-      eskema infer-ddl --dialect=postgresql data.lp
+      skeem infer-ddl --dialect=postgresql data.ndjson
+      skeem infer-ddl --dialect=postgresql data.parquet
+      skeem infer-ddl --dialect=postgresql data.lp
 
       # CSV, JSON, ODS, and XLSX formats
-      eskema infer-ddl --dialect=postgresql data.csv
-      eskema infer-ddl --dialect=postgresql data.json
-      eskema infer-ddl --dialect=postgresql data.ods
-      eskema --verbose infer-ddl --dialect=postgresql data.xlsx
-      eskema --verbose infer-ddl --dialect=postgresql data.xlsx --address="Sheet2"
+      skeem infer-ddl --dialect=postgresql data.csv
+      skeem infer-ddl --dialect=postgresql data.json
+      skeem infer-ddl --dialect=postgresql data.ods
+      skeem --verbose infer-ddl --dialect=postgresql data.xlsx
+      skeem --verbose infer-ddl --dialect=postgresql data.xlsx --address="Sheet2"
 
       # Google Sheets
-      eskema infer-ddl --dialect=postgresql --table-name=foo https://docs.google.com/spreadsheets/d/1ExyrawjlyksbC6DOM6nLolJDbU8qiRrrhxSuxf5ScB0/view
+      skeem infer-ddl --dialect=postgresql --table-name=foo https://docs.google.com/spreadsheets/d/1ExyrawjlyksbC6DOM6nLolJDbU8qiRrrhxSuxf5ScB0/view
 
       # InfluxDB line protocol (ILP)
-      eskema infer-ddl --dialect=postgresql https://github.com/influxdata/influxdb2-sample-data/raw/master/air-sensor-data/air-sensor-data.lp
+      skeem infer-ddl --dialect=postgresql https://github.com/influxdata/influxdb2-sample-data/raw/master/air-sensor-data/air-sensor-data.lp
 
       # Compressed files in gzip format
-      eskema infer-ddl --content-type=ndjson --dialect=crate https://s3.amazonaws.com/crate.sampledata/nyc.yellowcab/yc.2019.07.gz
+      skeem infer-ddl --content-type=ndjson --dialect=crate https://s3.amazonaws.com/crate.sampledata/nyc.yellowcab/yc.2019.07.gz
 
       ... and a lot more!
 
     Documentation
     -------------
 
-    More options and examples can be discovered on the Eskema README [1].
+    More options and examples can be discovered on the Skeem README [1].
 
-    [1] https://github.com/daq-tools/eskema/blob/main/README.rst
+    [1] https://github.com/daq-tools/skeem/blob/main/README.rst
     """  # noqa: E501
 
 
 @click.group()
-@click.version_option(package_name="eskema")
+@click.version_option(package_name="skeem")
 @click.option("--verbose", is_flag=True, required=False, help="Turn on logging")
 @click.option("--debug", is_flag=True, required=False, help="Turn on logging with debug level")
 @click.option(

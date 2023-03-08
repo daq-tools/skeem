@@ -1,7 +1,7 @@
 import pytest
 
-from eskema.core import SchemaGenerator
-from eskema.model import Resource, SqlTarget
+from skeem.core import SchemaGenerator
+from skeem.model import Resource, SqlTarget
 
 TIMEOUT_FAST = 1.5
 TIMEOUT_MEDIUM = 3.5
@@ -9,11 +9,11 @@ TIMEOUT_SLOW = 7.5
 TIMEOUT_ABYSMAL = 10
 
 URL_LIST_FAST = [
-    "github://daq-tools:eskema@/tests/testdata/basic.ods",
-    "github://daq-tools:eskema@/tests/testdata/basic.xlsx",
-    "github://daq-tools:eskema@/tests/testdata/basic-document.json",
-    "https://github.com/daq-tools/eskema/raw/main/tests/testdata/basic.csv",
-    "https://github.com/daq-tools/eskema/raw/main/tests/testdata/basic.lp",
+    "github://daq-tools:skeem@/tests/testdata/basic.ods",
+    "github://daq-tools:skeem@/tests/testdata/basic.xlsx",
+    "github://daq-tools:skeem@/tests/testdata/basic-document.json",
+    "https://github.com/daq-tools/skeem/raw/main/tests/testdata/basic.csv",
+    "https://github.com/daq-tools/skeem/raw/main/tests/testdata/basic.lp",
     "https://github.com/influxdata/influxdb2-sample-data/raw/master/air-sensor-data/air-sensor-data.lp",
 ]
 
@@ -26,7 +26,7 @@ URL_LIST_MEDIUM = [
 ]
 
 URL_LIST_SLOW = [
-    "github://daq-tools:eskema@/tests/testdata/basic.csv",
+    "github://daq-tools:skeem@/tests/testdata/basic.csv",
     # "https://dd.weather.gc.ca/ensemble/geps/grib2/products/12/003/CMC_geps-prob_TEMP_TGL_2m_latlon0p5x0p5_2023022512_P003_all-products.grib2",
     # "https://dd.weather.gc.ca/ensemble/geps/grib2/products/12/003/CMC_geps-prob_WIND_TGL_10m_latlon0p5x0p5_2023022512_P003_all-products.grib2",
     # "https://dd.weather.gc.ca/analysis/precip/hrdpa/grib2/polar_stereographic/06/CMC_HRDPA_APCP-006-0100cutoff_SFC_0_ps2.5km_2023012606_000.grib2",

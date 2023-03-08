@@ -1,9 +1,9 @@
 import pytest
 from click.testing import CliRunner
 
-from eskema.cli import cli
-from eskema.core import SchemaGenerator
-from eskema.model import Resource, SqlResult, SqlTarget
+from skeem.cli import cli
+from skeem.core import SchemaGenerator
+from skeem.model import Resource, SqlResult, SqlTarget
 from tests.util import BACKENDS, get_basic_sql_reference, getcmd
 
 

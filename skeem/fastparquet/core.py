@@ -6,7 +6,7 @@ from fastparquet.cencoding import ThriftObject
 from fastparquet.converted_types import convert
 from fastparquet.core import read_data_page, read_data_page_v2, read_dictionary_page
 
-from eskema.settings import PEEK_LINES
+from skeem.settings import PEEK_LINES
 
 
 def read_col(column, schema_helper, infile, use_cat=False, selfmade=False, assign=None, catdef=None, row_filter=None):
@@ -169,6 +169,6 @@ def read_col(column, schema_helper, infile, use_cat=False, selfmade=False, assig
 
         num += len(defi) if defi is not None else len(val)
 
-        # PATCH for Eskema: Terminate `read_col` early, in order to not load the whole file.
+        # PATCH for Skeem: Terminate `read_col` early, in order to not load the whole file.
         if num >= PEEK_LINES:
             break

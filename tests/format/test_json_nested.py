@@ -3,8 +3,8 @@ import textwrap
 import pytest
 from click.testing import CliRunner
 
-from eskema.cli import cli
-from eskema.model import SqlResult
+from skeem.cli import cli
+from skeem.model import SqlResult
 from tests.util import getcmd
 
 reference = textwrap.dedent(

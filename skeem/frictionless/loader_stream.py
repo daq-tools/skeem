@@ -7,7 +7,7 @@ def read_byte_stream_create(self):
 
     byte_stream = self.resource.data
     # TODO: Submit patch to upstream.
-    # PATCH for Eskema: Enable reading from nameless streams.
+    # PATCH for Skeem: Enable reading from nameless streams.
     """
     if not os.path.isfile(byte_stream.name):  # type: ignore
         note = f"only local streams are supported: {byte_stream}"

@@ -11,8 +11,8 @@ format, suitable for processing JSON data in a streaming manner.
 import io
 import typing as t
 
-from eskema.core import SchemaGenerator
-from eskema.model import Resource, SqlTarget
+from skeem.core import SchemaGenerator
+from skeem.model import Resource, SqlTarget
 
 
 def get_data() -> t.IO:

@@ -69,9 +69,9 @@ def enable_tracing(modules: t.List[str]):
     effective_modules = []
     for module in modules:
         if module == "machinery":
-            effective_modules += ["eskema", "fastparquet", "frictionless", "fsspec", "pandas"]
+            effective_modules += ["skeem", "fastparquet", "frictionless", "fsspec", "pandas"]
         if module == "core":
-            effective_modules += ["eskema"]
+            effective_modules += ["skeem"]
         else:
             effective_modules += [module]
     try:

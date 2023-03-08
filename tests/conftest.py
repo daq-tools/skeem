@@ -13,12 +13,12 @@ def ndjson_file_basic():
 
 @pytest.fixture
 def ndjson_url_basic():
-    return "https://raw.githubusercontent.com/daq-tools/eskema/main/tests/testdata/basic.ndjson"
+    return "https://raw.githubusercontent.com/daq-tools/skeem/main/tests/testdata/basic.ndjson"
 
 
 @pytest.fixture
 def ndjson_github_url_basic():
-    return "github://daq-tools:eskema@/tests/testdata/basic.ndjson"
+    return "github://daq-tools:skeem@/tests/testdata/basic.ndjson"
 
 
 @pytest.fixture
@@ -42,7 +42,7 @@ def csv_file_basic():
 
 @pytest.fixture
 def csv_url_basic():
-    return "https://raw.githubusercontent.com/daq-tools/eskema/main/tests/testdata/basic.csv"
+    return "https://raw.githubusercontent.com/daq-tools/skeem/main/tests/testdata/basic.csv"
 
 
 @pytest.fixture
@@ -52,7 +52,7 @@ def json_records_file_basic():
 
 @pytest.fixture
 def json_records_url_basic():
-    return "https://raw.githubusercontent.com/daq-tools/eskema/main/tests/testdata/basic-records.json"
+    return "https://raw.githubusercontent.com/daq-tools/skeem/main/tests/testdata/basic-records.json"
 
 
 @pytest.fixture
@@ -62,7 +62,7 @@ def json_document_file_basic():
 
 @pytest.fixture
 def json_document_url_basic():
-    return "https://raw.githubusercontent.com/daq-tools/eskema/main/tests/testdata/basic-document.json"
+    return "https://raw.githubusercontent.com/daq-tools/skeem/main/tests/testdata/basic-document.json"
 
 
 @pytest.fixture
@@ -72,7 +72,7 @@ def json_nested_file_basic():
 
 @pytest.fixture
 def json_nested_url_basic():
-    return "https://raw.githubusercontent.com/daq-tools/eskema/main/tests/testdata/basic-nested.json"
+    return "https://raw.githubusercontent.com/daq-tools/skeem/main/tests/testdata/basic-nested.json"
 
 
 @pytest.fixture
@@ -82,7 +82,7 @@ def line_protocol_file_basic():
 
 @pytest.fixture
 def line_protocol_url_basic():
-    return "https://raw.githubusercontent.com/daq-tools/eskema/main/tests/testdata/basic.lp"
+    return "https://raw.githubusercontent.com/daq-tools/skeem/main/tests/testdata/basic.lp"
 
 
 @pytest.fixture
@@ -98,7 +98,7 @@ def netcdf_file_aircraft():
 @pytest.fixture
 def netcdf_url_aircraft():
     return Path("tests/testdata/aircraft-track-lear.nc")
-    # return "https://raw.githubusercontent.com/daq-tools/eskema/main/tests/testdata/aircraft-track-lear.nc" # noqa: ERA001, E501
+    # return "https://raw.githubusercontent.com/daq-tools/skeem/main/tests/testdata/aircraft-track-lear.nc" # noqa: ERA001, E501
 
 
 @pytest.fixture
@@ -108,7 +108,7 @@ def xlsx_file_basic():
 
 @pytest.fixture
 def xlsx_url_basic():
-    return "https://raw.githubusercontent.com/daq-tools/eskema/main/tests/testdata/basic.xlsx"
+    return "https://raw.githubusercontent.com/daq-tools/skeem/main/tests/testdata/basic.xlsx"
 
 
 @pytest.fixture
@@ -118,7 +118,7 @@ def ods_file_basic():
 
 @pytest.fixture
 def ods_url_basic():
-    return "https://raw.githubusercontent.com/daq-tools/eskema/main/tests/testdata/basic.ods"
+    return "https://raw.githubusercontent.com/daq-tools/skeem/main/tests/testdata/basic.ods"
 
 
 @pytest.fixture
@@ -128,7 +128,7 @@ def parquet_file_basic():
 
 @pytest.fixture
 def parquet_url_basic():
-    return "https://raw.githubusercontent.com/daq-tools/eskema/main/tests/testdata/basic.parquet"
+    return "https://raw.githubusercontent.com/daq-tools/skeem/main/tests/testdata/basic.parquet"
 
 
 @pytest.fixture

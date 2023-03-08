@@ -5,12 +5,12 @@ from pathlib import Path
 
 import pandas as pd
 
-from eskema.autopk import infer_pk
-from eskema.exception import UnknownContentType
-from eskema.model import Resource, SqlResult, SqlTarget
-from eskema.settings import FRICTIONLESS_CONTENT_TYPES
-from eskema.type import ContentType
-from eskema.util.data import to_bytes
+from skeem.autopk import infer_pk
+from skeem.exception import UnknownContentType
+from skeem.model import Resource, SqlResult, SqlTarget
+from skeem.settings import FRICTIONLESS_CONTENT_TYPES
+from skeem.type import ContentType
+from skeem.util.data import to_bytes
 
 logger = logging.getLogger(__name__)
 
@@ -86,7 +86,7 @@ class SchemaGenerator:
         from ddlgenerator.ddlgenerator import _dump
         from frictionless.formats import ExcelControl, OdsControl
 
-        from eskema.ddlgen.ddlgenerator import TablePlus
+        from skeem.ddlgen.ddlgenerator import TablePlus
 
         frictionless_args: t.Dict[str, t.Union[str, t.IO]] = {}
         if self.resource.path is not None:
@@ -159,8 +159,8 @@ class SchemaGenerator:
 
     def _ddl_ddlgen(self) -> SqlResult:
 
-        from eskema.ddlgen.ddlgenerator import TablePlus
-        from eskema.ddlgen.sources import SourcePlus
+        from skeem.ddlgen.ddlgenerator import TablePlus
+        from skeem.ddlgen.sources import SourcePlus
 
         # Sanity checks.
         if self.resource.type is None:

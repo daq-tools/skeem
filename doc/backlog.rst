@@ -1,6 +1,6 @@
-##############
-Eskema backlog
-##############
+#############
+Skeem backlog
+#############
 
 
 ***********
@@ -40,14 +40,14 @@ Features
 - [x] Performance: Support reading large files efficiently
 - [x] Source: Support reading data from HTTP
 - [x] Performance: Support reading large files from HTTP more efficiently
-- [x] Refactoring: A bit of code to ``eskema.io``
+- [x] Refactoring: A bit of code to ``skeem.io``
 - [x] Format: Add support for "InfluxDB line protocol" input format
-- [x] Refactoring: ``eskema.sources`` to ``eskema.ddlgen``?
+- [x] Refactoring: ``skeem.sources`` to ``skeem.ddlgen``?
 - [x] Source: Support reading data from S3
 - [x] Source: Load data from Google Cloud Storage
 - [x] Format: Add NetCDF (.nc, .netcdf) input format
 - [x] Format: Add GRIB2 (.grib2) input format
-- [x] UX: ``eskema info``
+- [x] UX: ``skeem info``
 - [x] UX: Add help texts to CLI options
 - [x] Support reading archive files directly.
 
@@ -84,7 +84,7 @@ Quality
 
 Formats
 =======
-- [x] Format: Modernize ``eskema.type``
+- [x] Format: Modernize ``skeem.type``
 - [x] Format: Also recognize .netcdf, see https://en.ilmatieteenlaitos.fi/silam-opendata-on-aws-s3
 
 
@@ -173,7 +173,7 @@ General
   - [o] Read irregular files, where field and tag names deviate between individual lines
   - [o] Use ``TIMESTAMP`` for ``time`` column?
 - [o] Add support for other metrics formats. Prometheus, Graphite, collectd?
-- [o] Enable ``frictionless`` backend using environment variable ``ESKEMA_BACKEND=frictionless``
+- [o] Enable ``frictionless`` backend using environment variable ``SKEEM_BACKEND=frictionless``
 - [o] Provide options to control sample size
 - [o] Startup time is currently one second. Can this be improved?
 - [o] Add support for "InfluxDB annotated CSV" input format

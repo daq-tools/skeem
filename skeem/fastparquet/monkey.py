@@ -1,6 +1,6 @@
 import fastparquet.core
 
-from eskema.fastparquet.core import read_col
+from skeem.fastparquet.core import read_col
 
 
 def activate():

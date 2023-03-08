@@ -1,6 +1,6 @@
-###########################
-Eskema test case collection
-###########################
+##########################
+Skeem test case collection
+##########################
 
 
 air-sensor-data-irregular.lp

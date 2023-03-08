@@ -1,6 +1,6 @@
-##########################
-Eskema resource collection
-##########################
+#########################
+Skeem resource collection
+#########################
 
 
 Azure Blob Filesystem (ABFS)

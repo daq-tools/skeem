@@ -14,13 +14,13 @@ waste resources on subsequent redundant downloads.
 However, there are situations where data files need to be accessed directly on
 remote locations.
 
-Eskema supports a variety of remote sources and data formats using the
+Skeem supports a variety of remote sources and data formats using the
 excellent `fsspec`_ package, and tries to be efficient by only sampling the
 first one hundred records of the obtained data source. The corresponding
 default settings are currently:
 
-- ``eskema.settings.PEEK_LINES = 100``
-- ``eskema.settings.PEEK_BYTES = 13000``
+- ``skeem.settings.PEEK_LINES = 100``
+- ``skeem.settings.PEEK_BYTES = 13000``
 - ``frictionless.Detector.sample_size = 100``
 
 
@@ -39,7 +39,7 @@ and the Carbon Dioxide Information Analysis Center.
 
 This CSV file (1.2 GB) is from the `noaa-ghcn-pds`_ bucket on AWS S3::
 
-    eskema --verbose infer-ddl --dialect=postgresql \
+    skeem --verbose infer-ddl --dialect=postgresql \
         s3://noaa-ghcn-pds/csv/by_year/2022.csv
 
 
@@ -60,40 +60,40 @@ vehicles in New York City.
 Parquet::
 
     wget https://d37ci6vzurychx.cloudfront.net/trip-data/yellow_tripdata_2022-01.parquet
-    eskema --verbose infer-ddl --dialect=postgresql yellow_tripdata_2022-01.parquet
+    skeem --verbose infer-ddl --dialect=postgresql yellow_tripdata_2022-01.parquet
 
-    eskema --verbose infer-ddl --dialect=postgresql \
+    skeem --verbose infer-ddl --dialect=postgresql \
         https://d37ci6vzurychx.cloudfront.net/trip-data/yellow_tripdata_2022-01.parquet
 
 NDJSON::
 
     wget https://s3.amazonaws.com/crate.sampledata/nyc.yellowcab/yc.2019.07.gz
     cat yc.2019.07.gz | gunzip > yc.2019.07.ndjson
-    eskema --verbose infer-ddl --dialect=postgresql yc.2019.07.ndjson
+    skeem --verbose infer-ddl --dialect=postgresql yc.2019.07.ndjson
 
 CSV::
 
     # Acquire first 1000 lines of TLC trip data in CSV format, without needing to download everything.
     curl -s "https://data.cityofnewyork.us/api/views/biws-g3hs/rows.csv?accessType=DOWNLOAD" \
         | dd bs=1 count=100000 | head -n 1000 > tlc-yc-2017-head.csv
-    eskema --verbose infer-ddl --dialect=postgresql tlc-yc-2017-head.csv
+    skeem --verbose infer-ddl --dialect=postgresql tlc-yc-2017-head.csv
 
     wget https://data.cityofnewyork.us/resource/biws-g3hs.csv
-    eskema --verbose infer-ddl --dialect=postgresql biws-g3hs.csv
+    skeem --verbose infer-ddl --dialect=postgresql biws-g3hs.csv
 
     # Try out both backends.
-    eskema --verbose infer-ddl --dialect=postgresql --backend=ddlgen \
+    skeem --verbose infer-ddl --dialect=postgresql --backend=ddlgen \
         https://data.cityofnewyork.us/resource/biws-g3hs.csv
 
-    eskema --verbose infer-ddl --dialect=postgresql --backend=frictionless \
+    skeem --verbose infer-ddl --dialect=postgresql --backend=frictionless \
         https://data.cityofnewyork.us/resource/biws-g3hs.csv
 
 JSON::
 
     wget https://data.cityofnewyork.us/resource/biws-g3hs.json
-    eskema --verbose infer-ddl --dialect=postgresql biws-g3hs.json
+    skeem --verbose infer-ddl --dialect=postgresql biws-g3hs.json
 
-    eskema --verbose infer-ddl --dialect=postgresql \
+    skeem --verbose infer-ddl --dialect=postgresql \
         https://data.cityofnewyork.us/resource/biws-g3hs.json
 
 
@@ -107,16 +107,16 @@ ecommerce website with different properties.
 Reading NDJSON from remote resources is supported by both backends,
 ``ddlgen``, and ``frictionless``::
 
-    eskema --verbose infer-ddl --dialect=postgresql --backend=ddlgen \
+    skeem --verbose infer-ddl --dialect=postgresql --backend=ddlgen \
         https://storage.googleapis.com/tinybird-assets/datasets/guides/how-to-ingest-ndjson-data/events_100k.ndjson
 
-    eskema --verbose infer-ddl --dialect=postgresql --backend=frictionless \
+    skeem --verbose infer-ddl --dialect=postgresql --backend=frictionless \
         https://storage.googleapis.com/tinybird-assets/datasets/guides/how-to-ingest-ndjson-data/events_100k.ndjson
 
 You can also address public buckets in Google Cloud Storage, using the
 ``gs://`` scheme, like::
 
-    eskema --verbose infer-ddl --dialect=postgresql \
+    skeem --verbose infer-ddl --dialect=postgresql \
         gs://tinybird-assets/datasets/guides/how-to-ingest-ndjson-data/events_100k.ndjson
 
 .. _2017 Yellow Taxi Trip Data: https://data.cityofnewyork.us/Transportation/2017-Yellow-Taxi-Trip-Data/biws-g3hs

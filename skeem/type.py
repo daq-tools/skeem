@@ -4,8 +4,8 @@ from collections import OrderedDict
 from enum import Enum
 from pathlib import Path
 
-from eskema.exception import UnknownContentType
-from eskema.util.data import enum_values
+from skeem.exception import UnknownContentType
+from skeem.util.data import enum_values
 
 
 def init():

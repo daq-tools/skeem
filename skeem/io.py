@@ -11,8 +11,8 @@ import xarray as xr
 from fsspec.implementations.local import LocalFileOpener
 from fsspec.spec import AbstractBufferedFile
 
-from eskema.settings import PEEK_BYTES, PEEK_LINES
-from eskema.type import ContentType, ContentTypeGroup
+from skeem.settings import PEEK_BYTES, PEEK_LINES
+from skeem.type import ContentType, ContentTypeGroup
 
 logger = logging.getLogger(__name__)
 
@@ -238,7 +238,7 @@ def to_dataframe(data: t.Union[t.IO], content_type: ContentType, address: t.Any 
     """
     Converge data to pandas DataFrame, trying to peek at the first lines/records of data only.
 
-    This machinery is currently used by `eskema.autopk`.
+    This machinery is currently used by `skeem.autopk`.
     """
 
     if data is None:

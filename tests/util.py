@@ -5,7 +5,7 @@ from pathlib import Path
 
 from ddlgenerator.reshape import clean_key_name
 
-from eskema.util.sql import sql_canonicalize
+from skeem.util.sql import sql_canonicalize
 
 BACKENDS = ["ddlgen", "frictionless"]
 
@@ -14,7 +14,7 @@ def random_table_name(label: t.Union[Path, str]):
     name = label
     if isinstance(label, Path):
         name = label.name
-    return f"eskema-test-{name}-{random.randint(1, 9999)}"
+    return f"skeem-test-{name}-{random.randint(1, 9999)}"
 
 
 def get_basic_sql_reference(

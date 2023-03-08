@@ -1,9 +1,9 @@
 import pytest
 from click.testing import CliRunner
 
-from eskema.cli import cli
-from eskema.core import SchemaGenerator
-from eskema.model import Resource, SqlResult, SqlTarget
+from skeem.cli import cli
+from skeem.core import SchemaGenerator
+from skeem.model import Resource, SqlResult, SqlTarget
 from tests.util import get_basic_sql_reference, get_basic_sql_reference_alt, getcmd
 
 GSHEET_URL_SHEET_BASIC = "https://docs.google.com/spreadsheets/d/1ExyrawjlyksbC6DOM6nLolJDbU8qiRrrhxSuxf5ScB0/view"

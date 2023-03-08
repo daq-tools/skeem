@@ -3,9 +3,9 @@ import io
 import pandas as pd
 import pytest
 
-from eskema.autopk import infer_pk
-from eskema.core import SchemaGenerator
-from eskema.model import Resource, SqlTarget
+from skeem.autopk import infer_pk
+from skeem.core import SchemaGenerator
+from skeem.model import Resource, SqlTarget
 
 
 def test_schema_generator_without_dialect():

@@ -3,10 +3,10 @@ import logging
 import typing as t
 from pathlib import Path
 
-import eskema.io
-from eskema.settings import PEEK_BYTES, PEEK_LINES
-from eskema.type import ContentType
-from eskema.util.sql import sql_canonicalize, sql_pretty
+import skeem.io
+from skeem.settings import PEEK_BYTES, PEEK_LINES
+from skeem.type import ContentType
+from skeem.util.sql import sql_canonicalize, sql_pretty
 
 logger = logging.getLogger(__name__)
 
@@ -58,14 +58,14 @@ class Resource:
 
         # Access a plethora of resources using `fsspec` and friends.
         if self.data is None and self.path is not None:
-            self.data = eskema.io.open(self.path)
+            self.data = skeem.io.open(self.path)
 
         # Sanity checks
         if self.data is None:
             raise ValueError(f"Unable to open resource: {self}")
 
         # Peek into the first bytes/lines of data.
-        return eskema.io.peek(data=self.data, content_type=self.type, peek_bytes=PEEK_BYTES, peek_lines=PEEK_LINES)
+        return skeem.io.peek(data=self.data, content_type=self.type, peek_bytes=PEEK_BYTES, peek_lines=PEEK_LINES)
 
 
 @dataclasses.dataclass

@@ -1,6 +1,6 @@
 import platform
 
-from eskema.util.report import bullet_item, subsection
+from skeem.util.report import bullet_item, subsection
 
 
 def about_platform():

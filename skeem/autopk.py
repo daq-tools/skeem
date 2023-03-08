@@ -4,8 +4,8 @@ import typing as t
 
 import pandas as pd
 
-from eskema.io import to_dataframe
-from eskema.type import ContentType, ContentTypeGroup
+from skeem.io import to_dataframe
+from skeem.type import ContentType, ContentTypeGroup
 
 IntOrString = t.TypeVar("IntOrString", int, str)
 AddressType = t.Union[int, str, t.List[IntOrString]]

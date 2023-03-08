@@ -1,8 +1,8 @@
-#######################
-About ``eskema.ddlgen``
-#######################
+######################
+About ``skeem.ddlgen``
+######################
 
-The code within ``eskema.ddlgen`` is vendored from the excellent
+The code within ``skeem.ddlgen`` is vendored from the excellent
 `ddlgenerator`_ by `Catherine Devlin`_, thank you so much!
 
 It has been slightly adjusted, mostly by using monkey-patching, and it would be

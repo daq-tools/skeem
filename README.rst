@@ -1,18 +1,18 @@
 .. highlight:: sh
 
 
-######
-Eskema
-######
+#####
+Skeem
+#####
 
 
 *****
 About
 *****
 
-You can use Eskema to infer SQL DDL statements from tabular data.
+You can use Skeem to infer SQL DDL statements from tabular data.
 
-Eskema is, amongst others, based on the excellent `ddlgenerator`_, `frictionless`_,
+Skeem is, amongst others, based on the excellent `ddlgenerator`_, `frictionless`_,
 `fsspec`_, `pandas`_, `SQLAlchemy`_, and `xarray`_ packages, and can be used both
 as a standalone program, and as a library.
 
@@ -44,7 +44,7 @@ Synopsis
 
 .. code-block:: sh
 
-    eskema infer-ddl --dialect=postgresql data.ndjson
+    skeem infer-ddl --dialect=postgresql data.ndjson
 
 .. code-block:: sql
 
@@ -64,17 +64,17 @@ Setup
 
 .. code-block:: sh
 
-    pip install eskema
+    pip install skeem
 
     # Additional formats: NetCDF
-    pip install 'eskema[scientific]'
+    pip install 'skeem[scientific]'
 
 
 *****
 Usage
 *****
 
-This section display some example invocations of Eskema, both on the command
+This section display some example invocations of Skeem, both on the command
 line, and per library use. Other than the resources available from the web,
 testing data can be acquired from the repository's `testdata`_ folder.
 
@@ -86,9 +86,9 @@ Help
 
 .. code-block:: sh
 
-    eskema info
-    eskema --help
-    eskema infer-ddl --help
+    skeem info
+    skeem --help
+    skeem infer-ddl --help
 
 Read from files
 ---------------
@@ -96,16 +96,16 @@ Read from files
 .. code-block:: sh
 
     # NDJSON, Parquet, and InfluxDB line protocol (ILP) formats.
-    eskema infer-ddl --dialect=postgresql data.ndjson
-    eskema infer-ddl --dialect=postgresql data.parquet
-    eskema infer-ddl --dialect=postgresql data.lp
+    skeem infer-ddl --dialect=postgresql data.ndjson
+    skeem infer-ddl --dialect=postgresql data.parquet
+    skeem infer-ddl --dialect=postgresql data.lp
 
     # CSV, JSON, ODS, and XLSX formats.
-    eskema infer-ddl --dialect=postgresql data.csv
-    eskema infer-ddl --dialect=postgresql data.json
-    eskema infer-ddl --dialect=postgresql data.ods
-    eskema infer-ddl --dialect=postgresql data.xlsx
-    eskema infer-ddl --dialect=postgresql data.xlsx --address="Sheet2"
+    skeem infer-ddl --dialect=postgresql data.csv
+    skeem infer-ddl --dialect=postgresql data.json
+    skeem infer-ddl --dialect=postgresql data.ods
+    skeem infer-ddl --dialect=postgresql data.xlsx
+    skeem infer-ddl --dialect=postgresql data.xlsx --address="Sheet2"
 
 Read from URLs
 --------------
@@ -113,53 +113,53 @@ Read from URLs
 .. code-block:: sh
 
     # CSV, NDJSON, XLSX
-    eskema infer-ddl --dialect=postgresql https://github.com/daq-tools/eskema/raw/main/tests/testdata/basic.csv
-    eskema infer-ddl --dialect=postgresql https://github.com/daq-tools/eskema/raw/main/tests/testdata/basic.ndjson
-    eskema infer-ddl --dialect=postgresql https://github.com/daq-tools/eskema/raw/main/tests/testdata/basic.xlsx --address="Sheet2"
+    skeem infer-ddl --dialect=postgresql https://github.com/daq-tools/skeem/raw/main/tests/testdata/basic.csv
+    skeem infer-ddl --dialect=postgresql https://github.com/daq-tools/skeem/raw/main/tests/testdata/basic.ndjson
+    skeem infer-ddl --dialect=postgresql https://github.com/daq-tools/skeem/raw/main/tests/testdata/basic.xlsx --address="Sheet2"
 
     # Google Sheets: Address first sheet, and specific sheet of workbook.
-    eskema infer-ddl --dialect=postgresql --table-name=foo https://docs.google.com/spreadsheets/d/1ExyrawjlyksbC6DOM6nLolJDbU8qiRrrhxSuxf5ScB0/view
-    eskema infer-ddl --dialect=postgresql --table-name=foo https://docs.google.com/spreadsheets/d/1ExyrawjlyksbC6DOM6nLolJDbU8qiRrrhxSuxf5ScB0/view#gid=883324548
+    skeem infer-ddl --dialect=postgresql --table-name=foo https://docs.google.com/spreadsheets/d/1ExyrawjlyksbC6DOM6nLolJDbU8qiRrrhxSuxf5ScB0/view
+    skeem infer-ddl --dialect=postgresql --table-name=foo https://docs.google.com/spreadsheets/d/1ExyrawjlyksbC6DOM6nLolJDbU8qiRrrhxSuxf5ScB0/view#gid=883324548
 
     # InfluxDB line protocol (ILP)
-    eskema infer-ddl --dialect=postgresql https://github.com/influxdata/influxdb2-sample-data/raw/master/air-sensor-data/air-sensor-data.lp
+    skeem infer-ddl --dialect=postgresql https://github.com/influxdata/influxdb2-sample-data/raw/master/air-sensor-data/air-sensor-data.lp
 
     # CSV on S3
-    eskema --verbose infer-ddl --dialect=postgresql s3://noaa-ghcn-pds/csv/by_year/2022.csv
+    skeem --verbose infer-ddl --dialect=postgresql s3://noaa-ghcn-pds/csv/by_year/2022.csv
 
     # CSV on Google Cloud Storage
-    eskema --verbose infer-ddl --dialect=postgresql gs://tinybird-assets/datasets/nations.csv
-    eskema --verbose infer-ddl --dialect=postgresql gs://tinybird-assets/datasets/medals1.csv
+    skeem --verbose infer-ddl --dialect=postgresql gs://tinybird-assets/datasets/nations.csv
+    skeem --verbose infer-ddl --dialect=postgresql gs://tinybird-assets/datasets/medals1.csv
 
     # CSV on GitHub
-    eskema --verbose infer-ddl --dialect=postgresql github://daq-tools:eskema@/tests/testdata/basic.csv
+    skeem --verbose infer-ddl --dialect=postgresql github://daq-tools:skeem@/tests/testdata/basic.csv
 
     # GRIB2, NetCDF
-    eskema infer-ddl --dialect=postgresql https://dd.weather.gc.ca/ensemble/geps/grib2/products/12/003/CMC_geps-prob_TEMP_TGL_2m_latlon0p5x0p5_2023022512_P003_all-products.grib2
-    eskema infer-ddl --dialect=postgresql https://www.unidata.ucar.edu/software/netcdf/examples/sresa1b_ncar_ccsm3-example.nc
-    eskema infer-ddl --dialect=postgresql https://www.unidata.ucar.edu/software/netcdf/examples/WMI_Lear.nc
+    skeem infer-ddl --dialect=postgresql https://dd.weather.gc.ca/ensemble/geps/grib2/products/12/003/CMC_geps-prob_TEMP_TGL_2m_latlon0p5x0p5_2023022512_P003_all-products.grib2
+    skeem infer-ddl --dialect=postgresql https://www.unidata.ucar.edu/software/netcdf/examples/sresa1b_ncar_ccsm3-example.nc
+    skeem infer-ddl --dialect=postgresql https://www.unidata.ucar.edu/software/netcdf/examples/WMI_Lear.nc
 
     # Compressed files in gzip format
-    eskema --verbose infer-ddl --content-type=ndjson --dialect=crate https://s3.amazonaws.com/crate.sampledata/nyc.yellowcab/yc.2019.07.gz
+    skeem --verbose infer-ddl --content-type=ndjson --dialect=crate https://s3.amazonaws.com/crate.sampledata/nyc.yellowcab/yc.2019.07.gz
 
 More
 ----
 
 Use a different backend (default: ``ddlgen``)::
 
-    eskema infer-ddl --dialect=postgresql --backend=frictionless data.ndjson
+    skeem infer-ddl --dialect=postgresql --backend=frictionless data.ndjson
 
 Reading data from stdin needs to obtain both the table name and content type separately::
 
-    eskema infer-ddl --dialect=crate --table-name=foo --content-type=ndjson - < data.ndjson
-    eskema infer-ddl --dialect=crate --table-name=foo --content-type=json - < data.json
-    eskema infer-ddl --dialect=crate --table-name=foo --content-type=csv - < data.csv
+    skeem infer-ddl --dialect=crate --table-name=foo --content-type=ndjson - < data.ndjson
+    skeem infer-ddl --dialect=crate --table-name=foo --content-type=json - < data.json
+    skeem infer-ddl --dialect=crate --table-name=foo --content-type=csv - < data.csv
 
 Reading data from stdin also works like this, if you prefer to use pipes::
 
-    cat data.ndjson | eskema infer-ddl --dialect=crate --table-name=foo --content-type=ndjson -
-    cat data.json | eskema infer-ddl --dialect=crate --table-name=foo --content-type=json -
-    cat data.csv | eskema infer-ddl --dialect=crate --table-name=foo --content-type=csv -
+    cat data.ndjson | skeem infer-ddl --dialect=crate --table-name=foo --content-type=ndjson -
+    cat data.json | skeem infer-ddl --dialect=crate --table-name=foo --content-type=json -
+    cat data.csv | skeem infer-ddl --dialect=crate --table-name=foo --content-type=csv -
 
 
 Library use
@@ -168,8 +168,8 @@ Library use
 .. code-block:: python
 
     import io
-    from eskema.core import SchemaGenerator
-    from eskema.model import Resource, SqlTarget
+    from skeem.core import SchemaGenerator
+    from skeem.model import Resource, SqlTarget
 
     INDATA = io.StringIO(
         """
@@ -215,7 +215,15 @@ Credits and prior art
 - All the other countless authors of excellent Python packages,
   Python itself, and turtles all the way down.
 - More prior art: We are maintaining a `list of other projects`_ with the same
-  or similar goals like Eskema.
+  or similar goals like Skeem.
+
+Etymology
+=========
+
+The program was about to be called *Eskema*, but it turned out that there is
+already another `Eskema`_ out there. So, it has been renamed to *Skeem*, which
+is Estonian, and means "schema", "outline", or "(to) plan".
+
 
 
 .. _Amazon S3: https://en.wikipedia.org/wiki/Amazon_S3
@@ -225,6 +233,7 @@ Credits and prior art
 .. _data_dispenser: https://pypi.org/project/data_dispenser/
 .. _ddlgenerator: https://pypi.org/project/ddlgenerator/
 .. _development: doc/development.rst
+.. _Eskema: https://github.com/nombrekeff/eskema
 .. _Evgeny Karev: https://github.com/roll
 .. _file system: https://en.wikipedia.org/wiki/File_system
 .. _frictionless: https://github.com/frictionlessdata/framework
@@ -249,5 +258,5 @@ Credits and prior art
 .. _pandas: https://pypi.org/project/pandas/
 .. _Paul Walsh: https://github.com/pwalsh
 .. _SQLAlchemy: https://pypi.org/project/SQLAlchemy/
-.. _testdata: https://github.com/daq-tools/eskema/tree/main/tests/testdata
+.. _testdata: https://github.com/daq-tools/skeem/tree/main/tests/testdata
 .. _xarray: https://xarray.dev/

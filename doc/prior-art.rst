@@ -8,8 +8,8 @@ About
 *****
 
 There are a few other projects on PyPI and GitHub, which are aiming at the same
-goals like Eskema. Most notably are those excellent projects by `Catherine
-Devlin`_ and `Iuliia Volkova`_. Eskema is currently based on ``ddlgenerator``.
+goals like Skeem. Most notably are those excellent projects by `Catherine
+Devlin`_ and `Iuliia Volkova`_. Skeem is currently based on ``ddlgenerator``.
 
 - https://pypi.org/project/ddlgenerator/
 - https://pypi.org/project/simple-ddl-parser/

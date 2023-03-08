@@ -1,7 +1,7 @@
 import pytest
 
-from eskema.exception import UnknownContentType
-from eskema.type import ContentType, ContentTypeMime, ContentTypeSuffix
+from skeem.exception import UnknownContentType
+from skeem.type import ContentType, ContentTypeMime, ContentTypeSuffix
 
 # ===============
 # Main test cases

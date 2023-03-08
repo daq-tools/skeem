@@ -1,7 +1,7 @@
 import pytest
 from click.testing import CliRunner
 
-from eskema.cli import cli
+from skeem.cli import cli
 
 
 def test_generic_infer_cli_stdin_without_content_type():

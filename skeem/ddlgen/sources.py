@@ -8,8 +8,8 @@ import sqlalchemy
 from cachetools.func import lru_cache
 from data_dispenser import Source
 
-from eskema.io import dataframe_from_lineprotocol, dataset_to_dataframe, to_tempfile
-from eskema.settings import PEEK_LINES
+from skeem.io import dataframe_from_lineprotocol, dataset_to_dataframe, to_tempfile
+from skeem.settings import PEEK_LINES
 
 logger = logging.getLogger(__name__)
 

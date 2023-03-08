@@ -4,8 +4,8 @@ import pandas as pd
 import pandas._testing as tm
 import pytest
 
-from eskema.io import peek, to_dataframe
-from eskema.type import ContentType
+from skeem.io import peek, to_dataframe
+from skeem.type import ContentType
 
 
 def test_peek_success():

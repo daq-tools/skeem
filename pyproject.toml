@@ -1,5 +1,5 @@
 [project]
-name = "eskema"
+name = "skeem"
 version = "0.0.0"
 description = "Infer SQL DDL statements from tabular data"
 readme = "README.rst"
@@ -115,13 +115,13 @@ test = [
 ]
 
 [project.urls]
-changelog = "https://github.com/daq-tools/eskema/blob/main/CHANGES.rst"
-documentation = "https://github.com/daq-tools/eskema"
-homepage = "https://github.com/daq-tools/eskema"
-repository = "https://github.com/daq-tools/eskema"
+changelog = "https://github.com/daq-tools/skeem/blob/main/CHANGES.rst"
+documentation = "https://github.com/daq-tools/skeem"
+homepage = "https://github.com/daq-tools/skeem"
+repository = "https://github.com/daq-tools/skeem"
 
 [project.scripts]
-eskema = "eskema.cli:cli"
+skeem = "skeem.cli:cli"
 
 
 [tool.black]
@@ -130,20 +130,20 @@ line-length = 120
 [tool.coverage.run]
 branch = false
 omit = [
-  "eskema/ddlgen/ddlgenerator.py",
-  "eskema/ddlgen/sources.py",
-  "eskema/fastparquet/core.py",
-  "eskema/pandas/io_common.py",
+  "skeem/ddlgen/ddlgenerator.py",
+  "skeem/ddlgen/sources.py",
+  "skeem/fastparquet/core.py",
+  "skeem/pandas/io_common.py",
   "tests/*",
 ]
-source = ["eskema"]
+source = ["skeem"]
 
 [tool.coverage.report]
 fail_under = 0
 show_missing = true
 
 [tool.mypy]
-packages = ["eskema"]
+packages = ["skeem"]
 install_types = true
 ignore_missing_imports = true
 implicit_optional = true
@@ -155,7 +155,7 @@ minversion = "2.0"
 log_level = "DEBUG"
 log_cli_level = "DEBUG"
 testpaths = [
-  "eskema",
+  "skeem",
   "tests",
 ]
 xfail_strict = true
@@ -208,12 +208,12 @@ extend-ignore = [
 ]
 
 [tool.ruff.per-file-ignores]
-"eskema/core.py" = ["E402"]
-"eskema/fastparquet/*" = ["E722"]
-"eskema/pandas/*" = ["S101"]
-"eskema/report.py" = ["T201"]
-"eskema/util/platform.py" = ["T201"]
-"eskema/util/report.py" = ["T201"]
+"skeem/core.py" = ["E402"]
+"skeem/fastparquet/*" = ["E722"]
+"skeem/pandas/*" = ["S101"]
+"skeem/report.py" = ["T201"]
+"skeem/util/platform.py" = ["T201"]
+"skeem/util/report.py" = ["T201"]
 "tests/*" = ["S101"]  # Use of `assert` detected
 "tests/*roadrunner*" = ["ERA001"]  # Use of `assert` detected
 

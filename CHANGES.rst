@@ -1,6 +1,6 @@
-################
-Eskema changelog
-################
+###############
+Skeem changelog
+###############
 
 
 in progress
@@ -27,7 +27,7 @@ in progress
 - Performance: Improve peeking into Parquet files
 - Performance: Configure ``PEEK_LINES = 100`` instead of 1000
 - Performance: Optimize reading from remote NDJSON files
-- Refactoring: I/O related code goes into ``eskema.io``
+- Refactoring: I/O related code goes into ``skeem.io``
 - Format: Add support for InfluxDB line protocol input format
 - Source: Unlock reading from public S3 buckets anonymously (``--no-sign-request``)
 - Source: Unlock and document reading from public Google Cloud Storage (GCS) buckets,
@@ -37,11 +37,11 @@ in progress
 - Format: Add NetCDF input format
 - AutoPK: Fix heuristics where the first column is a dictionary
 - Format: Add GRIB2 input format
-- Refactoring: Rework ``eskema.type``
-- Refactoring: Add ``eskema.io.open`` as a wrapper around ``fsspec.open``
-- Refactoring: Add ``eskema.io.to_dataframe`` from ``eskema.autopk``
-- Refactoring: Add ``eskema.util`` folder instead of single ``util.py``
-- UX: Add ``eskema info`` subcommand
+- Refactoring: Rework ``skeem.type``
+- Refactoring: Add ``skeem.io.open`` as a wrapper around ``fsspec.open``
+- Refactoring: Add ``skeem.io.to_dataframe`` from ``skeem.autopk``
+- Refactoring: Add ``skeem.util`` folder instead of single ``util.py``
+- UX: Add ``skeem info`` subcommand
 - UX: Improve CLI help
 - Format: Add support for reading compressed files in Gzip format
 

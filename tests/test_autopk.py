@@ -2,8 +2,8 @@ import re
 
 import pytest
 
-from eskema.autopk import infer_pk
-from eskema.type import ContentType
+from skeem.autopk import infer_pk
+from skeem.type import ContentType
 
 
 def test_autopk_content_type_invalid_none():

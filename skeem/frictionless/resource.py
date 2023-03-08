@@ -1,6 +1,6 @@
 from frictionless import Resource
 
-from eskema.settings import PEEK_LINES
+from skeem.settings import PEEK_LINES
 
 
 class ResourcePlus(Resource):

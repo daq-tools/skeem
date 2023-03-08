@@ -1,7 +1,7 @@
 import pandas.io.common
 
-from eskema.pandas.compat import fix_optional_dependency_list
-from eskema.pandas.io_common import _get_filepath_or_buffer
+from skeem.pandas.compat import fix_optional_dependency_list
+from skeem.pandas.io_common import _get_filepath_or_buffer
 
 
 def activate():
