@@ -45,6 +45,7 @@ in progress
 - UX: Improve CLI help
 - Format: Add support for reading compressed files in Gzip format
 - CI: Run software tests on GHA
+- CI: Use ``versioningit`` for automatic package versioning
 
 
 2023-01-xx 0.0.0
