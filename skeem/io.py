@@ -7,7 +7,6 @@ from pathlib import Path
 
 import fsspec
 import pandas as pd
-import xarray as xr
 from fsspec.implementations.local import LocalFileOpener
 from fsspec.spec import AbstractBufferedFile
 
@@ -125,7 +124,9 @@ def fsspec_peek(
     return payload
 
 
-def dataset_to_dataframe(ds: xr.Dataset, peek_lines: int) -> pd.DataFrame:
+def dataset_to_dataframe(
+    ds: "xarray.Dataset", peek_lines: int  # type: ignore[name-defined]  # noqa: F821
+) -> pd.DataFrame:
     logger.info(f"Dataset:\n{ds}")
     df = ds.to_dataframe().dropna()
     logger.debug(f"DataFrame:\n{df}")
