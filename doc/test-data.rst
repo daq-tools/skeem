@@ -25,3 +25,4 @@ Production
 - https://learn.microsoft.com/en-us/azure/databricks/external-data/csv
 - csv-to-lineprotocol: https://dganais.medium.com/getting-started-writing-data-to-influxdb-54ce99fdeb3e
 - https://github.com/pandas-dev/pandas/issues/36688
+- https://github.com/earthobservations/testdata

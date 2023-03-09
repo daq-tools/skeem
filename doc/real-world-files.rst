@@ -54,7 +54,7 @@ external predictors (e.g., elevation) as covariates (kriging with external drift
 
 Daily data is in annual netcdf files. The files are produced by R:s Raster package.
 
-This NDJSON file (94 MB) is from the `fmi-gridded-obs-daily-1km`_ bucket on AWS S3::
+This NetCDF file (170 MB) is from the `fmi-gridded-obs-daily-1km`_ bucket on AWS S3::
 
     aws s3 cp --no-sign-request s3://fmi-gridded-obs-daily-1km/Netcdf/Tday/tday_2023.nc .
     skeem --verbose infer-ddl --dialect=postgresql tday_2023.nc

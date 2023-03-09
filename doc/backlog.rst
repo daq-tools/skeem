@@ -221,11 +221,13 @@ Iteration 4
   - Fixed-width, using ``pd.read_fwf()``
   - Dataframes
 
-    - Pandas
-    - Arrow
+    - Arrow / Datafusion
     - Dask
+    - Ibis: https://github.com/ibis-project/ibis
     - Modin
+    - Pandas
     - Polars
+    - Spark
     - Vaex: https://github.com/vaexio/vaex
       https://vaex.io/blog/8-incredibly-powerful-Vaex-features-you-might-have-not-known-about
   - Avro

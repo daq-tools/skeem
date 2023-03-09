@@ -1,6 +1,3 @@
-.. highlight:: sh
-
-
 #####
 Skeem
 #####
@@ -37,6 +34,11 @@ Supported input sources:
 - `Google Cloud Storage`_
 - `HTTP`_
 
+Please note that Skeem is alpha-quality software, and a work in progress.
+Contributions of all kinds are very welcome, in order to make it more solid.
+Breaking changes should be expected until a 1.0 release, so version pinning
+is recommended, especially when you use it as a library.
+
 
 ********
 Synopsis
@@ -62,7 +64,7 @@ Synopsis
 Quickstart
 **********
 
-If you are in a hurry, and want to run Skeem without any installation, just run
+If you are in a hurry, and want to run Skeem without any installation, just use
 the OCI image on Podman or Docker.
 
 .. code-block:: sh
@@ -76,11 +78,16 @@ the OCI image on Podman or Docker.
 Setup
 *****
 
+Install Skeem from PyPI.
+
 .. code-block:: sh
 
     pip install skeem
 
-    # Additional formats: NetCDF
+Install Skeem with support for additional data formats like NetCDF.
+
+.. code-block:: sh
+
     pip install 'skeem[scientific]'
 
 
@@ -88,7 +95,7 @@ Setup
 Usage
 *****
 
-This section display some example invocations of Skeem, both on the command
+This section outlines some example invocations of Skeem, both on the command
 line, and per library use. Other than the resources available from the web,
 testing data can be acquired from the repository's `testdata`_ folder.
 
@@ -138,6 +145,9 @@ Read from URLs
     # InfluxDB line protocol (ILP)
     skeem infer-ddl --dialect=postgresql https://github.com/influxdata/influxdb2-sample-data/raw/master/air-sensor-data/air-sensor-data.lp
 
+    # Compressed files in gzip format
+    skeem --verbose infer-ddl --dialect=crate --content-type=ndjson https://s3.amazonaws.com/crate.sampledata/nyc.yellowcab/yc.2019.07.gz
+
     # CSV on S3
     skeem --verbose infer-ddl --dialect=postgresql s3://noaa-ghcn-pds/csv/by_year/2022.csv
 
@@ -149,12 +159,9 @@ Read from URLs
     skeem --verbose infer-ddl --dialect=postgresql github://daq-tools:skeem@/tests/testdata/basic.csv
 
     # GRIB2, NetCDF
-    skeem infer-ddl --dialect=postgresql https://dd.weather.gc.ca/ensemble/geps/grib2/products/12/003/CMC_geps-prob_TEMP_TGL_2m_latlon0p5x0p5_2023022512_P003_all-products.grib2
+    skeem infer-ddl --dialect=postgresql https://github.com/earthobservations/testdata/raw/main/opendata.dwd.de/weather/nwp/icon/grib/18/t/icon-global_regular-lat-lon_air-temperature_level-90.grib2
     skeem infer-ddl --dialect=postgresql https://www.unidata.ucar.edu/software/netcdf/examples/sresa1b_ncar_ccsm3-example.nc
     skeem infer-ddl --dialect=postgresql https://www.unidata.ucar.edu/software/netcdf/examples/WMI_Lear.nc
-
-    # Compressed files in gzip format
-    skeem --verbose infer-ddl --content-type=ndjson --dialect=crate https://s3.amazonaws.com/crate.sampledata/nyc.yellowcab/yc.2019.07.gz
 
 OCI
 ---
@@ -175,6 +182,17 @@ working directory into the container when running it, like:
 
     docker run --rm --volume=$(pwd):/data ghcr.io/daq-tools/skeem-standard \
         skeem infer-ddl --dialect=postgresql /data/basic.csv
+
+In order to always run the latest development version, and to use a shortcut
+for that, this section outlining how to use an alias for ``skeem``, and a
+variable for storing the URL, may be useful to save a few keystrokes.
+
+.. code-block:: sh
+
+    alias skeem="docker run --rm --pull=always ghcr.io/daq-tools/skeem-standard:nightly skeem"
+    URL=https://github.com/daq-tools/skeem/raw/main/tests/testdata/basic.ndjson
+    skeem infer-ddl --dialect=postgresql $URL
+
 
 More
 ----
@@ -235,25 +253,30 @@ Library use
 Development
 ***********
 
-For working with the latest development version, please follow the
-`development`_ documentation.
+For installing the project from source, please follow the `development`_
+documentation.
 
 
-*********************
-Credits and prior art
-*********************
+*******************
+Project information
+*******************
 
-- `Mike Bayer`_ for `SQLAlchemy`_.
+Credits
+=======
 - `Catherine Devlin`_ for `ddlgenerator`_ and `data_dispenser`_.
+- `Mike Bayer`_ for `SQLAlchemy`_.
 - `Paul Walsh`_ and `Evgeny Karev`_ for `frictionless`_.
-- All the other countless authors of excellent Python packages,
-  Python itself, and turtles all the way down.
-- More prior art: We are maintaining a `list of other projects`_ with the same
-  or similar goals like Skeem.
+- `Wes McKinney`_ for `pandas`_.
+- All other countless contributors and authors of excellent Python
+  packages, Python itself, and turtles all the way down.
+
+Prior art
+=========
+We are maintaining a `list of other projects`_ with the same or similar goals
+like Skeem.
 
 Etymology
 =========
-
 The program was about to be called *Eskema*, but it turned out that there is
 already another `Eskema`_ out there. So, it has been renamed to *Skeem*, which
 is Estonian, and means "schema", "outline", or "(to) plan".
@@ -289,8 +312,9 @@ is Estonian, and means "schema", "outline", or "(to) plan".
 .. _NetCDF: https://en.wikipedia.org/wiki/NetCDF
 .. _Office Open XML Workbook: https://en.wikipedia.org/wiki/Office_Open_XML
 .. _OpenDocument Spreadsheet: https://en.wikipedia.org/wiki/OpenDocument
-.. _pandas: https://pypi.org/project/pandas/
+.. _pandas: https://pandas.pydata.org/
 .. _Paul Walsh: https://github.com/pwalsh
 .. _SQLAlchemy: https://pypi.org/project/SQLAlchemy/
 .. _testdata: https://github.com/daq-tools/skeem/tree/main/tests/testdata
+.. _Wes McKinney: https://github.com/wesm
 .. _xarray: https://xarray.dev/
