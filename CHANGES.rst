@@ -6,6 +6,9 @@ Skeem changelog
 in progress
 ===========
 
+
+2023-03-09 0.1.0
+================
 - Initial working version, supporting JSON
 - Add CLI subsystem
 - Add logging
@@ -47,7 +50,3 @@ in progress
 - CI: Run software tests on GHA
 - CI: Use ``versioningit`` for automatic package versioning
 - CI: Add OCI image builder to provide images for Podman, Docker, etc.
-
-
-2023-01-xx 0.0.0
-================
