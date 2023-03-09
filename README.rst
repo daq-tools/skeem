@@ -175,22 +175,29 @@ run them on Podman or Docker, invoke:
         skeem infer-ddl --dialect=postgresql \
         https://github.com/daq-tools/skeem/raw/main/tests/testdata/basic.csv
 
-If you want to work with files on your filesystem, you will need to mount the
-working directory into the container when running it, like:
+If you want to work with files on your filesystem, you will need to either
+mount the working directory into the container using the ``--volume`` option,
+or use the ``--interactive`` option to consume STDIN, like:
 
 .. code-block:: sh
 
     docker run --rm --volume=$(pwd):/data ghcr.io/daq-tools/skeem-standard \
-        skeem infer-ddl --dialect=postgresql /data/basic.csv
+        skeem infer-ddl --dialect=postgresql /data/basic.ndjson
 
-In order to always run the latest development version, and to use a shortcut
-for that, this section outlining how to use an alias for ``skeem``, and a
-variable for storing the URL, may be useful to save a few keystrokes.
+    docker run --rm --interactive ghcr.io/daq-tools/skeem-standard \
+        skeem infer-ddl --dialect=postgresql --content-type=ndjson - < basic.ndjson
+
+In order to always run the latest ``nightly`` development version, and to use a
+shortcut for that, this section outlines how to use an alias for ``skeem``, and
+a variable for storing the input URL. It may be useful to save a few keystrokes
+on subsequent invocations.
 
 .. code-block:: sh
 
-    alias skeem="docker run --rm --pull=always ghcr.io/daq-tools/skeem-standard:nightly skeem"
+    docker pull ghcr.io/daq-tools/skeem-standard:nightly
+    alias skeem="docker run --rm --interactive ghcr.io/daq-tools/skeem-standard:nightly skeem"
     URL=https://github.com/daq-tools/skeem/raw/main/tests/testdata/basic.ndjson
+
     skeem infer-ddl --dialect=postgresql $URL
 
 
@@ -204,14 +211,10 @@ Use a different backend (default: ``ddlgen``)::
 Reading data from stdin needs to obtain both the table name and content type separately::
 
     skeem infer-ddl --dialect=crate --table-name=foo --content-type=ndjson - < data.ndjson
-    skeem infer-ddl --dialect=crate --table-name=foo --content-type=json - < data.json
-    skeem infer-ddl --dialect=crate --table-name=foo --content-type=csv - < data.csv
 
 Reading data from stdin also works like this, if you prefer to use pipes::
 
     cat data.ndjson | skeem infer-ddl --dialect=crate --table-name=foo --content-type=ndjson -
-    cat data.json | skeem infer-ddl --dialect=crate --table-name=foo --content-type=json -
-    cat data.csv | skeem infer-ddl --dialect=crate --table-name=foo --content-type=csv -
 
 
 Library use

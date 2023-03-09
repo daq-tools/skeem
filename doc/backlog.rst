@@ -131,6 +131,8 @@ Bugs
 - [o] ``HTTP/1.1 403 Forbidden`` gets masked badly
 - [o] Fix ``cat foo | --backend=fl -``
 - [o] ``logger.warning`` will emit to STDOUT when running per tests
+- [o] RecursionError: maximum recursion depth exceeded
+  ``skeem infer-ddl --dialect=crate --content-type=ndjson --backend=frictionless - < tests/testdata/basic.ndjson``
 
 Features
 ========
