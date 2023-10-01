@@ -48,7 +48,6 @@ def test_schema_generator_invalid_content_type():
 
 @pytest.mark.xfail
 def test_schema_generator_without_resource_type():
-
     # Let's create a _valid_ `SchemaGenerator` instance first.
     sg = SchemaGenerator(
         resource=Resource(data=io.StringIO("a,b"), content_type="csv"),

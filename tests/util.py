@@ -14,7 +14,7 @@ def random_table_name(label: t.Union[Path, str]):
     name = label
     if isinstance(label, Path):
         name = label.name
-    return f"skeem-test-{name}-{random.randint(1, 9999)}"
+    return f"skeem-test-{name}-{random.randint(1, 9999)}"  # noqa: S311
 
 
 def get_basic_sql_reference(

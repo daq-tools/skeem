@@ -4,7 +4,6 @@ from skeem.util.report import bullet_item, subsection
 
 
 def about_platform():
-
     subsection("Python")
     print(bullet_item(platform.platform()))
     print()

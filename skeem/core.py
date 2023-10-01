@@ -75,7 +75,6 @@ class SchemaGenerator:
             raise NotImplementedError(f"Backend '{self.backend}' not implemented")
 
     def _ddl_frictionless(self) -> SqlResult:
-
         # Suppress warnings of BeautifulSoup
         from bs4 import GuessedAtParserWarning
 
@@ -118,7 +117,6 @@ class SchemaGenerator:
         # TODO: Make `infer_pk` obtain a `Resource` instance, and/or refactor as method.
         # TODO: Optimize runtime by not needing to open the resource twice.
         if self.target.primary_key is None:
-
             logger.info("Converging resource to pandas DataFrame")
             df: pd.DataFrame = resource.to_pandas()
             logger.info(f"pandas DataFrame size={len(df)}")
@@ -158,7 +156,6 @@ class SchemaGenerator:
         return SqlResult(sql)
 
     def _ddl_ddlgen(self) -> SqlResult:
-
         from skeem.ddlgen.ddlgenerator import TablePlus
         from skeem.ddlgen.sources import SourcePlus
 
