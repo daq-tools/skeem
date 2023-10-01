@@ -50,7 +50,7 @@ dependencies = [
   "line-protocol-parser<2",
   "odfpy<2",
   "pandas<1.6",
-  "requests<2.30",
+  "requests<2.32",
   "sql-formatter<0.7",
   "sqlmakeuper<0.2",
   "urllib3<2",
