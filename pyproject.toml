@@ -100,7 +100,7 @@ dependencies = [
   "sql-formatter<0.7",
   "sqlalchemy-cratedb==0.37.0",
   "sqlmakeuper<0.2",
-  "urllib3<2",
+  "urllib3<3",
 ]
 [project.optional-dependencies]
 develop = [
