@@ -9,7 +9,7 @@ on:
     branches: [ main ]
 
   schedule:
-    - cron: '0 10 * * *' # every day at 10am
+    - cron: '0 06 * * *' # every day at 06am
 
   # Allow job to be triggered manually.
   workflow_dispatch:
