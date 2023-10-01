@@ -120,3 +120,13 @@ Substrait
 - https://github.com/substrait-io/substrait-java
 - https://github.com/apache/arrow-datafusion-python/pull/145
 - https://github.com/duckdblabs/duckdb-substrait-demo
+
+
+Misc
+====
+- https://github.com/toddwschneider/nyc-taxi-data
+- https://github.com/taichi-dev/taichi
+- Vaex' ``infer_schema``
+  https://github.com/vaexio/vaex/blob/652937db59ef099a42ad650cdb19567dcbe1905a/packages/vaex-core/vaex/csv.py#L231-L292
+  - https://vaex.io/docs/guides/io.html#Text-based-file-formats
+- https://vaex.io/blog/8-incredibly-powerful-Vaex-features-you-might-have-not-known-about

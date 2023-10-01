@@ -54,10 +54,6 @@ Features
   - Example: https://s3.amazonaws.com/crate.sampledata/nyc.yellowcab/yc.2019.07.gz
   - https://github.com/leenr/gzip-stream
 
-Bugs
-====
-- [x] Why is "frictionless" resource being read twice?
-
 Documentation
 =============
 - [x] Inline code comments
@@ -70,10 +66,10 @@ Documentation
 Infrastructure
 ==============
 - [o] Add "examples" to test suite
-- [o] CI/GHA
-- [o] Docker build & publish
+- [x] CI/GHA
+- [x] Docker build & publish
 - [o] Docs: RTD
-- [o] Release 0.1.0
+- [x] Release 0.1.0
 - [o] Issue: Hello world
 
 Quality
@@ -93,46 +89,38 @@ Formats
 Iteration 3
 ***********
 
+Bugs
+====
+- Source url: https://docs.google.com/spreadsheets/d/e/2PACX-1vTyMYzq-Gh8dbMhID8XzDqwwmY2e8ahw9VRM_yLMT2_hz3XzR-rCLoFAU2Qdo2v4_IgnjurwW1c85E_/pub?gid=0&single=true&output=csv
+  Destination table: my_import_data
+
+Next steps
+==========
+- [o] Docs: Improve "library use" docs re. ``ContentType``.
+- [o] Docs: Add list of supported databases. /cc @seut
+- [o] Option to suppress ``NOT NULL`` constraint. /cc @seut
+- [o] Different kinds of sampling methods? /cc @seut
+- [o] Performance considerations / HTTP server
 
 Formats
 =======
+- [o] Format: TSV
 - [o] Format: Add Zarr (.zarr) input format
 - [o] Format: Add JSON5, YAML, TOML input formats
 - [o] Format: Partitioned Geoparquet
-  https://github.com/gadomski/chalkboard/blob/main/notebooks/isd-demo.ipynb
+
+  - https://github.com/gadomski/chalkboard/blob/main/notebooks/isd-demo.ipynb
 - [o] Format: dBase and friends
-- [o] Format: Lance and ORC. -- https://github.com/eto-ai/lance
+- [o] Format: Lance and ORC.
+
+  - https://github.com/eto-ai/lance
+  - https://eto-ai.github.io/lance/notebooks/quickstart.html
 - [o] Format: CSV without headers: https://commonscreens.com/?page_id=1492
-
-
-Bugs
-====
-- [o] Why is "ddlgen" resource being read twice? See ``_eval_lineprotocol``.
-  => Workaround: Add ``@cachetools.func.lru_cache``
-- [o] Can get hogged on resources like. Resolve: Automatically download before working on it.
-
-  - https://www.unidata.ucar.edu/software/netcdf/examples/sresa1b_ncar_ccsm3-example.nc
-  - s3://fmi-gridded-obs-daily-1km/Netcdf/Tday/tday_2022.nc
-- [o] WMI_Lear.nc has "time" as "TIMESTAMP", but "sresa1b_ncar_ccsm3-example.nc" uses "TEXT"
-- [o] Does not detect semicolon as field delimiter
-
-  - https://archive.sensor.community/2015-10-01/2015-10-01_ppd42ns_sensor_27.csv
-- [o] FrictionlessException: [source-error] The data source has not supported or has inconsistent contents: The HTTP server doesn't appear to support range requests. Only reading this file from the beginning is supported. Open with block_size=0 for a streaming file interface.
-
-  - https://archive.sensor.community/parquet/2015-10/ppd42ns/part-00000-77c393f3-34ff-4e92-ad94-2c9839d70cd0-c000.snappy.parquet
-- [o] RuntimeError: OrderedDict mutated during iteration
-
-  - s3://openaq-fetches/realtime/2023-02-25/1677351953_eea_2aa299a7-b688-4200-864a-8df7bac3af5b.ndjson
-
-- [o] Compute Engine Metadata server unavailable on attempt 1 of 3. Reason: timed out
-- [o] Failed to decode variable 'valid_time': unable to decode time units 'seconds since 1970-01-01T00:00:00' with "calendar 'proleptic_gregorian'". Try opening your dataset with decode_times=False or installing cftime if it is not installed.
-
-  - https://dd.weather.gc.ca/analysis/precip/hrdpa/grib2/polar_stereographic/06/CMC_HRDPA_APCP-006-0100cutoff_SFC_0_ps2.5km_2023012606_000.grib2
-- [o] ``HTTP/1.1 403 Forbidden`` gets masked badly
-- [o] Fix ``cat foo | --backend=fl -``
-- [o] ``logger.warning`` will emit to STDOUT when running per tests
-- [o] RecursionError: maximum recursion depth exceeded
-  ``skeem infer-ddl --dialect=crate --content-type=ndjson --backend=frictionless - < tests/testdata/basic.ndjson``
+- [o] Format: Pickled embeddings like https://huggingface.co/flair/ner-german-large/resolve/main/pytorch_model.bin
+- [o] Format: InfluxDB line protocol files also available in compressed format (gzip, more?)
+  ``influxd inspect export-lp lalala --compress``
+- [o] Format: CBOR, MessagePack: https://github.com/remarshal-project/remarshal
+- [o] Format: EDN and Transit: https://github.com/borkdude/jet
 
 Features
 ========
@@ -143,10 +131,8 @@ Features
 - [o] Library: Derive schema directly from pandas DataFrame, or others
 - [o] IO: Export to descriptor and/or schema
 - [o] Resource caching with fsspec? -- https://github.com/blaylockbk/Herbie/pull/153/files
-
-Documentation
-=============
-- [o] Improve "library use" docs re. ``ContentType``
+- [o] Improve data type detection. e.g. heuristically infer ``ts`` columns. See
+  https://gist.github.com/seut/497ef886db8755f9c8f27959e197149f
 
 General
 =======
@@ -179,6 +165,9 @@ General
 - [o] Provide options to control sample size
 - [o] Startup time is currently one second. Can this be improved?
 - [o] Add support for "InfluxDB annotated CSV" input format
+
+  - https://docs.influxdata.com/influxdb/v2.6/reference/syntax/annotated-csv/
+  - https://docs.influxdata.com/influxdb/v2.6/reference/syntax/annotated-csv/extended/
 - [o] Load Parquet files efficiently from S3
 - [o] Unlock more fsspec sources
 
@@ -225,10 +214,13 @@ Iteration 4
 
     - Arrow / Datafusion
     - Dask
+    - Fugue
     - Ibis: https://github.com/ibis-project/ibis
+    - Lance
     - Modin
     - Pandas
     - Polars
+    - Ray
     - Spark
     - Vaex: https://github.com/vaexio/vaex
       https://vaex.io/blog/8-incredibly-powerful-Vaex-features-you-might-have-not-known-about

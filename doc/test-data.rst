@@ -15,6 +15,10 @@ Development
 - https://www.kaggle.com/datasets
 - https://github.com/earthobservations/testdata
 - https://dd.weather.gc.ca/climate/observations/daily/csv/YT/
+- https://srv.demo.crate.io/datasets/power_consumption.json
+- https://srv.demo.crate.io/datasets/home_data_aa.csv
+- https://srv.demo.crate.io/datasets/home_data_ab.csv
+
 
 Production
 ==========
@@ -26,3 +30,4 @@ Production
 - csv-to-lineprotocol: https://dganais.medium.com/getting-started-writing-data-to-influxdb-54ce99fdeb3e
 - https://github.com/pandas-dev/pandas/issues/36688
 - https://github.com/earthobservations/testdata
+- https://www.kaggle.com/datasets/cesaber/spam-email-data-spamassassin-2002
