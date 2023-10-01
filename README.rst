@@ -208,11 +208,11 @@ Use a different backend (default: ``ddlgen``)::
 
     skeem infer-ddl --dialect=postgresql --backend=frictionless data.ndjson
 
-Reading data from stdin needs to obtain both the table name and content type separately::
+Reading data from STDIN needs to obtain both the table name and content type separately::
 
     skeem infer-ddl --dialect=crate --table-name=foo --content-type=ndjson - < data.ndjson
 
-Reading data from stdin also works like this, if you prefer to use pipes::
+Reading data from STDIN also works like this, if you prefer to use pipes::
 
     cat data.ndjson | skeem infer-ddl --dialect=crate --table-name=foo --content-type=ndjson -
 
