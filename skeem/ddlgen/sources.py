@@ -1,3 +1,4 @@
+import ast
 import io
 import logging
 import typing as t
@@ -201,7 +202,7 @@ def _eval_grib2(target, fieldnames: t.List[str] = None, *args, **kwargs):
             candidates = msg.splitlines()[1:]
             candidate = candidates[0].strip()
             logger.info(f"WARNING: Falling back to '{candidate}'. Reason: {ex}")
-            kwargs = eval(f"dict({candidate})")
+            kwargs = ast.literal_eval(f"dict({candidate})")
             ds = xr.open_dataset(gribfile, engine="cfgrib", **kwargs, decode_times=False)
         else:
             raise

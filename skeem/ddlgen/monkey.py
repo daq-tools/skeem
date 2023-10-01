@@ -8,7 +8,6 @@ from .typehelpers import best_coercable, coerce_to_specific
 
 
 def activate():
-
     ddlgenerator.ddlgenerator.mock_engines = AnyDialect()
     ddlgenerator.ddlgenerator.Table = TablePlus
     ddlgenerator.reshape.clean_key_name = clean_key_name

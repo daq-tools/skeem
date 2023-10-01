@@ -77,7 +77,7 @@ def coerce_to_specific(datum: CoercionType) -> t.Optional[CoercionType]:
                     if not (1700 < result.year < 2150):
                         raise Exception("false date hit (%s) for %s" % (str(result), datum))
             return result
-    except Exception:
+    except Exception:  # noqa: S110
         pass
     try:
         return int(str(datum))

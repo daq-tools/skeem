@@ -50,7 +50,6 @@ def infer_pk(
 def _infer_pk(
     data: t.Any, content_type: t.Optional[ContentType] = None, address: t.Optional[AddressType] = None
 ) -> t.Optional[str]:
-
     # Try to converge data into pandas DataFrame.
     if isinstance(data, pd.DataFrame):
         df = data
