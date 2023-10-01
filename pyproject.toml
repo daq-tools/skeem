@@ -50,7 +50,7 @@ dependencies = [
   "line-protocol-parser<2",
   "odfpy<2",
   "pandas<1.6",
-  "requests<3",
+  "requests<2.30",
   "sql-formatter<0.7",
   "sqlmakeuper<0.2",
   "urllib3<2",
@@ -107,6 +107,7 @@ develop = [
   "poethepoet<0.25",
   "pyproject-fmt<1.2",
   "ruff==0.0.291",
+  "types-requests<2.30",
   "validate-pyproject<0.15",
 ]
 release = [
