@@ -105,7 +105,7 @@ develop = [
   "hunter<4",
   "mypy==1.8.0",
   "poethepoet<0.25",
-  "pyproject-fmt<1.7",
+  "pyproject-fmt<1.8",
   "ruff==0.1.13",
   "types-requests<2.32",
   "validate-pyproject<0.16",
