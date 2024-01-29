@@ -101,7 +101,7 @@ classifiers = [
 ]
 [project.optional-dependencies]
 develop = [
-  "black<24",
+  "black<25",
   "hunter<4",
   "mypy==1.8.0",
   "poethepoet<0.25",
