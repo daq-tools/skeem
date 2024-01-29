@@ -119,7 +119,7 @@ scientific = [
   "cfgrib<1",
   "cftime<2",
   "scipy<2",
-  "xarray<2024",
+  "xarray<2025",
 ]
 test = [
   "pytest<8",
