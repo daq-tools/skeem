@@ -49,7 +49,7 @@ dependencies = [
   "json_stream<3",
   "line-protocol-parser<2",
   "odfpy<2",
-  "pandas<1.6",
+  "pandas<2.3",
   "requests<2.32",
   "sql-formatter<0.7",
   "sqlmakeuper<0.2",
