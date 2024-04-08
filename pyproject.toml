@@ -104,7 +104,7 @@ develop = [
   "black<24",
   "hunter<4",
   "mypy==1.8.0",
-  "poethepoet<0.25",
+  "poethepoet<0.26",
   "pyproject-fmt<1.8",
   "ruff==0.1.14",
   "types-requests<2.32",
