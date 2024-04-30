@@ -53,7 +53,7 @@ dependencies = [
   "requests<2.32",
   "sql-formatter<0.7",
   "sqlmakeuper<0.2",
-  "urllib3<2",
+  "urllib3<3",
 ]
 dynamic = [
   "version",
