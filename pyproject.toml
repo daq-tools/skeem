@@ -103,7 +103,7 @@ classifiers = [
 develop = [
   "black<24",
   "hunter<4",
-  "mypy==1.8.0",
+  "mypy==1.10.0",
   "poethepoet<0.27",
   "pyproject-fmt<1.8",
   "ruff==0.1.14",
