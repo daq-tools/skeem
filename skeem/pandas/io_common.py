@@ -190,8 +190,7 @@ def is_fsspec_url(url: t.Union[FilePath, BaseBuffer]) -> bool:
     something fsspec can handle
     """
     return (
-        isinstance(url, str)
-        and bool(_RFC_3986_PATTERN.match(url))
+        isinstance(url, str) and bool(_RFC_3986_PATTERN.match(url))
         # PATCH for Skeem: Let HTTP requests also be handled by `fsspec`.
         # and not url.startswith(("http://", "https://"))
     )

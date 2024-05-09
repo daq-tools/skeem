@@ -38,26 +38,6 @@ authors = [
   { name = "Richard Pobering", email = "richard.pobering@panodata.org" },
 ]
 requires-python = ">=3.8"
-dependencies = [
-  "click<9",
-  "colorama<1",
-  "crash",
-  "crate[sqlalchemy]",
-  "ddlgenerator<0.2",
-  "frictionless[excel,json,ods,parquet,sql]<5.6",
-  "fsspec[gcs,github,http,s3]==2024.3.1",
-  "json_stream<3",
-  "line-protocol-parser<2",
-  "odfpy<2",
-  "pandas<1.6",
-  "requests<2.32",
-  "sql-formatter<0.7",
-  "sqlmakeuper<0.2",
-  "urllib3<2",
-]
-dynamic = [
-  "version",
-]
 classifiers = [
   "Development Status :: 3 - Alpha",
   "Environment :: Console",
@@ -79,10 +59,12 @@ classifiers = [
   "Operating System :: POSIX :: Linux",
   "Operating System :: Unix",
   "Programming Language :: Python",
+  "Programming Language :: Python :: 3 :: Only",
   "Programming Language :: Python :: 3.8",
   "Programming Language :: Python :: 3.9",
   "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
   "Topic :: Communications",
   "Topic :: Database",
   "Topic :: Documentation",
@@ -99,14 +81,33 @@ classifiers = [
   "Topic :: Text Processing",
   "Topic :: Utilities",
 ]
+dynamic = [
+  "version",
+]
+dependencies = [
+  "click<9",
+  "colorama<1",
+  "crash",
+  "crate[sqlalchemy]",
+  "ddlgenerator<0.2",
+  "frictionless[excel,json,ods,parquet,sql]<5.6",
+  "fsspec[gcs,github,http,s3]==2024.3.1",
+  "json_stream<3",
+  "line-protocol-parser<2",
+  "odfpy<2",
+  "pandas<2",
+  "requests<2.32",
+  "sql-formatter<0.7",
+  "sqlmakeuper<0.2",
+  "urllib3<2",
+]
 [project.optional-dependencies]
 develop = [
-  "black<24",
   "hunter<4",
-  "mypy==1.8.0",
+  "mypy<1.11",
   "poethepoet<0.27",
-  "pyproject-fmt<1.8",
-  "ruff==0.1.14",
+  "pyproject-fmt<1.9",
+  "ruff<0.5",
   "types-requests<2.32",
   "validate-pyproject<0.17",
 ]
@@ -126,16 +127,13 @@ test = [
   "pytest-cov<5",
   "pytest-timeout<3",
 ]
-
 [project.urls]
 changelog = "https://github.com/daq-tools/skeem/blob/main/CHANGES.rst"
 documentation = "https://github.com/daq-tools/skeem"
 homepage = "https://github.com/daq-tools/skeem"
 repository = "https://github.com/daq-tools/skeem"
-
 [project.scripts]
 skeem = "skeem.cli:cli"
-
 
 [tool.black]
 line-length = 120
@@ -177,11 +175,10 @@ markers = [
   "slow",
 ]
 
-
 [tool.ruff]
 line-length = 120
 
-select = [
+lint.select = [
   # Bandit
   "S",
   # Bugbear
@@ -209,7 +206,7 @@ select = [
   "RET",
 ]
 
-extend-ignore = [
+lint.extend-ignore = [
   # zip() without an explicit strict= parameter
   "B905",
   # df is a bad variable name. Be kinder to your future self.
@@ -220,7 +217,7 @@ extend-ignore = [
   "RET505",
 ]
 
-[tool.ruff.per-file-ignores]
+[tool.ruff.lint.per-file-ignores]
 "skeem/core.py" = ["E402"]
 "skeem/fastparquet/*" = ["E722"]
 "skeem/pandas/*" = ["S101"]
@@ -246,15 +243,15 @@ check = [
 ]
 
 format = [
-  { cmd = "black ." },
+  { cmd = "ruff format" },
   # Configure Ruff not to auto-fix (remove!) unused variables (F841) and `print` statements (T201).
-  { cmd = "ruff --fix --ignore=ERA --ignore=F401 --ignore=F841 --ignore=T20 ." },
-  { cmd = "pyproject-fmt pyproject.toml" },
+  { cmd = "ruff check --fix --ignore=ERA --ignore=F401 --ignore=F841 --ignore=T20 ." },
+  { cmd = "pyproject-fmt --keep-full-version pyproject.toml" },
 ]
 
 lint = [
-  { cmd = "ruff ." },
-  { cmd = "black --check ." },
+  { cmd = "ruff format --check" },
+  { cmd = "ruff check ." },
   { cmd = "validate-pyproject pyproject.toml" },
   { cmd = "mypy" },
 ]

@@ -8,6 +8,7 @@ format, suitable for processing JSON data in a streaming manner.
 - https://en.wikipedia.org/wiki/JSON_streaming
 - https://github.com/ndjson/ndjson.github.io/issues/1#issuecomment-109935996
 """
+
 import io
 import typing as t
 

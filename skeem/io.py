@@ -13,6 +13,10 @@ from fsspec.spec import AbstractBufferedFile
 from skeem.settings import PEEK_BYTES, PEEK_LINES
 from skeem.type import ContentType, ContentTypeGroup
 
+if t.TYPE_CHECKING:
+    import xarray
+
+
 logger = logging.getLogger(__name__)
 
 
@@ -125,7 +129,8 @@ def fsspec_peek(
 
 
 def dataset_to_dataframe(
-    ds: "xarray.Dataset", peek_lines: int  # type: ignore[name-defined]  # noqa: F821
+    ds: "xarray.Dataset",
+    peek_lines: int,
 ) -> pd.DataFrame:
     logger.info(f"Dataset:\n{ds}")
     df = ds.to_dataframe().dropna()
