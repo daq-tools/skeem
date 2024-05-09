@@ -101,6 +101,10 @@ Next steps
 - [o] Option to suppress ``NOT NULL`` constraint. /cc @seut
 - [o] Different kinds of sampling methods? /cc @seut
 - [o] Performance considerations / HTTP server
+- [o] Look at JSON Schema for DDL definition.
+
+  - https://pypi.org/project/JSONSchema2DB/
+  - https://pypi.org/project/jsonschema2ddl/
 
 Formats
 =======
