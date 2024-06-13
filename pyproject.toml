@@ -94,7 +94,7 @@ dependencies = [
   "json_stream<3",
   "line-protocol-parser<2",
   "odfpy<2",
-  "pandas<2",
+  "pandas<3",
   "requests<2.32",
   "sql-formatter<0.7",
   "sqlalchemy-cratedb",
