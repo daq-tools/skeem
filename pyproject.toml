@@ -88,7 +88,6 @@ dependencies = [
   "click<9",
   "colorama<1",
   "crash",
-  "crate[sqlalchemy]",
   "ddlgenerator<0.2",
   "frictionless[excel,json,ods,parquet,sql]<5.6",
   "fsspec[gcs,github,http,s3]==2024.3.1",
@@ -98,6 +97,7 @@ dependencies = [
   "pandas<2",
   "requests<2.32",
   "sql-formatter<0.7",
+  "sqlalchemy-cratedb",
   "sqlmakeuper<0.2",
   "urllib3<2",
 ]
