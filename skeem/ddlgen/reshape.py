@@ -41,7 +41,7 @@ def use_this_pk(self, pk_name, key_type):
     More graceful version which will ignore errors on `int` type PKs,
     and fall back to the effective type instead.
     """
-    if key_type == int:
+    if key_type is int:
         try:
             all_max = max([0] + all_values_for(self, pk_name))
             self.pk = UniqueKey(pk_name, key_type, max=all_max)
