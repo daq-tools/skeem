@@ -93,6 +93,7 @@ dependencies = [
   "fsspec[gcs,github,http,s3]==2024.6.0",
   "json_stream<3",
   "line-protocol-parser<2",
+  "numpy<2",
   "odfpy<2",
   "pandas<2",
   "requests<2.32",
