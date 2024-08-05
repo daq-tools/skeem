@@ -1,4 +1,6 @@
-sut:
-  build: ../..
-  dockerfile: release/oci/full.Dockerfile
-  command: selftest.sh full
+services:
+  sut:
+    build:
+      context: ../..
+      dockerfile: release/oci/full.Dockerfile
+    command: selftest.sh full
