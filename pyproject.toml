@@ -110,7 +110,7 @@ develop = [
   "pyproject-fmt<2.3",
   "ruff<0.7",
   "types-requests<2.33",
-  "validate-pyproject<0.20",
+  "validate-pyproject<0.21",
 ]
 release = [
   "build<2",
