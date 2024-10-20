@@ -1,3 +1,4 @@
+import datetime as dt
 import logging
 import pprint
 from collections import OrderedDict
@@ -79,6 +80,8 @@ class TablePlus(Table):
                 # PATCH: Decimals like `"0704.0001"` should be treated as strings, see `nested.json`.
                 v_candidate = th.coerce_to_specific(v_raw)
                 if isinstance(v_raw, str) and isinstance(v_candidate, Decimal):
+                    v = v_raw
+                elif isinstance(v_raw, dt.datetime) and isinstance(v_candidate, str):
                     v = v_raw
                 else:
                     v = v_candidate
