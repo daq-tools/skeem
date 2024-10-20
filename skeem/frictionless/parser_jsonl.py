@@ -1,6 +1,6 @@
-import frictionless.formats
+from frictionless.formats import JsonlParser
 
-read_cell_stream_create_original = frictionless.formats.json.parsers.JsonlParser.read_cell_stream_create
+read_cell_stream_create_original = JsonlParser.read_cell_stream_create
 
 
 def read_cell_stream_create(self):
