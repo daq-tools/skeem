@@ -5,6 +5,7 @@ Skeem changelog
 
 in progress
 ===========
+- Added support for Python 3.12
 
 
 2023-03-09 0.1.0

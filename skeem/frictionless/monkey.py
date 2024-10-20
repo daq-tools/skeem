@@ -2,6 +2,7 @@ from .loader_s3 import read_byte_stream_create as s3_read_byte_stream_create
 from .loader_stream import read_byte_stream_create
 from .pandas_plugin import create_parser
 from .parser_jsonl import read_cell_stream_create
+from .parser_xlsx import read_loader
 from .resource import ResourcePlus
 
 
@@ -28,6 +29,7 @@ def patch_modules():
     - Don't croak when reading streams without `name` attribute.
     """
 
+    import frictionless.formats.excel.parsers
     import frictionless.formats.json.parsers
     import frictionless.formats.pandas.plugin
     import frictionless.schemes.aws.loaders.s3
@@ -37,3 +39,4 @@ def patch_modules():
     frictionless.formats.pandas.plugin.PandasPlugin.create_parser = create_parser
     frictionless.schemes.aws.loaders.s3.S3Loader.read_byte_stream_create = s3_read_byte_stream_create
     frictionless.schemes.stream.loader.StreamLoader.read_byte_stream_create = read_byte_stream_create
+    frictionless.formats.excel.parsers.XlsxParser.read_loader = read_loader
