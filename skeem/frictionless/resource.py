@@ -1,16 +1,16 @@
-from frictionless import Resource
+from frictionless.resources import TableResource
 
 from skeem.settings import PEEK_LINES
 
 
-class ResourcePlus(Resource):
+class TableSampleResource(TableResource):
     """
     Override sample size for frictionless `Resource` instances.
     """
 
-    def __init__(self, *args, **kwargs):
-        from frictionless import Detector
+    def __attrs_post_init__(self):
+        if self.detector is None:
+            from frictionless import Detector
 
-        if "detector" not in kwargs:
-            kwargs["detector"] = Detector(sample_size=PEEK_LINES)
-        super().__init__(*args, **kwargs)
+            self.detector = Detector(sample_size=PEEK_LINES)
+        super().__attrs_post_init__()

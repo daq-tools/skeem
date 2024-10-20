@@ -8,6 +8,7 @@ in progress
 - Added support for Python 3.12 and 3.13
 - Adjusted SQL DDL for sqlalchemy-cratedb 0.40.0
 - Adjusted ddlgenerator wrapper for pandas 2
+- Updated to frictionless >=5.16
 
 
 2023-03-09 0.1.0

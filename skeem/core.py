@@ -80,12 +80,15 @@ class SchemaGenerator:
 
         warnings.filterwarnings("ignore", category=GuessedAtParserWarning)
 
-        import frictionless.formats
-        import sqlalchemy as sa
-        from ddlgenerator.ddlgenerator import _dump
-        from frictionless.formats import ExcelControl, OdsControl
+        from frictionless import Control, Schema
+        from frictionless.formats import ExcelControl, OdsControl, SqlMapper
 
         from skeem.ddlgen.ddlgenerator import TablePlus
+        from skeem.frictionless.resource import TableSampleResource
+
+        # Sanity checks.
+        if not self.target.dialect:
+            raise ValueError("Inferring the database schema needs an SQLAlchemy dialect")
 
         frictionless_args: t.Dict[str, t.Union[str, t.IO]] = {}
         if self.resource.path is not None:
@@ -103,15 +106,15 @@ class SchemaGenerator:
             raise ValueError("Unable to read any data")
 
         # Define resource controls.
-        control = None
+        control: t.Union[Control, None] = None
         if self.resource.type is ContentType.ODS:
             control = OdsControl(sheet=self.resource.address or 1)
         elif self.resource.type is ContentType.XLSX:
             control = ExcelControl(sheet=self.resource.address or 1)
 
         # Open resource.
-        logger.info(f"Opening resource {frictionless_args} with {control}")
-        resource = frictionless.Resource(**frictionless_args, control=control)
+        logger.info(f"Opening resource {frictionless_args}. type={self.resource.type}, control={control}")
+        resource = TableSampleResource(**frictionless_args, control=control)  # type: ignore[arg-type]
 
         # When primary key is not given, try to infer it from the data.
         # TODO: Make `infer_pk` obtain a `Resource` instance, and/or refactor as method.
@@ -126,15 +129,14 @@ class SchemaGenerator:
 
         # Infer schema.
         logger.info("Inferring schema")
-        engine = sa.create_mock_engine(sa.engine.make_url(f"{self.target.dialect}://"), executor=_dump)
-        mapper = frictionless.formats.sql.SqlMapper(engine)
+        mapper = SqlMapper(dialect=self.target.dialect)
         descriptor = resource.to_descriptor()
 
         # Either `schema` is already present, or it needs to be established by invoking `describe` first.
         if "schema" in descriptor:
-            schema = frictionless.Schema.from_descriptor(descriptor["schema"])
+            schema = Schema.from_descriptor(descriptor["schema"])
         else:
-            schema = frictionless.Schema.describe(**frictionless_args, control=control)
+            schema = Schema.describe(**frictionless_args, control=control)
 
         logger.debug(f"Inferred schema: {schema}")
 
@@ -143,6 +145,10 @@ class SchemaGenerator:
             pk_field = schema.get_field(self.target.primary_key)
             pk_field.required = True
             schema.primary_key = [self.target.primary_key]
+
+        # Sanity checks.
+        if not self.target.table_name:
+            raise ValueError("Table name must not be empty")
 
         # Create SQLAlchemy table from schema.
         logger.info("Converging schema to SQLAlchemy")
