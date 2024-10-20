@@ -32,7 +32,7 @@ def get_basic_sql_reference(
     CREATE TABLE "{clean_key_name(table_name)}" (
         "id" INT NOT NULL,
         "name" STRING NOT NULL,
-        "date" TIMESTAMP{" NOT NULL" if timestamp_not_null else ""},
+        "date" TIMESTAMP WITHOUT TIME ZONE{" NOT NULL" if timestamp_not_null else ""},
         "fruits" STRING NOT NULL,
         "price" DOUBLE NOT NULL,
         PRIMARY KEY ("{primary_key}")
@@ -43,7 +43,8 @@ def get_basic_sql_reference(
     CREATE TABLE {clean_key_name(table_name)} (
         id INT NOT NULL,
         name STRING,
-        date {"TIMESTAMP" if not timestamp_is_string else "STRING"}{" NOT NULL" if timestamp_not_null else ""},
+        date {"TIMESTAMP WITHOUT TIME ZONE" if not timestamp_is_string else "STRING"
+        }{" NOT NULL" if timestamp_not_null else ""},
         fruits STRING,
         price FLOAT,
         PRIMARY KEY ({primary_key})
