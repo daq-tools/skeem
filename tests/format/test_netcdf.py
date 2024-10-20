@@ -10,7 +10,7 @@ from tests.util import getcmd
 reference = unwrap(
     """
 CREATE TABLE "aircraft_track_lear" (
-    "time" TIMESTAMP NOT NULL,
+    "time" TIMESTAMP WITHOUT TIME ZONE NOT NULL,
     "altitude" DOUBLE NOT NULL,
     "latitude" DOUBLE NOT NULL,
     "longitude" DOUBLE NOT NULL,
