@@ -109,7 +109,7 @@ develop = [
   "mypy<1.12",
   "poethepoet<0.28",
   "pyproject-fmt<2.3",
-  "ruff<0.7",
+  "ruff<0.8",
   "types-requests<2.33",
   "validate-pyproject<0.21",
 ]
