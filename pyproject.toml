@@ -107,7 +107,7 @@ dependencies = [
 develop = [
   "hunter<4",
   "mypy<1.12",
-  "poethepoet<0.28",
+  "poethepoet<0.30",
   "pyproject-fmt<2.3",
   "ruff<0.7",
   "types-requests<2.33",
