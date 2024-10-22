@@ -5,10 +5,6 @@ requires = [
   "versioningit",
 ]
 
-[tool.versioningit.vcs]
-method = "git"
-default-tag = "0.0.0"
-
 [project]
 name = "skeem"
 description = "Infer SQL DDL statements from tabular data"
@@ -30,8 +26,8 @@ keywords = [
   "json",
   "jsonl",
   "ldjson",
-  "netcdf",
   "ndjson",
+  "netcdf",
   "pandas",
   "parquet",
   "rdbms",
@@ -79,7 +75,6 @@ classifiers = [
   "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
-  "Programming Language :: Python :: 3.13",
   "Topic :: Communications",
   "Topic :: Database",
   "Topic :: Documentation",
@@ -106,7 +101,7 @@ dependencies = [
   "ddlgenerator<0.2",
   "frictionless[excel,json,ods,parquet,sql]>=5.16,<5.19",
   "fsspec[gcs,github,http,s3]==2024.10.0",
-  "json_stream<3",
+  "json-stream<3",
   "line-protocol-parser<2",
   "numpy<3",
   "odfpy<2",
@@ -117,8 +112,7 @@ dependencies = [
   "sqlmakeuper<0.2",
   "urllib3<3",
 ]
-[project.optional-dependencies]
-develop = [
+optional-dependencies.develop = [
   "hunter<4",
   "mypy<1.13",
   "poethepoet<0.30",
@@ -127,53 +121,83 @@ develop = [
   "types-requests<2.33",
   "validate-pyproject<0.22",
 ]
-release = [
+optional-dependencies.release = [
   "build<2",
   "twine<6",
 ]
-scientific = [
+optional-dependencies.scientific = [
   "cfgrib<1",
   "cftime<2",
   "scipy<2",
   "xarray<2025",
 ]
-test = [
+optional-dependencies.test = [
   "pytest<9",
   "pytest-cov<6",
   "pytest-timeout<3",
 ]
-[project.urls]
-changelog = "https://github.com/daq-tools/skeem/blob/main/CHANGES.rst"
-documentation = "https://github.com/daq-tools/skeem"
-homepage = "https://github.com/daq-tools/skeem"
-repository = "https://github.com/daq-tools/skeem"
-[project.scripts]
-skeem = "skeem.cli:cli"
+urls.changelog = "https://github.com/daq-tools/skeem/blob/main/CHANGES.rst"
+urls.documentation = "https://github.com/daq-tools/skeem"
+urls.homepage = "https://github.com/daq-tools/skeem"
+urls.repository = "https://github.com/daq-tools/skeem"
+scripts.skeem = "skeem.cli:cli"
+
+[tool.setuptools.packages.find]
+namespaces = false
 
 [tool.black]
 line-length = 120
 
-[tool.coverage.run]
-branch = false
-omit = [
-  "skeem/ddlgen/ddlgenerator.py",
-  "skeem/ddlgen/sources.py",
-  "skeem/fastparquet/core.py",
-  "skeem/pandas/io_common.py",
-  "tests/*",
+[tool.ruff]
+line-length = 120
+
+lint.select = [
+  # Builtins
+  "A",
+  # Bugbear
+  "B",
+  # comprehensions
+  "C4",
+  # Pycodestyle
+  "E",
+  # eradicate
+  "ERA",
+  # Pyflakes
+  "F",
+  # isort
+  "I",
+  # pandas-vet
+  "PD",
+  # return
+  "RET",
+  # Bandit
+  "S",
+  # print
+  "T20",
+  "W",
+  # flake8-2020
+  "YTT",
 ]
-source = ["skeem"]
 
-[tool.coverage.report]
-fail_under = 0
-show_missing = true
+lint.extend-ignore = [
+  # zip() without an explicit strict= parameter
+  "B905",
+  # df is a bad variable name. Be kinder to your future self.
+  "PD901",
+  # Unnecessary variable assignment before `return` statement
+  "RET504",
+  # Unnecessary `elif` after `return` statement
+  "RET505",
+]
 
-[tool.mypy]
-packages = ["skeem"]
-install_types = true
-ignore_missing_imports = true
-implicit_optional = true
-non_interactive = true
+lint.per-file-ignores."skeem/core.py" = [ "E402" ]
+lint.per-file-ignores."skeem/fastparquet/*" = [ "E722" ]
+lint.per-file-ignores."skeem/pandas/*" = [ "S101" ]
+lint.per-file-ignores."skeem/report.py" = [ "T201" ]
+lint.per-file-ignores."skeem/util/platform.py" = [ "T201" ]
+lint.per-file-ignores."skeem/util/report.py" = [ "T201" ]
+lint.per-file-ignores."tests/*" = [ "S101" ]                # Use of `assert` detected
+lint.per-file-ignores."tests/*roadrunner*" = [ "ERA001" ]   # Use of `assert` detected
 
 [tool.pytest.ini_options]
 addopts = "-ra -q --verbosity=3 --doctest-modules --cov --cov-report=term-missing --cov-report=xml"
@@ -190,61 +214,31 @@ markers = [
   "slow",
 ]
 
-[tool.ruff]
-line-length = 120
-
-lint.select = [
-  # Bandit
-  "S",
-  # Bugbear
-  "B",
-  # Builtins
-  "A",
-  # comprehensions
-  "C4",
-  # eradicate
-  "ERA",
-  # flake8-2020
-  "YTT",
-  # isort
-  "I",
-  # pandas-vet
-  "PD",
-  # print
-  "T20",
-  # Pycodestyle
-  "E",
-  "W",
-  # Pyflakes
-  "F",
-  # return
-  "RET",
+[tool.coverage.run]
+branch = false
+omit = [
+  "skeem/ddlgen/ddlgenerator.py",
+  "skeem/ddlgen/sources.py",
+  "skeem/fastparquet/core.py",
+  "skeem/pandas/io_common.py",
+  "tests/*",
 ]
+source = [ "skeem" ]
 
-lint.extend-ignore = [
-  # zip() without an explicit strict= parameter
-  "B905",
-  # df is a bad variable name. Be kinder to your future self.
-  "PD901",
-  # Unnecessary variable assignment before `return` statement
-  "RET504",
-  # Unnecessary `elif` after `return` statement
-  "RET505",
-]
+[tool.coverage.report]
+fail_under = 0
+show_missing = true
 
-[tool.ruff.lint.per-file-ignores]
-"skeem/core.py" = ["E402"]
-"skeem/fastparquet/*" = ["E722"]
-"skeem/pandas/*" = ["S101"]
-"skeem/report.py" = ["T201"]
-"skeem/util/platform.py" = ["T201"]
-"skeem/util/report.py" = ["T201"]
-"tests/*" = ["S101"]  # Use of `assert` detected
-"tests/*roadrunner*" = ["ERA001"]  # Use of `assert` detected
+[tool.mypy]
+packages = [ "skeem" ]
+install_types = true
+ignore_missing_imports = true
+implicit_optional = true
+non_interactive = true
 
-[tool.setuptools.packages.find]
-namespaces = false
-
+[tool.versioningit.vcs]
+method = "git"
+default-tag = "0.0.0"
 
 # ===================
 # Tasks configuration
