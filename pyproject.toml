@@ -120,7 +120,7 @@ dependencies = [
 [project.optional-dependencies]
 develop = [
   "hunter<4",
-  "mypy<1.12",
+  "mypy<1.13",
   "poethepoet<0.30",
   "pyproject-fmt<2.3",
   "ruff<0.8",
