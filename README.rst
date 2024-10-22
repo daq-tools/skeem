@@ -2,6 +2,37 @@
 Skeem
 #####
 
+|
+
+.. start-badges
+
+|ci-tests| |ci-coverage| |license| |pypi-downloads|
+|python-versions| |status| |pypi-version|
+
+.. |ci-tests| image:: https://github.com/daq-tools/skeem/actions/workflows/tests.yml/badge.svg
+    :target: https://github.com/daq-tools/skeem/actions/workflows/tests.yml
+
+.. |ci-coverage| image:: https://codecov.io/gh/daq-tools/skeem/branch/main/graph/badge.svg
+    :target: https://codecov.io/gh/daq-tools/skeem
+    :alt: Test suite code coverage
+
+.. |python-versions| image:: https://img.shields.io/pypi/pyversions/skeem.svg
+    :target: https://pypi.org/project/skeem/
+
+.. |status| image:: https://img.shields.io/pypi/status/skeem.svg
+    :target: https://pypi.org/project/skeem/
+
+.. |pypi-version| image:: https://img.shields.io/pypi/v/skeem.svg
+    :target: https://pypi.org/project/skeem/
+
+.. |pypi-downloads| image:: https://static.pepy.tech/badge/skeem/month
+    :target: https://pypi.org/project/skeem/
+
+.. |license| image:: https://img.shields.io/pypi/l/skeem.svg
+    :target: https://github.com/daq-tools/skeem/blob/main/LICENSE
+
+.. end-badges
+
 
 *****
 About
