@@ -7,11 +7,12 @@ Skeem
 About
 *****
 
-You can use Skeem to infer SQL DDL statements from tabular data.
+Skeem infers SQL DDL statements from tabular data.
 
-Skeem is, amongst others, based on the excellent `ddlgenerator`_, `frictionless`_,
-`fsspec`_, `pandas`_, `SQLAlchemy`_, and `xarray`_ packages, and can be used both
-as a standalone program, and as a library.
+Skeem is, amongst others, based on the excellent `ddlgenerator`_,
+`frictionless`_, `fsspec`_, `pandas`_, `ScipPy`_, `SQLAlchemy`_
+and `xarray`_ packages, and can be used both as a standalone program,
+and as a library.
 
 Supported input data:
 
@@ -34,7 +35,7 @@ Supported input sources:
 - `Google Cloud Storage`_
 - `HTTP`_
 
-Please note that Skeem is alpha-quality software, and a work in progress.
+Please note that Skeem is beta-quality software, and a work in progress.
 Contributions of all kinds are very welcome, in order to make it more solid.
 Breaking changes should be expected until a 1.0 release, so version pinning
 is recommended, especially when you use it as a library.
@@ -317,6 +318,7 @@ is Estonian, and means "schema", "outline", or "(to) plan".
 .. _OpenDocument Spreadsheet: https://en.wikipedia.org/wiki/OpenDocument
 .. _pandas: https://pandas.pydata.org/
 .. _Paul Walsh: https://github.com/pwalsh
+.. _ScipPy: https://scipy.org/
 .. _SQLAlchemy: https://pypi.org/project/SQLAlchemy/
 .. _testdata: https://github.com/daq-tools/skeem/tree/main/tests/testdata
 .. _Wes McKinney: https://github.com/wesm
