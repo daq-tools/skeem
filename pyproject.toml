@@ -100,7 +100,7 @@ dependencies = [
   "crash",
   "ddlgenerator<0.2",
   "frictionless[excel,json,ods,parquet,sql]>=5.16,<5.19",
-  "fsspec[gcs,github,http,s3]==2024.10.0",
+  "fsspec[gcs,github,http,s3]==2025.3.0",
   "json-stream<3",
   "line-protocol-parser<2",
   "numpy<3",
