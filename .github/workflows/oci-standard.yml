@@ -2,11 +2,11 @@
 name: OCI Standard
 
 on:
+  pull_request:
+
   push:
     tags:
-      - '*.*.*'
-  pull_request:
-    branches: [ main ]
+      - '*'
 
   schedule:
     - cron: '0 06 * * *' # every day at 06am
