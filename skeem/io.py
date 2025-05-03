@@ -11,7 +11,7 @@ from fsspec.implementations.local import LocalFileOpener
 from fsspec.spec import AbstractBufferedFile
 
 from skeem.settings import PEEK_BYTES, PEEK_LINES
-from skeem.type import ContentType, ContentTypeGroup
+from skeem.types import ContentType, ContentTypeGroup
 
 if t.TYPE_CHECKING:
     import xarray

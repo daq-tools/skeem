@@ -61,7 +61,7 @@ def read_col(column, schema_helper, infile, use_cat=False, selfmade=False, assig
             dic2 = read_dictionary_page(infile, schema_helper, ph, cmd, utf=se.converted_type == 0)
             dic2 = convert(dic2, se)
             if use_cat and dic is not None and (dic2 != dic).any():
-                raise RuntimeError("Attempt to read as categorical a column" "with multiple dictionary pages.")
+                raise RuntimeError("Attempt to read as categorical a column with multiple dictionary pages.")
             dic = dic2
             if use_cat and dic is not None:
                 # fastpath skips the check the number of categories hasn't changed.
@@ -114,7 +114,7 @@ def read_col(column, schema_helper, infile, use_cat=False, selfmade=False, assig
         if rep is not None and assign.dtype.kind != "O":  # pragma: no cover
             # this should never get called
             raise ValueError(
-                "Column contains repeated value, must use object " "type, but has assumed type: %s" % assign.dtype
+                "Column contains repeated value, must use object type, but has assumed type: %s" % assign.dtype
             )
         d = ph.data_page_header.encoding in [
             parquet_thrift.Encoding.PLAIN_DICTIONARY,
@@ -123,7 +123,7 @@ def read_col(column, schema_helper, infile, use_cat=False, selfmade=False, assig
         if use_cat and not d:
             if not hasattr(catdef, "_set_categories"):
                 raise ValueError(
-                    "Returning category type requires all chunks" " to use dictionary encoding; column: %s",
+                    "Returning category type requires all chunks to use dictionary encoding; column: %s",
                     cmd.path_in_schema,
                 )
 

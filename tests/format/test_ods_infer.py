@@ -4,7 +4,7 @@ from click.testing import CliRunner
 from skeem.cli import cli
 from skeem.core import SchemaGenerator
 from skeem.model import Resource, SqlResult, SqlTarget
-from skeem.type import ContentType
+from skeem.types import ContentType
 from tests.util import BACKENDS, get_basic_sql_reference, get_basic_sql_reference_alt, getcmd
 
 
