@@ -1,4 +1,4 @@
-from skeem import type
+from skeem import types
 from skeem.ddlgen import monkey as ddlgen_monkey
 from skeem.fastparquet import monkey as fastparquet_monkey
 from skeem.frictionless import monkey as frictionless_monkey
@@ -9,7 +9,7 @@ ddlgen_monkey.activate()
 frictionless_monkey.activate()
 fastparquet_monkey.activate()
 pandas_monkey.activate()
-type.init()
+types.init()
 
 
 __appname__ = "skeem"

@@ -3,7 +3,7 @@ import re
 import pytest
 
 from skeem.autopk import infer_pk
-from skeem.type import ContentType
+from skeem.types import ContentType
 
 
 def test_autopk_content_type_invalid_none():

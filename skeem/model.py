@@ -5,7 +5,7 @@ from pathlib import Path
 
 import skeem.io
 from skeem.settings import PEEK_BYTES, PEEK_LINES
-from skeem.type import ContentType
+from skeem.types import ContentType
 from skeem.util.sql import sql_canonicalize, sql_pretty
 
 logger = logging.getLogger(__name__)

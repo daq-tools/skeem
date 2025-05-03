@@ -9,7 +9,7 @@ from skeem.autopk import infer_pk
 from skeem.exception import UnknownContentType
 from skeem.model import Resource, SqlResult, SqlTarget
 from skeem.settings import FRICTIONLESS_CONTENT_TYPES
-from skeem.type import ContentType
+from skeem.types import ContentType
 from skeem.util.data import to_bytes
 
 logger = logging.getLogger(__name__)

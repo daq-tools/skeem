@@ -1,7 +1,7 @@
 import pytest
 
 from skeem.exception import UnknownContentType
-from skeem.type import ContentType, ContentTypeMime, ContentTypeSuffix
+from skeem.types import ContentType, ContentTypeMime, ContentTypeSuffix
 
 # ===============
 # Main test cases

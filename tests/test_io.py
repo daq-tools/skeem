@@ -5,7 +5,7 @@ import pandas._testing as tm
 import pytest
 
 from skeem.io import peek, to_dataframe
-from skeem.type import ContentType
+from skeem.types import ContentType
 
 
 def test_peek_success():

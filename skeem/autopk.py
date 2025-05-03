@@ -5,7 +5,7 @@ import typing as t
 import pandas as pd
 
 from skeem.io import to_dataframe
-from skeem.type import ContentType, ContentTypeGroup
+from skeem.types import ContentType, ContentTypeGroup
 
 IntOrString = t.TypeVar("IntOrString", int, str)
 AddressType = t.Union[int, str, t.List[IntOrString]]
@@ -90,8 +90,7 @@ def _infer_pk(
                 return df.columns[0]
         except Exception as ex:
             logger.info(
-                f"WARNING: Unable to use '{column1_series.name}' as primary key. "
-                f"Uniqueness check failed. Reason: {ex}"
+                f"WARNING: Unable to use '{column1_series.name}' as primary key. Uniqueness check failed. Reason: {ex}"
             )
 
     return None

@@ -1,4 +1,4 @@
-from skeem.type import ContentType
+from skeem.types import ContentType
 
 # How many lines to read from input data.
 PEEK_LINES = 100

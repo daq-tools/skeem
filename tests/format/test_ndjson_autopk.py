@@ -2,7 +2,7 @@ from click.testing import CliRunner
 
 from skeem.autopk import infer_pk
 from skeem.cli import cli
-from skeem.type import ContentType
+from skeem.types import ContentType
 from skeem.util.sql import sql_canonicalize
 from tests.util import get_basic_sql_reference, random_table_name
 

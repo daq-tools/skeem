@@ -43,8 +43,9 @@ def get_basic_sql_reference(
     CREATE TABLE {clean_key_name(table_name)} (
         id INT NOT NULL,
         name STRING,
-        date {"TIMESTAMP WITHOUT TIME ZONE" if not timestamp_is_string else "STRING"
-        }{" NOT NULL" if timestamp_not_null else ""},
+        date {"TIMESTAMP WITHOUT TIME ZONE" if not timestamp_is_string else "STRING"}{
+            " NOT NULL" if timestamp_not_null else ""
+        },
         fruits STRING,
         price FLOAT,
         PRIMARY KEY ({primary_key})
