@@ -134,7 +134,7 @@ optional-dependencies.scientific = [
 ]
 optional-dependencies.test = [
   "pytest<9",
-  "pytest-cov<7",
+  "pytest-cov<8",
   "pytest-timeout<3",
 ]
 urls.changelog = "https://github.com/daq-tools/skeem/blob/main/CHANGES.rst"
