@@ -49,7 +49,7 @@ def test_resource_peek_url_success_csv(csv_url_basic):
 
 def test_resource_peek_url_success_html():
     resource = Resource(path="https://example.org/")
-    assert resource.peek().read().startswith(b"<!doctype html>\n<html>\n<head>\n    <title>Example Domain</title>")
+    assert resource.peek().read().startswith(b'<!doctype html><html lang="en"><head><title>Example Domain</title>')
 
 
 def test_resource_peek_url_failure_404():
