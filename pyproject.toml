@@ -134,7 +134,7 @@ optional-dependencies.scientific = [
   "xarray<2026",
 ]
 optional-dependencies.test = [
-  "pytest<9",
+  "pytest<10",
   "pytest-cov<8",
   "pytest-timeout<3",
 ]
