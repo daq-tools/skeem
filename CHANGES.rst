@@ -5,6 +5,7 @@ Skeem changelog
 
 in progress
 ===========
+- Added missing ``cachetools`` dependency
 
 2024-10-22 v0.1.1
 =================
