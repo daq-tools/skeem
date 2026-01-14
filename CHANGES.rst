@@ -5,7 +5,11 @@ Skeem changelog
 
 in progress
 ===========
+
+2026-01-14 v0.1.2
+=================
 - Added missing ``cachetools`` dependency
+- Validated support on Python 3.14
 
 2024-10-22 v0.1.1
 =================
