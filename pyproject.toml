@@ -102,7 +102,7 @@ dependencies = [
   "colorama<1",
   "crash",
   "ddlgenerator<0.2",
-  "frictionless[excel,json,ods,parquet,sql]>=5.16,<5.19",
+  "frictionless[excel,json,ods,parquet,sql]>=5.16,<5.20",
   "fsspec[gcs,github,http,s3]<=2025.12.0",
   "json-stream<3",
   "line-protocol-parser<2",
