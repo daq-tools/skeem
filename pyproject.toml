@@ -124,6 +124,9 @@ optional-dependencies.develop = [
   "types-requests<2.33",
   "validate-pyproject<1",
 ]
+optional-dependencies.full = [
+  "skeem[scientific]",
+]
 optional-dependencies.release = [
   "build<2",
   "twine<7",

@@ -120,7 +120,7 @@ Install Skeem with support for additional data formats like NetCDF.
 
 .. code-block:: sh
 
-    pip install 'skeem[scientific]'
+    pip install 'skeem[full]'
 
 
 *****
