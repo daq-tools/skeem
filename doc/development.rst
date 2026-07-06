@@ -14,7 +14,7 @@ and run software tests::
     cd skeem
     python3 -m venv .venv
     source .venv/bin/activate
-    pip install --use-pep517 --prefer-binary --editable=.[test,develop,release,scientific]
+    pip install --use-pep517 --prefer-binary --editable='.[full,develop,test,release]'
 
     # Run linter and regular test suite.
     poe check
