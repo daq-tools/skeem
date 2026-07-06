@@ -97,7 +97,7 @@ dynamic = [
   "version",
 ]
 dependencies = [
-  "cachetools<7",
+  "cachetools<8",
   "click<9",
   "colorama<1",
   "crash",
