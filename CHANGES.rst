@@ -5,6 +5,7 @@ Skeem changelog
 
 in progress
 ===========
+- Dependencies: Downgraded to ``fastparquet==2026.3.0``
 
 2026-01-14 v0.1.2
 =================
