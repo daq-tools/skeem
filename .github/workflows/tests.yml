@@ -21,9 +21,9 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: ["ubuntu-22.04"]
+        os: ["ubuntu-latest"]
         python-version: [
-          "3.8",
+          "3.10",
           "3.14",
         ]
       fail-fast: false
