@@ -9,6 +9,7 @@ in progress
 - Fix database model software tests re. DOUBLE vs. NUMERIC on
   newer CrateDB versions.
 - Modernized Dockerfile, now using Debian 13 "trixie" and ``uv``
+- OCI: Updated to ``python:3.14-slim-trixie``
 
 2026-07-06 v0.1.3
 =================
