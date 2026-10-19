@@ -25,11 +25,11 @@ reference_irregular = unwrap(
 CREATE TABLE "irregular_lp" (
     "time" LONG NOT NULL,
     "sensor_id" STRING NOT NULL,
-    "co" DOUBLE NOT NULL,
-    "humidity" DOUBLE NOT NULL,
-    "temperature" DOUBLE NOT NULL,
+    "co" NUMERIC(17, 17) NOT NULL,
+    "humidity" NUMERIC(17, 15) NOT NULL,
+    "temperature" NUMERIC(16, 14) NOT NULL,
     "tag_foo" STRING,
-    "val_more" DOUBLE
+    "val_more" NUMERIC(2, 1)
 );
     """
 )
