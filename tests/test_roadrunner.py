@@ -78,6 +78,7 @@ def test_roadrunner_fast(url):
     assert "CREATE TABLE" in sql
 
 
+@pytest.mark.skip(reason="Resource no longer exists")
 @pytest.mark.roadrunner
 @pytest.mark.timeout(TIMEOUT_MEDIUM)
 @pytest.mark.parametrize("url", urls("medium"))
@@ -86,6 +87,7 @@ def test_roadrunner_medium(url):
     assert "CREATE TABLE" in sql
 
 
+@pytest.mark.skip(reason="Resource no longer exists")
 # @pytest.mark.xfail(run=False, reason="Too slow")
 @pytest.mark.roadrunner
 @pytest.mark.timeout(TIMEOUT_SLOW)
