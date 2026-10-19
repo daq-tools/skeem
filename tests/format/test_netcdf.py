@@ -11,16 +11,16 @@ reference = unwrap(
     """
 CREATE TABLE "aircraft_track_lear" (
     "time" TIMESTAMP WITHOUT TIME ZONE NOT NULL,
-    "altitude" DOUBLE NOT NULL,
-    "latitude" DOUBLE NOT NULL,
-    "longitude" DOUBLE NOT NULL,
-    "pressure" DOUBLE NOT NULL,
-    "tdry" DOUBLE NOT NULL,
-    "dp" DOUBLE NOT NULL,
-    "mr" DOUBLE NOT NULL,
-    "wspd" DOUBLE NOT NULL,
-    "wdir" DOUBLE NOT NULL,
-    "drops" DOUBLE NOT NULL
+    "altitude" NUMERIC(18, 17) NOT NULL,
+    "latitude" NUMERIC(17, 15) NOT NULL,
+    "longitude" NUMERIC(16, 14) NOT NULL,
+    "pressure" NUMERIC(17, 14) NOT NULL,
+    "tdry" NUMERIC(19, 17) NOT NULL,
+    "dp" NUMERIC(19, 17) NOT NULL,
+    "mr" NUMERIC(18, 16) NOT NULL,
+    "wspd" NUMERIC(18, 16) NOT NULL,
+    "wdir" NUMERIC(20, 17) NOT NULL,
+    "drops" NUMERIC(1, 1) NOT NULL
 );
     """
 )

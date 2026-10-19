@@ -34,7 +34,7 @@ def get_basic_sql_reference(
         "name" STRING NOT NULL,
         "date" TIMESTAMP WITHOUT TIME ZONE{" NOT NULL" if timestamp_not_null else ""},
         "fruits" STRING NOT NULL,
-        "price" DOUBLE NOT NULL,
+        "price" NUMERIC(2, 2) NOT NULL,
         PRIMARY KEY ("{primary_key}")
     );
     """
@@ -60,8 +60,8 @@ def get_basic_sql_reference_alt(backend: str) -> str:
     if backend == "ddlgen":
         ddl = """
         CREATE TABLE "sheet2" (
-            "foo" DOUBLE NOT NULL,
-            "bar" DOUBLE NOT NULL
+            "foo" NUMERIC(4, 2) NOT NULL,
+            "bar" NUMERIC(2, 1) NOT NULL
         );
         """
     elif backend == "frictionless":

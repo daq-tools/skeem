@@ -5,6 +5,9 @@ Skeem changelog
 
 in progress
 ===========
+- Fixed software tests
+- Fix database model software tests re. DOUBLE vs. NUMERIC on
+  newer CrateDB versions.
 
 2026-07-06 v0.1.3
 =================
