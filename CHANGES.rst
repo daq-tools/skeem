@@ -8,6 +8,7 @@ in progress
 - Fixed software tests
 - Fix database model software tests re. DOUBLE vs. NUMERIC on
   newer CrateDB versions.
+- Modernized Dockerfile, now using Debian 13 "trixie" and ``uv``
 
 2026-07-06 v0.1.3
 =================

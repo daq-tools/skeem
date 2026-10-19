@@ -4,7 +4,7 @@
 # - https://vsupalov.com/buildkit-cache-mount-dockerfile/
 # - https://github.com/FernandoMiguel/Buildkit#mounttypecache
 
-FROM python:3.13-slim-bullseye
+FROM python:3.13-slim-trixie
 
 ENV DEBIAN_FRONTEND=noninteractive
 ENV TERM=linux
@@ -16,12 +16,35 @@ RUN --mount=type=cache,id=apt,target=/var/cache/apt --mount=type=cache,id=apt,ta
     && apt-get update \
     && apt-get install --no-install-recommends --no-install-suggests --yes git libeccodes0
 
+# Install and configure `uv`.
+# Guidelines that have been followed.
+# - https://hynek.me/articles/docker-uv/
+
+# Install the `uv` package manager.
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
+
+# - Tell uv to byte-compile packages for faster application startups.
+# - Silence uv complaining about not being able to use hard links.
+# - Prevent uv from accidentally downloading isolated Python builds.
+# - Install packages into the system Python environment.
+ENV \
+    UV_COMPILE_BYTECODE=true \
+    UV_LINK_MODE=copy \
+    UV_PYTHON_DOWNLOADS=never \
+    UV_SYSTEM_PYTHON=true
+
+# Configure runtime environment.
+ENV PATH=/root/.local/bin:$PATH
+
 # Copy sources
 COPY . /src
 
 # Install package.
-RUN --mount=type=cache,id=pip,target=/root/.cache/pip \
-    pip install --use-pep517 --prefer-binary '/src[full]'
+RUN \
+    --mount=type=cache,id=pip,target=/root/.cache/pip \
+    --mount=type=cache,id=uv,target=/root/.cache/uv \
+    true \
+    && uv pip install --upgrade '/src[full]'
 
 # Uninstall Git again.
 RUN apt-get --yes remove --purge git && apt-get --yes autoremove
