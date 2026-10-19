@@ -103,7 +103,7 @@ dependencies = [
   "crash",
   "ddlgenerator<0.2",
   "fastparquet<2026.10",
-  "frictionless[excel,json,ods,parquet,sql]>=5.16,<5.20",
+  "frictionless[excel,json,ods,parquet,sql]>=5.16,<5.22",
   "fsspec[gcs,github,http,s3]<=2026.9.0",
   "json-stream<3",
   "line-protocol-parser<3",
