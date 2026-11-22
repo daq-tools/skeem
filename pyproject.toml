@@ -135,7 +135,7 @@ optional-dependencies.scientific = [
   "cfgrib<1",
   "cftime<2",
   "scipy<2",
-  "xarray<2026",
+  "xarray<2027",
 ]
 optional-dependencies.test = [
   "pytest<10",
