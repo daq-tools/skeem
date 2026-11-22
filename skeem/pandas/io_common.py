@@ -1,11 +1,11 @@
 import mmap
+import re
 import typing as t
 import warnings
 
 from pandas._typing import BaseBuffer, CompressionOptions, FilePath, StorageOptions
 from pandas.compat._optional import import_optional_dependency
 from pandas.io.common import (
-    _RFC_3986_PATTERN,
     IOArgs,
     _expand_user,
     get_compression_method,
@@ -13,6 +13,8 @@ from pandas.io.common import (
     stringify_path,
 )
 from pandas.util._exceptions import find_stack_level
+
+_RFC_3986_PATTERN = re.compile(r"^[A-Za-z][A-Za-z0-9+\-+.]*://")
 
 
 def _get_filepath_or_buffer(

@@ -10,6 +10,7 @@ in progress
   newer CrateDB versions.
 - Modernized Dockerfile, now using Debian 13 "trixie" and ``uv``
 - OCI: Updated to ``python:3.14-slim-trixie``
+- Updated to pandas 3.x
 
 2026-07-06 v0.1.3
 =================

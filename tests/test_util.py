@@ -81,7 +81,7 @@ def test_get_firstline_unknown_type():
 def test_json_get_first_records_empty():
     with pytest.raises(ValueError) as ex:
         json_get_first_records(io.StringIO(""))
-    assert ex.match("Unable to parse JSON document in streaming mode. Reason: Document is empty")
+    assert ex.match("Unable to parse JSON document in streaming mode. Reason: No JSON value found")
 
 
 def test_json_get_first_records_invalid():

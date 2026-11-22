@@ -109,7 +109,7 @@ dependencies = [
   "line-protocol-parser<3",
   "numpy<3",
   "odfpy<2",
-  "pandas<2.4",
+  "pandas<3.2",
   "sql-formatter<0.7",
   "sqlalchemy-cratedb>=0.40.1",
   "sqlmakeuper<0.2",
